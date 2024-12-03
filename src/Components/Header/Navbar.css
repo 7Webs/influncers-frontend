@@ -16,6 +16,7 @@
   align-items: center;
   justify-content: center;
   gap: 60px;
+  width: 40%;
 }
 
 .logoContainer {
@@ -25,7 +26,8 @@
 }
 
 .logoContainer img {
-  background: none !important;
+  background: blue;
+  width: 40%;
 }
 
 .linkContainer ul {

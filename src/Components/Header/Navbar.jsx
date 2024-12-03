@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import "./Navbar.css";
 
-import { useSelector } from "react-redux";
-
 import logo from "../../Assets/logo.png";
 import { Link } from "react-router-dom";
 
 import { RiMenu2Line } from "react-icons/ri";
 import { FiSearch } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa6";
-import { RiShoppingBagLine } from "react-icons/ri";
 import { MdOutlineClose } from "react-icons/md";
 import { FiHeart } from "react-icons/fi";
 
@@ -21,10 +18,7 @@ import { FaInstagram } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
 import { FaPinterest } from "react-icons/fa";
 
-import Badge from "@mui/material/Badge";
-
 const Navbar = () => {
-  const cart = useSelector((state) => state.cart);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -54,17 +48,12 @@ const Navbar = () => {
             <ul>
               <li>
                 <Link to="/" onClick={scrollToTop}>
-                  FOR YOU
+                  HOME
                 </Link>
               </li>
               <li>
                 <Link to="/shop" onClick={scrollToTop}>
                   SHOP
-                </Link>
-              </li>
-              <li>
-                <Link to="/blog" onClick={scrollToTop}>
-                  BLOG
                 </Link>
               </li>
               <li>
@@ -85,18 +74,6 @@ const Navbar = () => {
           <Link to="/loginSignUp" onClick={scrollToTop}>
             <FaRegUser size={22} />
           </Link>
-          <Link to="/cart" onClick={scrollToTop}>
-            <Badge
-              badgeContent={cart.items.length === 0 ? "0" : cart.items.length}
-              color="primary"
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-            >
-              <RiShoppingBagLine size={22} />
-            </Badge>
-          </Link>
           <FiHeart size={22} onClick={scrollToTop} />
           {/* <RiMenu2Line size={22} /> */}
         </div>
@@ -115,18 +92,6 @@ const Navbar = () => {
               <img src={logo} alt="Logo" />
             </Link>
           </div>
-          <Link to="/cart">
-            <Badge
-              badgeContent={cart.items.length === 0 ? "0" : cart.items.length}
-              color="primary"
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-            >
-              <RiShoppingBagLine size={22} color="black" />
-            </Badge>
-          </Link>
         </div>
         <div className={`mobile-menu ${mobileMenuOpen ? "open" : ""}`}>
           <div className="mobile-menuTop">
