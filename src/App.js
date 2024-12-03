@@ -6,7 +6,7 @@ import "./App.css";
 import Home from "../src/Pages/Home";
 import About from "../src/Pages/About";
 import Shop from "../src/Pages/Shop";
-import Contact from "../src/Pages/Contact";
+
 import Header from "../src/Components/Header/Navbar";
 import Footer from "../src/Components/Footer/Footer";
 import ProductDetails from "./Pages/ProductDetails";
@@ -31,11 +31,9 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/contact" element={<Contact />} />
           <Route path="/product" element={<ProductDetails />} />
           <Route path="/loginSignUp" element={<Authentication />} />
           <Route path="/resetPassword" element={<ResetPass />} />
-
           <Route path="/terms" element={<TermsConditions />} />
           <Route path="/cart" element={<ShoppingCart />} />
           <Route path="*" element={<NotFound />} />

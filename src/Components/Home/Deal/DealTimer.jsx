@@ -1,6 +1,67 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./DealTimer.css";
+import { Box, Typography, styled } from "@mui/material";
+
+const DealContainer = styled(Box)(({ theme }) => ({
+  padding: "0 160px",
+  marginTop: "50px",
+  [theme.breakpoints.down("lg")]: {
+    padding: "0 60px",
+  },
+  [theme.breakpoints.down("md")]: {
+    padding: "0 20px",
+  },
+}));
+
+const DealTimerBox = styled(Box)(({ theme }) => ({
+  backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://images.pexels.com/photos/5868722/pexels-photo-5868722.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  height: "400px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  color: "white",
+  textAlign: "center",
+}));
+
+const TimerContent = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: "30px",
+}));
+
+const TimerCounter = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: "20px",
+  marginTop: "20px",
+}));
+
+const TimeDigit = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: "10px",
+}));
+
+const StyledLink = styled(Link)(({ theme }) => ({
+  color: "white",
+  textDecoration: "none",
+  fontSize: "14px",
+  fontWeight: 500,
+  padding: "12px 25px",
+  border: "2px solid white",
+  transition: "all 0.3s ease",
+  marginTop: "20px",
+  display: "inline-block",
+  "&:hover": {
+    backgroundColor: "white",
+    color: "black",
+  },
+}));
 
 const DealTimer = () => {
   const scrollToTop = () => {
@@ -60,47 +121,55 @@ const DealTimer = () => {
   };
 
   return (
-    <>
-      <div className="mainDeal">
-        <div className="dealTimer">
-          <div className="dealTimerMainContent">
-            <div className="dealTimeContent">
-              <p>Deal of the Week</p>
-              <h3>
-                Spring
-                <span> Collection</span>
-              </h3>
-              <div className="dealTimeLink">
-                <Link to="/shop" onClick={scrollToTop}>
-                  Shop Now
-                </Link>
-              </div>
-            </div>
-            <div className="dealTimeCounter">
-              <div className="dealTimeDigit">
-                <h4>{timeLeft.days}</h4>
-                <p>Days</p>
-              </div>
-              <h4>:</h4>
-              <div className="dealTimeDigit">
-                <h4>{timeLeft.hours}</h4>
-                <p>Hours</p>
-              </div>
-              <h4>:</h4>
-              <div className="dealTimeDigit">
-                <h4>{formatTime(timeLeft.minutes)}</h4>
-                <p>Minutes</p>
-              </div>
-              <h4>:</h4>
-              <div className="dealTimeDigit">
-                <h4>{formatTime(timeLeft.seconds)}</h4>
-                <p>Seconds</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+    <DealContainer>
+      <DealTimerBox>
+        <TimerContent>
+          <Box>
+            <Typography variant="subtitle1" sx={{ fontSize: "14px", mb: 2 }}>
+              Deal of the Week
+            </Typography>
+            <Typography variant="h3" sx={{ fontSize: { xs: "30px", sm: "40px" }, fontWeight: 600 }}>
+              Spring <Box component="span" sx={{ color: "#C22928" }}>Collection</Box>
+            </Typography>
+          </Box>
+
+          <TimerCounter>
+            <TimeDigit>
+              <Typography variant="h4" sx={{ fontSize: { xs: "24px", sm: "32px" }, fontWeight: 600 }}>
+                {timeLeft.days}
+              </Typography>
+              <Typography sx={{ fontSize: "14px" }}>Days</Typography>
+            </TimeDigit>
+            <Typography variant="h4" sx={{ fontSize: { xs: "24px", sm: "32px" }, fontWeight: 600 }}>:</Typography>
+            <TimeDigit>
+              <Typography variant="h4" sx={{ fontSize: { xs: "24px", sm: "32px" }, fontWeight: 600 }}>
+                {timeLeft.hours}
+              </Typography>
+              <Typography sx={{ fontSize: "14px" }}>Hours</Typography>
+            </TimeDigit>
+            <Typography variant="h4" sx={{ fontSize: { xs: "24px", sm: "32px" }, fontWeight: 600 }}>:</Typography>
+            <TimeDigit>
+              <Typography variant="h4" sx={{ fontSize: { xs: "24px", sm: "32px" }, fontWeight: 600 }}>
+                {formatTime(timeLeft.minutes)}
+              </Typography>
+              <Typography sx={{ fontSize: "14px" }}>Minutes</Typography>
+            </TimeDigit>
+            <Typography variant="h4" sx={{ fontSize: { xs: "24px", sm: "32px" }, fontWeight: 600 }}>:</Typography>
+            <TimeDigit>
+              <Typography variant="h4" sx={{ fontSize: { xs: "24px", sm: "32px" }, fontWeight: 600 }}>
+                {formatTime(timeLeft.seconds)}
+              </Typography>
+              <Typography sx={{ fontSize: "14px" }}>Seconds</Typography>
+            </TimeDigit>
+          </TimerCounter>
+
+          <StyledLink to="/shop" onClick={scrollToTop}>
+            Shop Now
+          </StyledLink>
+        </TimerContent>
+      </DealTimerBox>
+    </DealContainer>
   );
 };
+
 export default DealTimer;

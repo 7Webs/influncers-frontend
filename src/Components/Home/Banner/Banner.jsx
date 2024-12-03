@@ -1,7 +1,55 @@
 import React from "react";
-import "./Banner.css";
-
+import { Box, Typography, styled } from "@mui/material";
 import { Link } from "react-router-dom";
+
+const BannerContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  gap: "20px",
+  padding: "0 160px",
+  marginTop: "50px",
+  [theme.breakpoints.down("lg")]: {
+    padding: "0 60px",
+  },
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "column",
+    padding: "0 20px",
+  },
+}));
+
+const BannerSection = styled(Box)(({ theme, isRight }) => ({
+  flex: 1,
+  height: "250px",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  padding: "30px",
+  backgroundColor: isRight ? "#F5F5F5" : "#000000",
+  transition: "all 0.3s ease",
+  "&:hover": {
+    transform: "scale(1.02)",
+  },
+}));
+
+const StyledLink = styled(Link)(({ theme, isRight }) => ({
+  color: isRight ? "black" : "white",
+  textDecoration: "none",
+  fontSize: "14px",
+  fontWeight: 500,
+  position: "relative",
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    bottom: "-5px",
+    left: 0,
+    width: 0,
+    height: "2px",
+    backgroundColor: isRight ? "black" : "white",
+    transition: "width 0.3s ease-out",
+  },
+  "&:hover::after": {
+    width: "80%",
+  },
+}));
 
 const Banner = () => {
   const scrollToTop = () => {
@@ -12,32 +60,63 @@ const Banner = () => {
   };
 
   return (
-    <>
-      <div className="banner">
-        <div className="bannerLeft">
-          <h6 className="bannerh6">Starting At $19</h6>
-          <h3 className="bannerh3">Women's T-shirts</h3>
-          <h5 className="bannerh5">
-            <Link to="/shop" onClick={scrollToTop} style={{ color: "white" }}>
-              Shop Now
-            </Link>
-          </h5>
-        </div>
-        <div className="bannerRight">
-          <h6 className="bannerh6" style={{ color: "black" }}>
-            Starting At $39
-          </h6>
-          <h3 className="bannerh3" style={{ color: "black" }}>
-            Men's Sportswear
-          </h3>
-          <h5 className="bannerh5">
-            <Link to="/shop" onClick={scrollToTop} style={{ color: "black" }}>
-              Shop Now
-            </Link>
-          </h5>
-        </div>
-      </div>
-    </>
+    <BannerContainer>
+      <BannerSection>
+        <Typography 
+          variant="subtitle1" 
+          sx={{ 
+            color: "white", 
+            fontSize: "14px", 
+            fontWeight: 500,
+            mb: 1 
+          }}
+        >
+          Starting At $19
+        </Typography>
+        <Typography 
+          variant="h3" 
+          sx={{ 
+            color: "white", 
+            fontSize: { xs: "24px", sm: "32px" }, 
+            fontWeight: 600,
+            mb: 2 
+          }}
+        >
+          Women's T-shirts
+        </Typography>
+        <StyledLink to="/shop" onClick={scrollToTop}>
+          Shop Now
+        </StyledLink>
+      </BannerSection>
+
+      <BannerSection isRight>
+        <Typography 
+          variant="subtitle1" 
+          sx={{ 
+            color: "black", 
+            fontSize: "14px", 
+            fontWeight: 500,
+            mb: 1 
+          }}
+        >
+          Starting At $39
+        </Typography>
+        <Typography 
+          variant="h3" 
+          sx={{ 
+            color: "black", 
+            fontSize: { xs: "24px", sm: "32px" }, 
+            fontWeight: 600,
+            mb: 2 
+          }}
+        >
+          Men's Sportswear
+        </Typography>
+        <StyledLink to="/shop" onClick={scrollToTop} isRight>
+          Shop Now
+        </StyledLink>
+      </BannerSection>
+    </BannerContainer>
   );
 };
 
