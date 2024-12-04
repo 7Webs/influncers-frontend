@@ -21,7 +21,7 @@ export const ProtectedRoute = ({ children }) => {
         );
     }
 
-    return user && user.role === "admin" ? children : null;
+    return children;
 };
 
 export default ProtectedRoute;

@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Box, Typography, TextField, Button, Checkbox, styled, Divider } from "@mui/material";
 import GoogleIcon from '@mui/icons-material/Google';
 import AppleIcon from '@mui/icons-material/Apple';
-import PhoneIcon from '@mui/icons-material/Phone';
 import { useAuth } from "../../../Utils/AuthContext";
 import AnimatedLoader from "../../Animated-Loader/AnimatedLoader";
 
@@ -116,7 +115,7 @@ const SocialButton = styled(Button)(({ theme }) => ({
 
 const LoginSignUp = () => {
   const [activeTab, setActiveTab] = useState("tabButton1");
-  const { user, loading, authChecked, login, register } = useAuth();
+  const { user, loading, authChecked, login, register, loginWithGoogle, loginWithApple } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
@@ -166,6 +165,28 @@ const LoginSignUp = () => {
       }
     } catch (error) {
       console.error("Registration error:", error);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const googleUser = await loginWithGoogle();
+      if (googleUser) {
+        console.log("Google login successful:", googleUser);
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    try {
+      const appleUser = await loginWithApple();
+      if (appleUser) {
+        console.log("Apple login successful:", appleUser);
+      }
+    } catch (error) {
+      console.error("Apple login error:", error);
     }
   };
 
@@ -247,14 +268,11 @@ const LoginSignUp = () => {
 
                 <Divider sx={{ my: 0 }}>OR</Divider>
 
-                <SocialButton fullWidth startIcon={<GoogleIcon />}>
+                <SocialButton fullWidth startIcon={<GoogleIcon />} onClick={handleGoogleLogin}>
                   Continue with Google
                 </SocialButton>
-                <SocialButton fullWidth startIcon={<AppleIcon />}>
+                <SocialButton fullWidth startIcon={<AppleIcon />} onClick={handleAppleLogin}>
                   Continue with Apple
-                </SocialButton>
-                <SocialButton fullWidth startIcon={<PhoneIcon />}>
-                  Continue with Phone
                 </SocialButton>
               </StyledForm>
               <Box sx={{ paddingTop: "20px", textAlign: "center" }}>

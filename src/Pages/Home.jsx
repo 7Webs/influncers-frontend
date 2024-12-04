@@ -6,17 +6,12 @@ import Instagram from "../Components/Home/Instagram/Instagram";
 import Trendy from "../Components/Home/Trendy/Trendy";
 import LimitedEdition from "../Components/Home/Limited/LimitedEdition";
 import DealTimer from "../Components/Home/Deal/DealTimer";
-import HeroSection from "../Components/Home/Hero/HeroSection";
-import Header from "../Components/Header/Navbar";
-import Footer from "../Components/Footer/Footer";
 import Popup from "../Components/PopupBanner/Popup";
 
 const Home = () => {
   return (
     <>
       <Popup />
-      <Header />
-      <HeroSection />
       <CollectionBox />
       <Trendy />
       <DealTimer />
@@ -24,7 +19,6 @@ const Home = () => {
       <LimitedEdition />
       <Instagram />
       <Services />
-      <Footer />
     </>
   );
 };

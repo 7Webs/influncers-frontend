@@ -1,6 +1,15 @@
 // AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+    OAuthProvider,
+    sendPasswordResetEmail,
+    signOut
+} from "firebase/auth";
 import { auth } from "../firebase";
 import { toast } from "react-toastify";
 import { apiService } from "../App/apiwrapper";
@@ -42,11 +51,39 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const register = async (email, password) => {
+    const loginWithGoogle = async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            const userCredential = await signInWithPopup(auth, provider);
+            setUser(userCredential.user);
+            toast.success("Google login successful");
+            return userCredential.user;
+        } catch (error) {
+            toast.error(error.message);
+            console.error("Google login error:", error);
+            throw error;
+        }
+    };
+
+    const loginWithApple = async () => {
+        try {
+            const provider = new OAuthProvider('apple.com');
+            const userCredential = await signInWithPopup(auth, provider);
+            setUser(userCredential.user);
+            toast.success("Apple login successful");
+            return userCredential.user;
+        } catch (error) {
+            toast.error(error.message);
+            console.error("Apple login error:", error);
+            throw error;
+        }
+    };
+
+    const register = async (email, password, name) => {
         try {
             const userCredential = await createUserWithEmailAndPassword(
                 auth,
-                email, 
+                email,
                 password
             );
             setUser(userCredential.user);
@@ -59,9 +96,20 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const resetPassword = async (email) => {
+        try {
+            await sendPasswordResetEmail(auth, email);
+            toast.success("Password reset email sent successfully");
+        } catch (error) {
+            toast.error(error.message);
+            console.error("Password reset error:", error);
+            throw error;
+        }
+    };
+
     const logout = async () => {
         try {
-            // await signOut(auth);
+            await signOut(auth);
             setUser(null);
             toast.success("Logout successful");
         } catch (error) {
@@ -72,7 +120,17 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, authChecked, login, logout, register }}>
+        <AuthContext.Provider value={{
+            user,
+            loading,
+            authChecked,
+            login,
+            loginWithGoogle,
+            loginWithApple,
+            logout,
+            register,
+            resetPassword
+        }}>
             {children}
         </AuthContext.Provider>
     );

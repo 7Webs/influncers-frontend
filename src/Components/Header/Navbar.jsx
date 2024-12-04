@@ -254,7 +254,7 @@ const Navbar = () => {
           <IconButton onClick={scrollToTop}>
             <FiSearch size={22} />
           </IconButton>
-          <IconButton component={Link} to="/loginSignUp" onClick={scrollToTop}>
+          <IconButton component={Link} to="/profile" onClick={scrollToTop}>
             <FaRegUser size={22} />
           </IconButton>
           <IconButton onClick={scrollToTop}>

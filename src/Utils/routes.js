@@ -8,7 +8,7 @@ import Authentication from "../Pages/Authentication";
 import ResetPass from "../Components/Authentication/Reset/ResetPass";
 import TermsConditions from "../Pages/TermsConditions";
 import ShoppingCart from "../Components/ShoppingCart/ShoppingCart";
-
+import Profile from "../Pages/Profile";
 export const routes = {
     protected: [
         {
@@ -38,6 +38,10 @@ export const routes = {
         {
             path: "*",
             element: React.createElement(NotFound)
+        },
+        {
+            path: "/profile",
+            element: React.createElement(Profile)
         }
     ],
     public: [
