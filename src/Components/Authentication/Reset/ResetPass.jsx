@@ -29,7 +29,7 @@ const StyledForm = styled("form")(({ theme }) => ({
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
-    padding: "20px",
+    padding: "5px",
     "& fieldset": {
       borderColor: "#e4e4e4",
       borderWidth: "2px",
@@ -44,7 +44,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
-  padding: "20px",
+  padding: "10px",
   backgroundColor: "black",
   color: "white",
   "&:hover": {
