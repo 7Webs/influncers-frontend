@@ -79,18 +79,25 @@ const DealTimer = () => {
     dispatch(fetchDeals());
   }, [dispatch]);
 
-  // Get the soonest ending deal
-  const soonestDeal = deals.length > 0 
-    ? deals.reduce((a, b) => 
-        new Date(a.availableUntil) < new Date(b.availableUntil) ? a : b
-      )
-    : null;
+  // Get the next valid deal
+  const getNextValidDeal = (deals) => {
+    if (!deals.length) return null;
+    
+    const now = new Date();
+    const validDeals = deals
+      .filter(deal => new Date(deal.availableUntil) > now)
+      .sort((a, b) => new Date(a.availableUntil) - new Date(b.availableUntil));
+    
+    return validDeals.length > 0 ? validDeals[0] : null;
+  };
+
+  const activeDeal = getNextValidDeal(deals);
 
   useEffect(() => {
-    if (!soonestDeal) return;
+    if (!activeDeal) return;
 
     const calculateTimeLeft = () => {
-      const endDate = new Date(soonestDeal.availableUntil);
+      const endDate = new Date(activeDeal.availableUntil);
       endDate.setHours(23, 59, 0, 0);
       const difference = endDate - new Date();
       
@@ -114,24 +121,24 @@ const DealTimer = () => {
     setTimeLeft(calculateTimeLeft());
 
     return () => clearInterval(timer);
-  }, [soonestDeal]);
+  }, [activeDeal]);
 
   const formatTime = (value) => {
     return value.toString().padStart(2, "0");
   };
 
-  if (!soonestDeal) return null;
+  if (!activeDeal) return null;
 
   return (
     <DealContainer>
-      <DealTimerBox bgImage={soonestDeal.images[0]}>
+      <DealTimerBox bgImage={activeDeal.images[0]}>
         <TimerContent>
           <Box>
             <Typography variant="subtitle1" sx={{ fontSize: "14px", mb: 2 }}>
               Deal of the Week
             </Typography>
             <Typography variant="h3" sx={{ fontSize: { xs: "30px", sm: "40px" }, fontWeight: 600 }}>
-              {soonestDeal.title} <Box component="span" sx={{ color: "#C22928" }}>{soonestDeal.shortTagLine}</Box>
+              {activeDeal.title} <Box component="span" sx={{ color: "#C22928" }}>{activeDeal.shortTagLine}</Box>
             </Typography>
           </Box>
 
