@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Box, Typography, styled } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDeals } from "../../../redux/slice/dealsSlice";
 
 const DealContainer = styled(Box)(({ theme }) => ({
   padding: "0 160px",
@@ -13,8 +15,8 @@ const DealContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const DealTimerBox = styled(Box)(({ theme }) => ({
-  backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://images.pexels.com/photos/5868722/pexels-photo-5868722.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+const DealTimerBox = styled(Box)(({ theme, bgImage }) => ({
+  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${bgImage})`,
   backgroundPosition: "center",
   backgroundSize: "cover",
   backgroundRepeat: "no-repeat",
@@ -64,72 +66,79 @@ const StyledLink = styled(Link)(({ theme }) => ({
 }));
 
 const DealTimer = () => {
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
+  const dispatch = useDispatch();
+  const deals = useSelector((state) => state.deals?.list || []);
   const [timeLeft, setTimeLeft] = useState({
-    days: 31,
-    hours: 29,
-    minutes: 57,
-    seconds: 17,
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   });
 
   useEffect(() => {
+    dispatch(fetchDeals());
+  }, [dispatch]);
+
+  // Get the next valid deal
+  const getNextValidDeal = (deals) => {
+    if (!deals.length) return null;
+    
+    const now = new Date();
+    const validDeals = deals
+      .filter(deal => new Date(deal.availableUntil) > now)
+      .sort((a, b) => new Date(a.availableUntil) - new Date(b.availableUntil));
+    
+    return validDeals.length > 0 ? validDeals[0] : null;
+  };
+
+  const activeDeal = getNextValidDeal(deals);
+
+  useEffect(() => {
+    if (!activeDeal) return;
+
+    const calculateTimeLeft = () => {
+      const endDate = new Date(activeDeal.availableUntil);
+      endDate.setHours(23, 59, 0, 0);
+      const difference = endDate - new Date();
+      
+      if (difference <= 0) {
+        return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+      }
+
+      return {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60)
+      };
+    };
+
     const timer = setInterval(() => {
-      setTimeLeft((prevTimeLeft) => {
-        const { days, hours, minutes, seconds } = prevTimeLeft;
-        if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
-          clearInterval(timer);
-          return prevTimeLeft;
-        }
-        let newSeconds = seconds - 1;
-        let newMinutes = minutes;
-        let newHours = hours;
-        let newDays = days;
-
-        if (newSeconds < 0) {
-          newSeconds = 59;
-          newMinutes -= 1;
-        }
-        if (newMinutes < 0) {
-          newMinutes = 59;
-          newHours -= 1;
-        }
-        if (newHours < 0) {
-          newHours = 23;
-          newDays -= 1;
-        }
-
-        return {
-          days: newDays,
-          hours: newHours,
-          minutes: newMinutes,
-          seconds: newSeconds,
-        };
-      });
+      setTimeLeft(calculateTimeLeft());
     }, 1000);
 
+    // Initial calculation
+    setTimeLeft(calculateTimeLeft());
+
     return () => clearInterval(timer);
-  }, []);
+  }, [activeDeal]);
 
   const formatTime = (value) => {
     return value.toString().padStart(2, "0");
   };
 
+  if (!activeDeal) return null;
+
   return (
     <DealContainer>
-      <DealTimerBox>
+      <DealTimerBox bgImage={activeDeal.images[0]}>
         <TimerContent>
           <Box>
             <Typography variant="subtitle1" sx={{ fontSize: "14px", mb: 2 }}>
               Deal of the Week
             </Typography>
             <Typography variant="h3" sx={{ fontSize: { xs: "30px", sm: "40px" }, fontWeight: 600 }}>
-              Spring <Box component="span" sx={{ color: "#C22928" }}>Collection</Box>
+              {activeDeal.title} <Box component="span" sx={{ color: "#C22928" }}>{activeDeal.shortTagLine}</Box>
             </Typography>
           </Box>
 
@@ -143,7 +152,7 @@ const DealTimer = () => {
             <Typography variant="h4" sx={{ fontSize: { xs: "24px", sm: "32px" }, fontWeight: 600 }}>:</Typography>
             <TimeDigit>
               <Typography variant="h4" sx={{ fontSize: { xs: "24px", sm: "32px" }, fontWeight: 600 }}>
-                {timeLeft.hours}
+                {formatTime(timeLeft.hours)}
               </Typography>
               <Typography sx={{ fontSize: "14px" }}>Hours</Typography>
             </TimeDigit>
@@ -163,7 +172,7 @@ const DealTimer = () => {
             </TimeDigit>
           </TimerCounter>
 
-          <StyledLink to="/shop" onClick={scrollToTop}>
+          <StyledLink to="/shop">
             Shop Now
           </StyledLink>
         </TimerContent>

@@ -1,84 +1,21 @@
-import React from "react";
-import { Box, Typography, styled } from "@mui/material";
+import React, { useEffect } from "react";
+import { Box, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-
-const CollectionContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  gap: "20px",
-  padding: "0 160px",
-  marginTop: "50px",
-  [theme.breakpoints.down("lg")]: {
-    padding: "0 60px",
-  },
-  [theme.breakpoints.down("md")]: {
-    flexDirection: "column",
-    padding: "0 20px",
-  },
-}));
-
-const CollectionSection = styled(Box)(({ theme, bgImage }) => ({
-  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${bgImage})`,
-  backgroundPosition: "center",
-  backgroundSize: "cover",
-  backgroundRepeat: "no-repeat",
-  padding: "30px",
-  color: "white",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  transition: "all 0.3s ease",
-  "&:hover": {
-    transform: "scale(1.02)",
-  },
-}));
-
-const LeftSection = styled(CollectionSection)(({ theme }) => ({
-  flex: 1,
-  height: "600px",
-}));
-
-const RightSection = styled(Box)(({ theme }) => ({
-  flex: 1,
-  display: "flex",
-  flexDirection: "column",
-  gap: "20px",
-}));
-
-const TopSection = styled(CollectionSection)(({ theme }) => ({
-  height: "290px",
-}));
-
-const BottomSection = styled(Box)(({ theme }) => ({
-  display: "flex",
-  gap: "20px",
-  height: "290px",
-  [theme.breakpoints.down("sm")]: {
-    flexDirection: "column",
-  },
-}));
-
-const BottomBox = styled(CollectionSection)(({ theme }) => ({
-  flex: 1,
-  height: "100%",
-}));
-
-const StyledLink = styled(Link)(({ theme }) => ({
-  color: "white",
-  textDecoration: "none",
-  fontSize: "14px",
-  fontWeight: 500,
-  padding: "12px 25px",
-  border: "2px solid white",
-  transition: "all 0.3s ease",
-  marginTop: "20px",
-  display: "inline-block",
-  "&:hover": {
-    backgroundColor: "white",
-    color: "black",
-  },
-}));
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCategory } from "../../../redux/slice/categorySlice";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation, Autoplay } from "swiper/modules";
 
 const CollectionBox = () => {
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.category.list);
+
+  useEffect(() => {
+    dispatch(fetchCategory());
+  }, [dispatch]);
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -87,61 +24,121 @@ const CollectionBox = () => {
   };
 
   return (
-    <CollectionContainer>
-      <LeftSection bgImage="https://images.pexels.com/photos/7319317/pexels-photo-7319317.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
-        <Typography sx={{ fontSize: "14px", mb: 1 }}>Hot List</Typography>
-        <Typography variant="h3" sx={{ fontSize: { xs: "24px", sm: "32px" }, fontWeight: 600, mb: 2 }}>
-          <Box component="span" sx={{ color: "#C22928" }}>Women</Box> Collection
-        </Typography>
-        <Box>
-          <StyledLink to="/shop" onClick={scrollToTop}>
-            Shop Now
-          </StyledLink>
-        </Box>
-      </LeftSection>
-
-      <RightSection>
-        <TopSection bgImage="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
-          <Typography sx={{ fontSize: "14px", mb: 1 }}>Hot List</Typography>
-          <Typography variant="h3" sx={{ fontSize: { xs: "24px", sm: "32px" }, fontWeight: 600, mb: 2 }}>
-            <Box component="span" sx={{ color: "#C22928" }}>Men</Box> Collection
-          </Typography>
-          <Box>
-            <StyledLink to="/shop" onClick={scrollToTop}>
-              Shop Now
-            </StyledLink>
-          </Box>
-        </TopSection>
-
-        <BottomSection>
-          <BottomBox bgImage="https://images.pexels.com/photos/1620760/pexels-photo-1620760.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
-            <Typography sx={{ fontSize: "14px", mb: 1 }}>Hot List</Typography>
-            <Typography variant="h3" sx={{ fontSize: { xs: "24px", sm: "32px" }, fontWeight: 600, mb: 2 }}>
-              <Box component="span" sx={{ color: "#C22928" }}>Kids</Box> Collection
-            </Typography>
-            <Box>
-              <StyledLink to="/shop" onClick={scrollToTop}>
-                Shop Now
-              </StyledLink>
+    <Box sx={{
+      padding: { xs: "0 20px", md: "0 60px", lg: "0 160px" },
+      marginTop: "50px"
+    }}>
+      <Swiper
+        modules={[Navigation, Autoplay]}
+        spaceBetween={20}
+        slidesPerView={1}
+        navigation
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
+        breakpoints={{
+          640: {
+            slidesPerView: 2,
+          },
+          1024: {
+            slidesPerView: 3,
+          },
+        }}
+      >
+        {categories?.map((category) => (
+          <SwiperSlide key={category.id}>
+            <Box sx={{
+              position: "relative",
+              height: "450px",
+              width: "100%",
+              overflow: "hidden",
+              borderRadius: "8px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
+            }}>
+              <Box
+                component="img"
+                src={category.image}
+                alt={category.name}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  transition: "transform 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.05)"
+                  }
+                }}
+              />
+              <Box sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                transition: "background-color 0.3s ease",
+                "&:hover": {
+                  backgroundColor: "rgba(0, 0, 0, 0.6)"
+                }
+              }} />
+              <Box sx={{
+                position: "absolute",
+                bottom: "40px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                textAlign: "center",
+                color: "white",
+                zIndex: 2,
+                width: "100%",
+                padding: "0 20px"
+              }}>
+                <Typography 
+                  variant="h3" 
+                  sx={{ 
+                    fontSize: { xs: "26px", sm: "34px" }, 
+                    fontWeight: 700, 
+                    mb: 3,
+                    textShadow: "2px 2px 4px rgba(0,0,0,0.3)"
+                  }}
+                >
+                  <Box component="span" sx={{ color: "#ff4d4d" }}>
+                    {category.name}
+                  </Box>
+                  {" Collection"}
+                </Typography>
+                <Link 
+                  to={`/shop/${category.slug}`}
+                  onClick={scrollToTop}
+                  style={{ textDecoration: "none" }}
+                >
+                  <Box
+                    sx={{
+                      color: "white",
+                      fontSize: "15px",
+                      fontWeight: 600,
+                      padding: "14px 30px",
+                      border: "2px solid white",
+                      display: "inline-block",
+                      transition: "all 0.3s ease",
+                      textTransform: "uppercase",
+                      letterSpacing: "1px",
+                      "&:hover": {
+                        backgroundColor: "white",
+                        color: "black",
+                        transform: "translateY(-2px)"
+                      }
+                    }}
+                  >
+                    Shop Now
+                  </Box>
+                </Link>
+              </Box>
             </Box>
-          </BottomBox>
-
-          <BottomBox bgImage="https://images.pexels.com/photos/6567607/pexels-photo-6567607.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1">
-            <Typography variant="h3" sx={{ fontSize: { xs: "24px", sm: "32px" }, fontWeight: 600, mb: 2 }}>
-              <Box component="span" sx={{ color: "#C22928" }}>E-gift</Box> Cards
-            </Typography>
-            <Typography sx={{ fontSize: "14px", mb: 2 }}>
-              Surprise someone with the gift they really want.
-            </Typography>
-            <Box>
-              <StyledLink to="/shop" onClick={scrollToTop}>
-                Shop Now
-              </StyledLink>
-            </Box>
-          </BottomBox>
-        </BottomSection>
-      </RightSection>
-    </CollectionContainer>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </Box>
   );
 };
 

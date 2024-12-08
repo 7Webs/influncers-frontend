@@ -11,10 +11,10 @@ import Popup from "../Components/PopupBanner/Popup";
 const Home = () => {
   return (
     <>
-      <Popup />
-      <CollectionBox />
-      <Trendy />
+      {/* <Popup /> */}
       <DealTimer />
+      <Trendy />
+      <CollectionBox />
       <Banner />
       <LimitedEdition />
       <Instagram />

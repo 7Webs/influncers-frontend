@@ -12,7 +12,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase";
 import { toast } from "react-toastify";
-import { apiService } from "../App/apiwrapper";
+import { apiService } from "../Api/apiwrapper";
 
 const AuthContext = createContext();
 
