@@ -71,19 +71,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
   },
 }));
 
-const categories = [
-  { icon: <FashionIcon />, text: "Fashion" },
-  { icon: <ElectronicsIcon />, text: "Electronics" },
-  { icon: <BagsIcon />, text: "Bags" },
-  { icon: <FootwearIcon />, text: "Footwear" },
-  { icon: <GroceriesIcon />, text: "Groceries" },
-  { icon: <BeautyIcon />, text: "Beauty" },
-  { icon: <WellnessIcon />, text: "Wellness" },
-  { icon: <JewelleryIcon />, text: "Jewellery" },
-  { icon: <FootIcon />, text: "Foot" },
-];
-
-const CategoryDropdown = () => {
+const CategoryDropdown = ({ categories }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -106,8 +94,9 @@ const CategoryDropdown = () => {
                 button
                 divider={index !== categories.length - 1}
               >
-                <ListItemIcon>{category.icon}</ListItemIcon>
-                <ListItemText primary={category.text} />
+                <img src={category.image} alt="" width={26} height={26} />
+                &nbsp; &nbsp;
+                <ListItemText primary={category.name} />
                 <ArrowRightIcon sx={{ color: "#999", fontSize: 20 }} />
               </StyledListItem>
             ))}

@@ -12,6 +12,7 @@ const Home = () => {
   return (
     <>
       {/* <Popup /> */}
+      <Banner />
       <DealTimer />
       <Trendy />
       <CollectionBox />

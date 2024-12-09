@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -15,6 +15,7 @@ import {
   useMediaQuery,
   useTheme,
   Button,
+  ListItemButton,
 } from "@mui/material";
 import {
   Search as SearchIcon,
@@ -27,6 +28,9 @@ import { styled } from "@mui/material/styles";
 import CategoryDropdown from "./CategoryDropdown";
 import { useAuth } from "../../Utils/AuthContext";
 import logo from "../../Assets/logo.png";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCategory } from "../../redux/slice/categorySlice";
+import { useNavigate } from "react-router-dom";
 
 // Custom styled components
 const SearchWrapper = styled("div")(({ theme }) => ({
@@ -62,6 +66,7 @@ const MobileDrawer = styled(Drawer)(({ theme }) => ({
 const UpperSection = ({ user, openMobileMenu }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const nav = useNavigate();
 
   return (
     <Toolbar
@@ -93,6 +98,10 @@ const UpperSection = ({ user, openMobileMenu }) => {
             src={user?.photo}
             alt={user?.displayName}
             sx={{ cursor: "pointer" }}
+            onClick={(e) => {
+              e.preventDefault();
+              nav("/profile");
+            }}
           />
         )}
       </Box>
@@ -121,6 +130,10 @@ const UpperSection = ({ user, openMobileMenu }) => {
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, ml: "auto" }}>
           <Box
             sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+            onClick={(e) => {
+              e.preventDefault();
+              nav("/profile");
+            }}
           >
             <Avatar src={user?.photo} alt={user?.displayName} />
             <Typography variant="body2" sx={{ ml: 0.5 }}>
@@ -134,7 +147,7 @@ const UpperSection = ({ user, openMobileMenu }) => {
 };
 
 // Mobile Menu Component
-const MobileMenu = ({ isOpen, onClose, user }) => {
+const MobileMenu = ({ isOpen, onClose, user, categories }) => {
   return (
     <MobileDrawer anchor="left" open={isOpen} onClose={onClose}>
       <Box
@@ -147,8 +160,8 @@ const MobileMenu = ({ isOpen, onClose, user }) => {
       >
         {user && (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Avatar src={user?.photo} alt={user?.displayName} />
-            <Typography variant="subtitle1">My Account</Typography>
+            <Avatar src={user?.photo} alt={user?.name} />
+            <Typography variant="subtitle1">{user?.name}</Typography>
           </Box>
         )}
         <IconButton onClick={onClose}>
@@ -157,34 +170,13 @@ const MobileMenu = ({ isOpen, onClose, user }) => {
       </Box>
 
       <List>
-        <ListItem button>
-          <ListItemText primary="Home" />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="Fashion" />
-          <ArrowDownIcon />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="Electronics" />
-          <ArrowDownIcon />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="Bags" />
-          <ArrowDownIcon />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="Footwear" />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="Groceries" />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="Beauty" />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="Shop" />
-          <ArrowDownIcon />
-        </ListItem>
+        {categories.map((category) => (
+          <ListItem key={category.id}>
+            <ListItemButton>
+              <ListItemText primary={category.name} />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
 
       <Box sx={{ p: 2, mt: "auto", borderTop: "1px solid #eee" }}>
@@ -203,7 +195,7 @@ const MobileMenu = ({ isOpen, onClose, user }) => {
 };
 
 // Lower Section Component
-const LowerSection = () => {
+const LowerSection = ({ categories }) => {
   return (
     <Toolbar
       sx={{
@@ -212,7 +204,7 @@ const LowerSection = () => {
         borderBottom: "1px solid #eee",
       }}
     >
-      <CategoryDropdown />
+      <CategoryDropdown categories={categories} />
 
       <Box sx={{ display: "flex", gap: 3, ml: 4 }}>
         <Button color="inherit">Home</Button>
@@ -252,26 +244,36 @@ const HeaderMain = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { user } = useAuth();
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.category?.list || []);
+
+  useEffect(() => {
+    dispatch(fetchCategory());
+  }, []);
 
   return (
-    <AppBar
-      sx={{ bgcolor: "#fff", color: "#333" }}
-      position="fixed"
-      elevation={0}
-    >
-      <UpperSection
-        user={user}
-        openMobileMenu={() => setIsMobileMenuOpen(true)}
-      />
+    <>
+      <AppBar
+        sx={{ bgcolor: "#fff", color: "#333" }}
+        position="fixed"
+        elevation={0}
+      >
+        <UpperSection
+          user={user}
+          openMobileMenu={() => setIsMobileMenuOpen(true)}
+        />
 
-      {!isMobile && <LowerSection />}
+        {!isMobile && <LowerSection categories={categories} />}
 
-      <MobileMenu
-        isOpen={isMobileMenuOpen}
-        onClose={() => setIsMobileMenuOpen(false)}
-        user={user}
-      />
-    </AppBar>
+        <MobileMenu
+          isOpen={isMobileMenuOpen}
+          onClose={() => setIsMobileMenuOpen(false)}
+          user={user}
+          categories={categories}
+        />
+      </AppBar>
+      <div style={{ height: "100px" }} />
+    </>
   );
 };
 

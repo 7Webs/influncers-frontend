@@ -1,121 +1,76 @@
 import React from "react";
-import { Box, Typography, styled } from "@mui/material";
-import { Link } from "react-router-dom";
+import Slider from "react-slick";
+import styled from "styled-components";
 
-const BannerContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  gap: "20px",
-  padding: "0 160px",
-  marginTop: "50px",
-  [theme.breakpoints.down("lg")]: {
-    padding: "0 60px",
-  },
-  [theme.breakpoints.down("md")]: {
-    flexDirection: "column",
-    padding: "0 20px",
-  },
-}));
+const BannerContainer = styled.div`
+  width: 100%;
+  margin: 0 auto;
 
-const BannerSection = styled(Box)(({ theme, isRight }) => ({
-  flex: 1,
-  height: "250px",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  padding: "30px",
-  backgroundColor: isRight ? "#F5F5F5" : "#000000",
-  transition: "all 0.3s ease",
-  "&:hover": {
-    transform: "scale(1.02)",
-  },
-}));
+  .slick-slide img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
 
-const StyledLink = styled(Link)(({ theme, isRight }) => ({
-  color: isRight ? "black" : "white",
-  textDecoration: "none",
-  fontSize: "14px",
-  fontWeight: 500,
-  position: "relative",
-  "&::after": {
-    content: '""',
-    position: "absolute",
-    bottom: "-5px",
-    left: 0,
-    width: 0,
-    height: "2px",
-    backgroundColor: isRight ? "black" : "white",
-    transition: "width 0.3s ease-out",
-  },
-  "&:hover::after": {
-    width: "80%",
-  },
-}));
+  .slick-dots li button:before {
+    color: #088e22; // Customize dot color
+  }
+`;
 
 const Banner = () => {
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+  const settings = {
+    dots: true, // Show navigation dots
+    infinite: true, // Loop through slides
+    speed: 500, // Transition speed in ms
+    slidesToShow: 1, // Number of slides to show
+    slidesToScroll: 1, // Number of slides to scroll
+    autoplay: true, // Automatically transition slides
+    autoplaySpeed: 3000, // Duration between transitions in ms
+    arrows: true, // Show previous/next arrows
   };
+
+  const banners = [
+    {
+      id: 1,
+      image:
+        "https://img.freepik.com/free-vector/deal-promotional-banner-hanging-price-tag-style_1017-27325.jpg",
+      alt: "Banner 1",
+    },
+    {
+      id: 2,
+      image:
+        "https://img.freepik.com/free-vector/flash-sale-blue-banner-design_1017-31303.jpg",
+      alt: "Banner 2",
+    },
+    {
+      id: 3,
+      image:
+        "https://static.vecteezy.com/system/resources/previews/002/661/107/non_2x/weekend-deal-only-today-banner-sale-sales-background-with-gradient-shape-modern-advertising-illustration-vector.jpg",
+      alt: "Banner 3",
+    },
+  ];
 
   return (
     <BannerContainer>
-      <BannerSection>
-        <Typography 
-          variant="subtitle1" 
-          sx={{ 
-            color: "white", 
-            fontSize: "14px", 
-            fontWeight: 500,
-            mb: 1 
-          }}
-        >
-          Starting At $19
-        </Typography>
-        <Typography 
-          variant="h3" 
-          sx={{ 
-            color: "white", 
-            fontSize: { xs: "24px", sm: "32px" }, 
-            fontWeight: 600,
-            mb: 2 
-          }}
-        >
-          Women's T-shirts
-        </Typography>
-        <StyledLink to="/shop" onClick={scrollToTop}>
-          Shop Now
-        </StyledLink>
-      </BannerSection>
-
-      <BannerSection isRight>
-        <Typography 
-          variant="subtitle1" 
-          sx={{ 
-            color: "black", 
-            fontSize: "14px", 
-            fontWeight: 500,
-            mb: 1 
-          }}
-        >
-          Starting At $39
-        </Typography>
-        <Typography 
-          variant="h3" 
-          sx={{ 
-            color: "black", 
-            fontSize: { xs: "24px", sm: "32px" }, 
-            fontWeight: 600,
-            mb: 2 
-          }}
-        >
-          Men's Sportswear
-        </Typography>
-        <StyledLink to="/shop" onClick={scrollToTop} isRight>
-          Shop Now
-        </StyledLink>
-      </BannerSection>
+      <Slider {...settings}>
+        {banners.map((banner) => (
+          <div key={banner.id}>
+            <div
+              style={{
+                background: `url(${banner.image})`,
+                minHeight: "600px",
+                display: "block",
+                backgroundPosition: "centre",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+              }}
+            >
+              &nbsp;
+            </div>
+          </div>
+        ))}
+      </Slider>
     </BannerContainer>
   );
 };
