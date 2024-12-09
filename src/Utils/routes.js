@@ -9,53 +9,58 @@ import ResetPass from "../Components/Authentication/Reset/ResetPass";
 import TermsConditions from "../Pages/TermsConditions";
 import ShoppingCart from "../Components/ShoppingCart/ShoppingCart";
 import Profile from "../Pages/Profile";
+import EditProfile from "../Pages/EditProfilePage";
 export const routes = {
-    protected: [
-        {
-            path: "/home",
-            element: React.createElement(Home)
-        },
-        {
-            path: "/about",
-            element: React.createElement(About)
-        },
-        {
-            path: "/shop",
-            element: React.createElement(Shop)
-        },
-        {
-            path: "/product",
-            element: React.createElement(ProductDetails)
-        },
-        {
-            path: "/terms",
-            element: React.createElement(TermsConditions)
-        },
-        {
-            path: "/cart",
-            element: React.createElement(ShoppingCart)
-        },
-        {
-            path: "*",
-            element: React.createElement(NotFound)
-        },
-        {
-            path: "/profile",
-            element: React.createElement(Profile)
-        }
-    ],
-    public: [
-        {
-            path: "/",
-            element: React.createElement(Authentication)
-        },
-        {
-            path: "/loginSignUp",
-            element: React.createElement(Authentication)
-        },
-        {
-            path: "/resetPassword",
-            element: React.createElement(ResetPass)
-        }
-    ]
+  protected: [
+    {
+      path: "/home",
+      element: React.createElement(Home),
+    },
+    {
+      path: "/about",
+      element: React.createElement(About),
+    },
+    {
+      path: "/shop",
+      element: React.createElement(Shop),
+    },
+    {
+      path: "/product",
+      element: React.createElement(ProductDetails),
+    },
+    {
+      path: "/terms",
+      element: React.createElement(TermsConditions),
+    },
+    {
+      path: "/cart",
+      element: React.createElement(ShoppingCart),
+    },
+    {
+      path: "*",
+      element: React.createElement(NotFound),
+    },
+    {
+      path: "/profile",
+      element: React.createElement(Profile),
+    },
+    {
+      path: "/profile/edit",
+      element: React.createElement(EditProfile),
+    },
+  ],
+  public: [
+    {
+      path: "/",
+      element: React.createElement(Authentication),
+    },
+    {
+      path: "/loginSignUp",
+      element: React.createElement(Authentication),
+    },
+    {
+      path: "/resetPassword",
+      element: React.createElement(ResetPass),
+    },
+  ],
 };
