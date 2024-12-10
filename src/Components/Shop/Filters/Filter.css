@@ -107,6 +107,12 @@
   margin-top: 10px;
 }
 
+.brandList div {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 15px;
+}
+
 .brandItem {
   display: flex;
   align-items: center;

@@ -1,3 +1,4 @@
+import { Container } from "@mui/material";
 import React from "react";
 import Slider from "react-slick";
 import styled from "styled-components";
@@ -34,19 +35,19 @@ const Banner = () => {
     {
       id: 1,
       image:
-        "https://img.freepik.com/free-vector/deal-promotional-banner-hanging-price-tag-style_1017-27325.jpg",
+        "https://www.shutterstock.com/image-vector/colorful-discount-sale-podium-special-600nw-2055955985.jpg",
       alt: "Banner 1",
     },
     {
       id: 2,
       image:
-        "https://img.freepik.com/free-vector/flash-sale-blue-banner-design_1017-31303.jpg",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8mKTv0PVVbJXwcNFS0u5norbuLK2FmMupNxV5bpwYSxwGS6REdRxsPZtn21JObLfawVQ&usqp=CAU",
       alt: "Banner 2",
     },
     {
       id: 3,
       image:
-        "https://static.vecteezy.com/system/resources/previews/002/661/107/non_2x/weekend-deal-only-today-banner-sale-sales-background-with-gradient-shape-modern-advertising-illustration-vector.jpg",
+        "https://cdn.prod.website-files.com/5e26b9545f16d0434143dd15/65f93f174c46545a05c3448a_65321ee7caf2102b4ad2d3c0_black-friday.svg",
       alt: "Banner 3",
     },
   ];
@@ -56,18 +57,22 @@ const Banner = () => {
       <Slider {...settings}>
         {banners.map((banner) => (
           <div key={banner.id}>
-            <div
-              style={{
-                background: `url(${banner.image})`,
-                minHeight: "600px",
-                display: "block",
-                backgroundPosition: "centre",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-              }}
-            >
-              &nbsp;
-            </div>
+            <Container maxWidth="xl">
+              <div
+                style={{
+                  background: `url(${banner.image})`,
+                  minHeight: "520px",
+                  display: "block",
+                  backgroundPosition: "centre",
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "cover",
+                  borderRadius: "16px",
+                  border: "1px solid #000",
+                }}
+              >
+                &nbsp;
+              </div>
+            </Container>
           </div>
         ))}
       </Slider>

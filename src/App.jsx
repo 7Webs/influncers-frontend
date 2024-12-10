@@ -17,6 +17,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeaderMain from "./Components/Header/Header";
+import { CategoryProvider } from "./Utils/CategoryContext";
+import { ShopProvider } from "./Utils/ShopContext";
 
 const App = () => {
   return (
@@ -24,31 +26,35 @@ const App = () => {
       <ScrollToTop />
       <BrowserRouter>
         <Provider store={store}>
-          <AuthProvider>
-            <Routes>
-              <Route path="/" element={<Authentication />} />
-              <Route path="/resetPassword" element={<ResetPass />} />
-              <Route
-                path="/*"
-                element={
-                  <ProtectedRoute>
-                    <HeaderMain />
-                    <Routes>
-                      {routes.protected &&
-                        routes.protected.map((route) => (
-                          <Route
-                            key={route.path}
-                            path={route.path}
-                            element={route.element}
-                          />
-                        ))}
-                    </Routes>
-                    <Footer />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </AuthProvider>
+          <ShopProvider>
+            <CategoryProvider>
+              <AuthProvider>
+                <Routes>
+                  <Route path="/" element={<Authentication />} />
+                  <Route path="/resetPassword" element={<ResetPass />} />
+                  <Route
+                    path="/*"
+                    element={
+                      <ProtectedRoute>
+                        <HeaderMain />
+                        <Routes>
+                          {routes.protected &&
+                            routes.protected.map((route) => (
+                              <Route
+                                key={route.path}
+                                path={route.path}
+                                element={route.element}
+                              />
+                            ))}
+                        </Routes>
+                        <Footer />
+                      </ProtectedRoute>
+                    }
+                  />
+                </Routes>
+              </AuthProvider>
+            </CategoryProvider>
+          </ShopProvider>
         </Provider>
       </BrowserRouter>
       <ToastContainer

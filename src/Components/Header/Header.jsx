@@ -29,8 +29,8 @@ import CategoryDropdown from "./CategoryDropdown";
 import { useAuth } from "../../Utils/AuthContext";
 import logo from "../../Assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCategory } from "../../redux/slice/categorySlice";
 import { useNavigate } from "react-router-dom";
+import { useCategory } from "../../Utils/CategoryContext";
 
 // Custom styled components
 const SearchWrapper = styled("div")(({ theme }) => ({
@@ -136,8 +136,8 @@ const UpperSection = ({ user, openMobileMenu }) => {
             }}
           >
             <Avatar src={user?.photo} alt={user?.displayName} />
-            <Typography variant="body2" sx={{ ml: 0.5 }}>
-              My Account
+            <Typography variant="subtitle1" sx={{ ml: 0.5 }}>
+              Account
             </Typography>
           </Box>
         </Box>
@@ -244,12 +244,8 @@ const HeaderMain = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { user } = useAuth();
-  const dispatch = useDispatch();
-  const categories = useSelector((state) => state.category?.list || []);
 
-  useEffect(() => {
-    dispatch(fetchCategory());
-  }, []);
+  const { categories, loading } = useCategory();
 
   return (
     <>
@@ -272,7 +268,7 @@ const HeaderMain = () => {
           categories={categories}
         />
       </AppBar>
-      <div style={{ height: "100px" }} />
+      <div style={{ height: "140px" }} />
     </>
   );
 };

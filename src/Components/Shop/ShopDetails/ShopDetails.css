@@ -369,7 +369,11 @@
 
 @media screen and (max-width: 991px) {
   .shopDetails__left {
-    display: none;
+    width: 100%;
+  }
+
+  .shopDetailMain {
+    flex-direction: column;
   }
 
   .shopDetails__right {

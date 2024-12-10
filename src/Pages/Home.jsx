@@ -13,13 +13,12 @@ const Home = () => {
     <>
       {/* <Popup /> */}
       <Banner />
-      <DealTimer />
+      {/* <DealTimer /> */}
       <Trendy />
-      <CollectionBox />
-      <Banner />
-      <LimitedEdition />
-      <Instagram />
-      <Services />
+      {/* <CollectionBox /> */}
+      {/* <LimitedEdition /> */}
+      {/* <Instagram /> */}
+      {/* <Services /> */}
     </>
   );
 };

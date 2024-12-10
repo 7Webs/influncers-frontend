@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../Features/Cart/cartSlice";
 import toast from "react-hot-toast";
 
-const ProductCard = ({ deal, getCategoryName, wishList, onWishlistClick }) => {
+const ProductCard = ({ deal }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
 
@@ -18,9 +18,7 @@ const ProductCard = ({ deal, getCategoryName, wishList, onWishlistClick }) => {
   };
 
   const handleAddToCart = (deal) => {
-    const dealInCart = cartItems.find(
-      (item) => item.id === deal.id
-    );
+    const dealInCart = cartItems.find((item) => item.id === deal.id);
 
     if (dealInCart && dealInCart.quantity >= 20) {
       toast.error("Deal limit reached", {
@@ -54,20 +52,10 @@ const ProductCard = ({ deal, getCategoryName, wishList, onWishlistClick }) => {
     <div className="trendyProductContainer">
       <div className="trendyProductImages">
         <Link to="/Product" onClick={scrollToTop}>
-          <img
-            src={deal.images[0]}
-            alt=""
-            className="trendyProduct_front"
-          />
-          <img
-            src={deal.images[0]}
-            alt=""
-            className="trendyProduct_back"
-          />
+          <img src={deal.images[0]} alt="" className="trendyProduct_front" />
+          <img src={deal.images[0]} alt="" className="trendyProduct_back" />
         </Link>
-        <h4 onClick={() => handleAddToCart(deal)}>
-          Add to Cart
-        </h4>
+        <h4 onClick={() => handleAddToCart(deal)}>Add to Cart</h4>
       </div>
       <div
         className="trendyProductImagesCart"
@@ -76,7 +64,7 @@ const ProductCard = ({ deal, getCategoryName, wishList, onWishlistClick }) => {
         <FaCartPlus />
       </div>
       <div className="trendyProductInfo">
-        <div className="trendyProductCategoryWishlist">
+        {/* <div className="trendyProductCategoryWishlist">
           <p>{getCategoryName(deal.categoryId)}</p>
           <FiHeart
             onClick={() => onWishlistClick(deal.id)}
@@ -87,21 +75,27 @@ const ProductCard = ({ deal, getCategoryName, wishList, onWishlistClick }) => {
               cursor: "pointer",
             }}
           />
-        </div>
+        </div> */}
         <div className="trendyProductNameInfo">
           <Link to="product" onClick={scrollToTop}>
-            <h5>{deal.title}</h5>
+            <h5>
+              <strong>{deal.title}</strong>
+            </h5>
           </Link>
+          <div>Available till: {deal.availableUntil}</div>
+          <div>{deal.shortTagLine}</div>
+          <div>
+            By: <span style={{ color: "#07bc0c" }}>{deal.shop.name}</span>
+          </div>
 
-          <p>Free</p>
-          <div className="trendyProductRatingReviews">
+          {/* <div className="trendyProductRatingReviews">
             <div className="trendyProductRatingStar">
               {[...Array(5)].map((_, i) => (
                 <FaStar key={i} color="#FEC78A" size={10} />
               ))}
             </div>
             <span>5k+ reviews</span>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
