@@ -1,6 +1,7 @@
 import React from "react";
 import Lottie from "react-lottie";
 import loadingData from "../../Assets/lottie/loader.json";
+import { Box, CircularProgress } from "@mui/material";
 const AnimatedLoader = () => {
   const defaultOptions = {
     loop: true,
@@ -11,18 +12,14 @@ const AnimatedLoader = () => {
     },
   };
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-        height: "100vh",
-        // backgroundColor: "#fff",
-      }}
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100vh"
     >
-      <Lottie options={defaultOptions} height={200} width={200} />
-    </div>
+      <CircularProgress sx={{ color: "#000" }} />
+    </Box>
   );
 };
 

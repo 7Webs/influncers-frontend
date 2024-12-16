@@ -30,6 +30,7 @@ import { IoCalendar, IoLocation } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { apiService } from "../Api/apiwrapper";
+import RedeemedDealCard from "../Components/Resuables/RedeemedDealCard";
 
 // Styled Components
 const CoverPhoto = styled(Box)({
@@ -237,17 +238,18 @@ const Profile = () => {
             </Typography>
             <List>
               {allRedeemedDeals.map((deal) => (
-                <ListItem key={deal.deal.id} divider>
-                  <ListItemAvatar>
-                    <Avatar src={deal.deal.images[0]} alt={deal.deal.title} />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={deal.deal.title}
-                    secondary={`Redeemed on: ${new Date(
-                      deal.createdAt
-                    ).toLocaleDateString()}`}
-                  />
-                </ListItem>
+                // <ListItem key={deal.deal.id} divider>
+                //   <ListItemAvatar>
+                //     <Avatar src={deal.deal.images[0]} alt={deal.deal.title} />
+                //   </ListItemAvatar>
+                //   <ListItemText
+                //     primary={deal.deal.title}
+                //     secondary={`Redeemed on: ${new Date(
+                //       deal.createdAt
+                //     ).toLocaleDateString()}`}
+                //   />
+                // </ListItem>
+                <RedeemedDealCard key={deal.id} deal={deal} />
               ))}
             </List>
             <div ref={loadMoreRef} className="loading-trigger">

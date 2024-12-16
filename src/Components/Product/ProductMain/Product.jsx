@@ -86,7 +86,7 @@ const Product = ({ data, isLoading, error }) => {
             </div>
 
             <div className="productDescription">
-              <p>{data.description}</p>
+              <p style={{ color: "green" }}>{data.shortTagLine}</p>
             </div>
             <div className="productSizeColor">
               <div className="productColor">

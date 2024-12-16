@@ -10,6 +10,7 @@ import TermsConditions from "../Pages/TermsConditions";
 import ShoppingCart from "../Components/ShoppingCart/ShoppingCart";
 import Profile from "../Pages/Profile";
 import EditProfile from "../Pages/EditProfilePage";
+import RedeemedDealDetail from "../Components/Resuables/RedeemedDealDetailed";
 export const routes = {
   protected: [
     {
@@ -47,6 +48,10 @@ export const routes = {
     {
       path: "/profile/edit",
       element: React.createElement(EditProfile),
+    },
+    {
+      path: "/redeemed-deals/:id",
+      element: React.createElement(RedeemedDealDetail),
     },
   ],
   public: [
