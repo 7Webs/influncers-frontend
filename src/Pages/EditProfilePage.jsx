@@ -15,6 +15,7 @@ import {
 import { CameraAlt, Save } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import { useAuth } from "../Utils/AuthContext";
+import { useCategory } from "../Utils/CategoryContext";
 
 // Styled Components
 const ProfileAvatar = styled(Avatar)(({ theme }) => ({
@@ -27,6 +28,7 @@ const ProfileAvatar = styled(Avatar)(({ theme }) => ({
 
 const EditProfile = () => {
   const { user, updateProfileInfo } = useAuth();
+  const { categories } = useCategory();
 
   const [profileData, setProfileData] = useState({
     name: user?.name || "",
@@ -35,6 +37,7 @@ const EditProfile = () => {
     location: user?.location || "",
     gender: user?.gender || "",
     photo: user?.photo || "https://via.placeholder.com/150",
+    categoryId: user?.categoryId || null,
     facebookProfileLink: user?.facebookProfileLink || "",
     instagramProfileLink: user?.instagramProfileLink || "",
     twitterProfileLink: user?.twitterProfileLink || "",
@@ -79,9 +82,9 @@ const EditProfile = () => {
       }
 
       await updateProfileInfo(formData);
-      //   toast.success("Profile updated successfully");
+        toast.success("Profile updated successfully");
     } catch (error) {
-      //   toast.error("Failed to update profile");
+        toast.error("Failed to update profile");
       console.error("Profile update error:", error);
     }
   };
@@ -133,6 +136,7 @@ const EditProfile = () => {
                   label="Email Address"
                   name="email"
                   value={profileData.email}
+                  disabled
                   onChange={handleInputChange}
                   type="email"
                   required
@@ -169,6 +173,31 @@ const EditProfile = () => {
                   <MenuItem value="Male">Male</MenuItem>
                   <MenuItem value="Female">Female</MenuItem>
                   <MenuItem value="Other">Other</MenuItem>
+                </TextField>
+              </Grid>
+
+              {/* Category Dropdown */}
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Your Primary Domain"
+                  name="categoryId"
+                  value={profileData.categoryId}
+                  onChange={handleInputChange}
+                  select
+                >
+                  {categories.map((category) => (
+                    <MenuItem key={category.id} value={category.id}>
+                      <img
+                        src={category.image}
+                        alt={category.name}
+                        width={26}
+                        height={26}
+                        style={{ marginRight: 8 }}
+                      />
+                      {category.name}
+                    </MenuItem>
+                  ))}
                 </TextField>
               </Grid>
 

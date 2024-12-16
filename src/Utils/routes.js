@@ -25,7 +25,7 @@ export const routes = {
       element: React.createElement(Shop),
     },
     {
-      path: "/product",
+      path: "/product/:id",
       element: React.createElement(ProductDetails),
     },
     {

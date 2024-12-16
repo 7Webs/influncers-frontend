@@ -9,7 +9,6 @@ import { AuthProvider } from "./Utils/AuthContext";
 import { routes } from "./Utils/routes";
 import { Provider } from "react-redux";
 import store from "./redux/Store";
-import Header from "./Components/Header/Navbar";
 import Footer from "./Components/Footer/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

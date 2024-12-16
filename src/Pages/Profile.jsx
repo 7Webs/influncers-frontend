@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { useAuth } from "../Utils/AuthContext";
 import {
   Box,
   Container,
-  Paper,
   Avatar,
   Typography,
   Button,
@@ -12,8 +11,11 @@ import {
   Card,
   CardContent,
   IconButton,
-  Chip,
   Divider,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
 } from "@mui/material";
 import {
   Facebook,
@@ -26,6 +28,8 @@ import {
 import { PiEnvelope, PiGenderIntersex, PiPhone } from "react-icons/pi";
 import { IoCalendar, IoLocation } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { apiService } from "../Api/apiwrapper";
 
 // Styled Components
 const CoverPhoto = styled(Box)({
@@ -54,6 +58,49 @@ const SocialButton = styled(IconButton)(({ color }) => ({
 const Profile = () => {
   const { user, logout } = useAuth();
   const nav = useNavigate();
+  const loadMoreRef = useRef(null);
+
+  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["redeemedDeals"],
+      queryFn: async ({ pageParam = 0 }) => {
+        const response = await apiService.get(
+          `/deals-redeem/user?take=10&skip=${pageParam}`
+        );
+        return response.data;
+      },
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.length === 10 ? allPages.length * 10 : undefined;
+      },
+    });
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const target = entries[0];
+        if (target.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "200px",
+        threshold: 0.1,
+      }
+    );
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => {
+      if (loadMoreRef.current) {
+        observer.unobserve(loadMoreRef.current);
+      }
+    };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const allRedeemedDeals = data?.pages.flat() || [];
 
   const handleLogout = async () => {
     try {
@@ -71,10 +118,10 @@ const Profile = () => {
   ];
 
   return (
-    <Box sx={{ bgcolor: "#f5f5f5", minHeight: "100vh", py: 4 }}>
-      <Container maxWidth="md">
+    <Box>
+      <Container maxWidth="lg">
         {/* User Information Card */}
-        <Card sx={{ mb: 3, boxShadow: 2 }}>
+        <Card sx={{ mb: 3, boxShadow: 0.3 }}>
           <CoverPhoto>
             <IconButton
               sx={{
@@ -103,7 +150,7 @@ const Profile = () => {
               color="text.secondary"
               gutterBottom
             >
-              {user?.category || "General User"}
+              {user?.category?.name + " Influencer" || "General User"}
             </Typography>
             <Divider sx={{ my: 2 }} />
             <Grid container spacing={2}>
@@ -179,6 +226,35 @@ const Profile = () => {
                 Logout
               </Button>
             </Box>
+          </CardContent>
+        </Card>
+
+        {/* User Redeemed Deals */}
+        <Card sx={{ mb: 3, boxShadow: 0.3 }}>
+          <CardContent>
+            <Typography variant="h6" fontWeight="bold" gutterBottom>
+              Redeemed Deals
+            </Typography>
+            <List>
+              {allRedeemedDeals.map((deal) => (
+                <ListItem key={deal.deal.id} divider>
+                  <ListItemAvatar>
+                    <Avatar src={deal.deal.images[0]} alt={deal.deal.title} />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={deal.deal.title}
+                    secondary={`Redeemed on: ${new Date(
+                      deal.createdAt
+                    ).toLocaleDateString()}`}
+                  />
+                </ListItem>
+              ))}
+            </List>
+            <div ref={loadMoreRef} className="loading-trigger">
+              {isFetchingNextPage && <p>Loading more deals...</p>}
+              {!hasNextPage && <p>No more deals to load</p>}
+              {isFetching && !isFetchingNextPage && <p>Loading...</p>}
+            </div>
           </CardContent>
         </Card>
       </Container>

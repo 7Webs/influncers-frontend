@@ -196,6 +196,8 @@ const MobileMenu = ({ isOpen, onClose, user, categories }) => {
 
 // Lower Section Component
 const LowerSection = ({ categories }) => {
+  const { user } = useAuth();
+  const nav = useNavigate();
   return (
     <Toolbar
       sx={{
@@ -208,21 +210,24 @@ const LowerSection = ({ categories }) => {
 
       <Box sx={{ display: "flex", gap: 3, ml: 4 }}>
         <Button color="inherit">Home</Button>
-        <Button color="inherit" endIcon={<ArrowDownIcon />}>
-          Fashion
+        <Button color="inherit" onClick={() => nav("/home")}>
+          For You
         </Button>
-        <Button color="inherit" endIcon={<ArrowDownIcon />}>
-          Electronics
-        </Button>
-        <Button color="inherit" endIcon={<ArrowDownIcon />}>
-          Bags
-        </Button>
-        <Button color="inherit">Footwear</Button>
-        <Button color="inherit">Groceries</Button>
-        <Button color="inherit">Beauty</Button>
-        <Button color="inherit" endIcon={<ArrowDownIcon />}>
+        <Button color="inherit" onClick={() => nav("/shop")}>
           Shop
         </Button>
+        {user.category && (
+          <Button color="inherit" onClick={() => nav("/shop")}>
+            {user.category.name}
+          </Button>
+        )}
+        {user.category &&
+          user.category.relatedCategories &&
+          user.category.relatedCategories.map((category) => (
+            <Button color="inherit" onClick={() => nav("/shop")}>
+              {category.name}
+            </Button>
+          ))}
       </Box>
 
       <Box sx={{ display: "flex", alignItems: "center", ml: "auto", gap: 1 }}>

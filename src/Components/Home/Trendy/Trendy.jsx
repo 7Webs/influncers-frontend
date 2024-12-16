@@ -1,40 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../../Resuables/ProductCard";
 import "./Trendy.css";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { apiService } from "../../../Api/apiwrapper";
 
-
 const Trendy = () => {
+  const loadMoreRef = useRef(null);
   const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["deals"], // Unique key for this query
+      queryKey: ["deals"],
       queryFn: async ({ pageParam = 0 }) => {
         const response = await apiService.get(
-          `deals/top-deals?take=21&skip=${pageParam}`
+          `deals/top-deals?take=8&skip=${pageParam}`
         );
         return response.data;
       },
       getNextPageParam: (lastPage, allPages) => {
-        // Determine the next page parameter
-        return lastPage.length === 21 ? allPages.length * 21 : undefined;
+        return lastPage.length === 8 ? allPages.length * 8 : undefined;
       },
     });
 
-
   useEffect(() => {
-    const handleScroll = () => {
-      const { scrollTop, scrollHeight, clientHeight } =
-        document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight - 100 && hasNextPage) {
-        fetchNextPage();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const target = entries[0];
+        if (target.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "200px", // Load more content 200px before reaching the end
+        threshold: 0.1,
+      }
+    );
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => {
+      if (loadMoreRef.current) {
+        observer.unobserve(loadMoreRef.current);
       }
     };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasNextPage, fetchNextPage]);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const allDeals = data?.pages.flat() || [];
 
@@ -48,8 +59,11 @@ const Trendy = () => {
           <ProductCard key={deal.id} deal={deal} />
         ))}
       </div>
-      {isFetching && <p>Loading...</p>}
-      {!hasNextPage && <p>No more deals to load</p>}
+      <div ref={loadMoreRef} className="loading-trigger">
+        {isFetchingNextPage && <p>Loading more deals...</p>}
+        {!hasNextPage && <p>No more deals to load</p>}
+        {isFetching && !isFetchingNextPage && <p>Loading...</p>}
+      </div>
     </div>
   );
 };
