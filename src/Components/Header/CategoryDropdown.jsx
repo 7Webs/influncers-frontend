@@ -5,7 +5,6 @@ import {
   Collapse,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
   Paper,
   styled,
@@ -14,16 +13,8 @@ import {
   Menu as MenuIcon,
   KeyboardArrowDown as ArrowDownIcon,
   KeyboardArrowRight as ArrowRightIcon,
-  Checkroom as FashionIcon,
-  Devices as ElectronicsIcon,
-  ShoppingBag as BagsIcon,
-  DirectionsWalk as FootwearIcon,
-  ShoppingBasket as GroceriesIcon,
-  Face as BeautyIcon,
-  Spa as WellnessIcon,
-  Diamond as JewelleryIcon,
-  FoodBank as FootIcon,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const StyledButton = styled(Button)(({ theme, isOpen }) => ({
   backgroundColor: "#E34234",
@@ -73,6 +64,12 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
 
 const CategoryDropdown = ({ categories }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (categoryId) => {
+    navigate(`/coupons/${categoryId}`);
+    setIsOpen(false);
+  };
 
   return (
     <Box sx={{ position: "relative" }}>
@@ -93,6 +90,7 @@ const CategoryDropdown = ({ categories }) => {
                 key={index}
                 button
                 divider={index !== categories.length - 1}
+                onClick={() => handleCategoryClick(category.id)}
               >
                 <img src={category.image} alt="" width={26} height={26} />
                 &nbsp; &nbsp;

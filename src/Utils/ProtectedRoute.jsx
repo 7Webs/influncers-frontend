@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
-import AnimatedLoader from "../Components/Animated-Loader/AnimatedLoader";
+import AnimatedLoader from "../Components/Loaders/AnimatedLoader";
 import { useEffect } from "react";
 
 export const ProtectedRoute = ({ children }) => {

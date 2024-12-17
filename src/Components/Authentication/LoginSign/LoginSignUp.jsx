@@ -4,7 +4,7 @@ import { Box, Typography, TextField, Button, Checkbox, styled, Divider } from "@
 import GoogleIcon from '@mui/icons-material/Google';
 import AppleIcon from '@mui/icons-material/Apple';
 import { useAuth } from "../../../Utils/AuthContext";
-import AnimatedLoader from "../../Animated-Loader/AnimatedLoader";
+import AnimatedLoader from "../../Loaders/AnimatedLoader";
 
 const StyledSection = styled(Box)(({ theme }) => ({
   display: "flex",

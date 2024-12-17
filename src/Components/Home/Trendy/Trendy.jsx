@@ -4,6 +4,8 @@ import ProductCard from "../../Resuables/ProductCard";
 import "./Trendy.css";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { apiService } from "../../../Api/apiwrapper";
+import { CircularProgress } from "@mui/material";
+import SkeletonLoader from "../../Loaders/SkeletonLoader";
 
 const Trendy = () => {
   const loadMoreRef = useRef(null);
@@ -55,14 +57,21 @@ const Trendy = () => {
         <span>Deals</span> Only For You
       </h2>
       <div className="trendyMainContainer">
-        {allDeals.map((deal) => (
-          <ProductCard key={deal.id} deal={deal} />
-        ))}
+        {isFetching && !data ? (
+          // Show skeleton loader while initial data is being fetched
+          Array(8).fill(0).map((_, index) => (
+            <SkeletonLoader key={index} />
+          ))
+        ) : (
+          allDeals.map((deal) => (
+            <ProductCard key={deal.id} deal={deal} />
+          ))
+        )}
       </div>
       <div ref={loadMoreRef} className="loading-trigger">
-        {isFetchingNextPage && <p>Loading more deals...</p>}
+        {isFetchingNextPage && <CircularProgress />}
         {!hasNextPage && <p>No more deals to load</p>}
-        {isFetching && !isFetchingNextPage && <p>Loading...</p>}
+        {isFetching && !isFetchingNextPage && <CircularProgress />}
       </div>
     </div>
   );

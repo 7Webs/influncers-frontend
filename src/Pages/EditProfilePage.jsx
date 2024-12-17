@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Container,
@@ -29,6 +30,7 @@ const ProfileAvatar = styled(Avatar)(({ theme }) => ({
 const EditProfile = () => {
   const { user, updateProfileInfo } = useAuth();
   const { categories } = useCategory();
+  const navigate = useNavigate();
 
   const [profileData, setProfileData] = useState({
     name: user?.name || "",
@@ -82,9 +84,10 @@ const EditProfile = () => {
       }
 
       await updateProfileInfo(formData);
-        toast.success("Profile updated successfully");
+      toast.success("Profile updated successfully");
+      navigate("/profile");
     } catch (error) {
-        toast.error("Failed to update profile");
+      toast.error("Failed to update profile");
       console.error("Profile update error:", error);
     }
   };

@@ -5,15 +5,12 @@ import {
   Typography,
   TextField,
   Button,
-  Select,
-  MenuItem,
-  Link as MuiLink,
   styled,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import logo from "../../Assets/logo.png";
 import paymentIcon from "../../Assets/paymentIcon.png";
-import { FaFacebookF, FaInstagram, FaYoutube, FaPinterest } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaYoutube, FaPinterest, FaTiktok } from "react-icons/fa";
 
 const StyledFooter = styled(Box)(({ theme }) => ({
   padding: "30px 160px",
@@ -35,7 +32,6 @@ const FooterContainer = styled(Grid)(({ theme }) => ({
 const LogoContainer = styled(Box)(({ theme }) => ({
   marginBottom: "10px",
   "& img": {
-    background: "blue",
     width: "150px",
     height: "auto",
   },
@@ -106,51 +102,17 @@ const PaymentContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const FooterBottom = styled(Box)(({ theme }) => ({
-  display: "flex",
-  flexWrap: "wrap",
-  justifyContent: "space-between",
-  alignItems: "center",
-  marginTop: "20px",
-  borderTop: "1px solid #cfcdcd",
-  paddingTop: "30px",
-  gap: "20px",
-}));
-
-const LangCurrencyContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  gap: "20px",
-  flexWrap: "wrap",
-}));
-
-const SelectContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  gap: "30px",
-}));
-
-const StyledSelect = styled(Select)(({ theme }) => ({
-  border: "none",
-  backgroundColor: "transparent",
-  fontSize: "14px",
-  "& .MuiSelect-select": {
-    paddingTop: "0",
-    paddingBottom: "0",
-  },
-  "&:before, &:after": {
-    display: "none",
-  },
-  "& .MuiOutlinedInput-notchedOutline": {
-    border: "none",
-  },
+const SocialIconLink = styled('a')(({ theme }) => ({
+  color: 'black',
+  textDecoration: 'none',
+  fontSize: '24px',
+  transition: 'color 0.3s ease',
+  '&:hover': {
+    color: '#666',
+  }
 }));
 
 const Footer = () => {
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    alert("Subscribed Successfully");
-  };
-
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -177,47 +139,20 @@ const Footer = () => {
                 +91 9876543210
               </Typography>
             </Box>
-            <SocialLinks>
-              <FaFacebookF />
-              <FaInstagram />
-              <FaYoutube />
-              <FaPinterest />
-            </SocialLinks>
-          </Box>
-        </Grid>
 
-
-
-        <Grid item xs={12} md={2}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: "30px" }}>
-            <Typography variant="h5" sx={{ fontSize: "18px", fontWeight: 600, textTransform: "uppercase" }}>
-              Shop
-            </Typography>
-            <Box component="ul" sx={{ display: "flex", flexDirection: "column", gap: "15px", p: 0 }}>
-              {["New Arrivals", "Accessories", "Men", "Women", "Shop All"].map((item, index) => (
-                <Box component="li" key={index} sx={{ listStyle: "none" }}>
-                  <StyledLink to="/shop" onClick={scrollToTop}>
-                    {item}
-                  </StyledLink>
-                </Box>
-              ))}
-            </Box>
           </Box>
         </Grid>
 
         <Grid item xs={12} md={2}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: "30px" }}>
             <Typography variant="h5" sx={{ fontSize: "18px", fontWeight: 600, textTransform: "uppercase" }}>
-              Help
+              Pages
             </Typography>
             <Box component="ul" sx={{ display: "flex", flexDirection: "column", gap: "15px", p: 0 }}>
               {[
-                { text: "Customer Service", link: "/contact" },
-                { text: "My Account", link: "/loginSignUp" },
-                { text: "Find a Store", link: "/contact" },
-                { text: "Legal & Privacy", link: "/terms" },
-                { text: "Contact", link: "/contact" },
-                { text: "Gift Card", link: "/" },
+                { text: "Home", link: "/home" },
+                { text: "My Coupons", link: "/redeemed-coupons" },
+                { text: "Profile", link: "/profile" }
               ].map((item, index) => (
                 <Box component="li" key={index} sx={{ listStyle: "none" }}>
                   <StyledLink to={item.link} onClick={scrollToTop}>
@@ -232,20 +167,28 @@ const Footer = () => {
         <Grid item xs={12} md={3}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: "30px" }}>
             <Typography variant="h5" sx={{ fontSize: "18px", fontWeight: 600, textTransform: "uppercase" }}>
-              Subscribe
+              Follow Us
             </Typography>
             <Typography sx={{ fontSize: "14px" }}>
-              Be the first to get the latest news about trends, promotions, and much more!
+              Stay connected with us on social media for updates and exclusive offers!
             </Typography>
-            <StyledForm onSubmit={handleSubscribe}>
-              <StyledInput
-                placeholder="Your email address"
-                required
-                type="email"
-                fullWidth
-              />
-              <SubscribeButton type="submit">Join</SubscribeButton>
-            </StyledForm>
+            <Box sx={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+              <SocialIconLink href="#" target="_blank" aria-label="Facebook">
+                <FaFacebookF />
+              </SocialIconLink>
+              <SocialIconLink href="#" target="_blank" aria-label="Instagram">
+                <FaInstagram />
+              </SocialIconLink>
+              <SocialIconLink href="#" target="_blank" aria-label="YouTube">
+                <FaYoutube />
+              </SocialIconLink>
+              <SocialIconLink href="#" target="_blank" aria-label="Pinterest">
+                <FaPinterest />
+              </SocialIconLink>
+              <SocialIconLink href="#" target="_blank" aria-label="TikTok">
+                <FaTiktok />
+              </SocialIconLink>
+            </Box>
             <Typography variant="h6" sx={{ fontSize: "14px", fontWeight: 500 }}>
               Secure Payments
             </Typography>
@@ -255,42 +198,6 @@ const Footer = () => {
           </Box>
         </Grid>
       </FooterContainer>
-
-      <FooterBottom>
-        <Typography sx={{ fontSize: "14px" }}>
-          2024 7Webs. All Rights Reserved | Made By{" "}
-          <MuiLink
-            href="https://github.com/7Webs"
-            target="_blank"
-            rel="noreferrer"
-            sx={{ color: "#C22928", textDecoration: "none" }}
-          >
-            7Webs
-          </MuiLink>{" "}
-
-        </Typography>
-
-        <LangCurrencyContainer>
-          <SelectContainer>
-            <Typography>Language</Typography>
-            <StyledSelect defaultValue="english">
-              <MenuItem value="english">United States | English</MenuItem>
-              <MenuItem value="Hindi">Hindi</MenuItem>
-              <MenuItem value="Germany">Germany</MenuItem>
-              <MenuItem value="French">French</MenuItem>
-            </StyledSelect>
-          </SelectContainer>
-          <SelectContainer>
-            <Typography>Currency</Typography>
-            <StyledSelect defaultValue="USD">
-              <MenuItem value="USD">$ USD</MenuItem>
-              <MenuItem value="INR">₹ INR</MenuItem>
-              <MenuItem value="EUR">€ EUR</MenuItem>
-              <MenuItem value="GBP">£ GBP</MenuItem>
-            </StyledSelect>
-          </SelectContainer>
-        </LangCurrencyContainer>
-      </FooterBottom>
     </StyledFooter>
   );
 };
