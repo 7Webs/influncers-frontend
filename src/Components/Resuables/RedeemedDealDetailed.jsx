@@ -25,6 +25,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import { apiService } from "../../Api/apiwrapper";
+import { QRCodeCanvas } from "qrcode.react";
 
 const styles = {
   root: {
@@ -136,6 +137,10 @@ const styles = {
       backgroundColor: "#f8f8f8",
     },
   },
+  qrCode: {
+    marginTop: 2,
+    marginBottom: 2,
+  }
 };
 
 const RedeemedDealDetail = () => {
@@ -208,8 +213,11 @@ const RedeemedDealDetail = () => {
               <ContentCopy />
             </IconButton>
           </Box>
+          <Box sx={styles.qrCode}>
+            <QRCodeCanvas value={data.couponCode} size={128} level="H" />
+          </Box>
           <p style={{ color: "#666" }}>
-            Use this code at checkout to claim this deal!
+            Use this code or scan QR at checkout to claim this deal!
           </p>
         </Paper>
 
