@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Paper,
@@ -12,18 +12,19 @@ import {
   CardContent,
   CardMedia,
   CircularProgress,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import {
   ContentCopy,
   Share,
-  Facebook,
-  Twitter,
-  Instagram,
-  LinkedIn,
-  YouTube,
+  Close as CloseIcon,
 } from "@mui/icons-material";
-import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import { apiService } from "../../Api/apiwrapper";
 import { QRCodeCanvas } from "qrcode.react";
 
@@ -140,11 +141,52 @@ const styles = {
   qrCode: {
     marginTop: 2,
     marginBottom: 2,
+  },
+  formContainer: {
+    marginTop: 4,
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
   }
 };
 
 const RedeemedDealDetail = () => {
   const { id } = useParams();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [formData, setFormData] = useState({
+    socialMediaLink: "",
+    image: null,
+    additionalInfo: "",
+    additionalInfoLink: ""
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleImageChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      image: e.target.files[0]
+    }));
+  };
+
+  const approveMutation = useMutation({
+    mutationFn: async () => {
+      return await apiService.patch(`/deals-redeem/${id}`, {
+        "socialMediaLink": formData.socialMediaLink,
+        "additionalInfo": formData.additionalInfo,
+        "additionalInfoLink": formData.additionalInfoLink
+      });
+    },
+    onSuccess: () => {
+      setOpenDialog(false);
+    }
+  });
 
   const fetchDealDetails = async () => {
     const { data } = await apiService.get(`/deals-redeem/${id}`);
@@ -283,9 +325,82 @@ const RedeemedDealDetail = () => {
         </Card>
 
         <Card sx={styles.contentCard}>
-          <h3 style={styles.sectionTitle}>Redemption Status</h3>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <h3 style={styles.sectionTitle}>Redemption Status</h3>
+            {data.status === 'pending_usage' && (
+              <Button
+                variant="contained"
+                sx={styles.primaryButton}
+                onClick={() => setOpenDialog(true)}
+              >
+                Send Approval
+              </Button>
+            )}
+          </Box>
           <p>{data.status}</p>
         </Card>
+
+        <Dialog
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle>
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+              <span>Approval Information</span>
+              <IconButton onClick={() => setOpenDialog(false)}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+          </DialogTitle>
+          <DialogContent>
+            <Box sx={styles.formContainer}>
+              <TextField
+                name="socialMediaLink"
+                label="Social Media Link"
+                value={formData.socialMediaLink}
+                onChange={handleInputChange}
+                fullWidth
+              />
+              <TextField
+                name="image"
+                type="file"
+                onChange={handleImageChange}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <TextField
+                name="additionalInfo"
+                label="Additional Information"
+                value={formData.additionalInfo}
+                onChange={handleInputChange}
+                multiline
+                rows={4}
+                fullWidth
+              />
+              <TextField
+                name="additionalInfoLink"
+                label="Additional Information Link"
+                value={formData.additionalInfoLink}
+                onChange={handleInputChange}
+                fullWidth
+              />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              variant="contained"
+              sx={styles.primaryButton}
+              onClick={() => approveMutation.mutate()}
+              disabled={approveMutation.isLoading}
+            >
+              {approveMutation.isLoading ? "Submitting..." : "Submit"}
+            </Button>
+          </DialogActions>
+        </Dialog>
 
         <Box sx={styles.actionButtons}>
           <Button
