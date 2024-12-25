@@ -20,10 +20,12 @@ import {
   LinkedIn,
   CameraAlt,
   Edit,
+  YouTube,
 } from "@mui/icons-material";
 import { PiEnvelope, PiGenderIntersex, PiPhone } from "react-icons/pi";
 import { IoCalendar, IoLocation } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { FaTiktok } from "react-icons/fa6";
 
 // Styled Components
 const CoverPhoto = styled(Box)({
@@ -66,6 +68,8 @@ const Profile = () => {
     { Icon: Instagram, color: "#E1306C", link: user?.instagramProfileLink },
     { Icon: Twitter, color: "#1DA1F2", link: user?.twitterProfileLink },
     { Icon: LinkedIn, color: "#0077b5", link: user?.linkedinProfileLink },
+    { Icon: FaTiktok, color: "#000000", link: user?.tiktokProfileLink },
+    { Icon: YouTube, color: "#FF0000", link: user?.youtubeProfileLink },
   ];
 
   return (

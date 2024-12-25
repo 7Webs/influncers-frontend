@@ -67,13 +67,21 @@ const EditProfile = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
 
       // Dynamically append non-empty fields to FormData
       Object.keys(profileData).forEach((key) => {
-        if (profileData[key]) {
+        if (user[key] !== profileData[key]) {
           formData.append(key, profileData[key]);
         }
       });
@@ -268,6 +276,11 @@ const EditProfile = () => {
                 size="large"
               >
                 Save Changes
+              </Button>
+            </Box>
+            <Box display="flex" justifyContent="center" mt={3}>
+              <Button variant="contained" color="error" onClick={handleLogout}>
+                Logout
               </Button>
             </Box>
           </Box>
