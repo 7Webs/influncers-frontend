@@ -27,6 +27,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { apiService } from "../../Api/apiwrapper";
 import { QRCodeCanvas } from "qrcode.react";
+import { toast } from "react-toastify";
 
 const styles = {
   root: {
@@ -155,9 +156,7 @@ const RedeemedDealDetail = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [formData, setFormData] = useState({
     socialMediaLink: "",
-    image: null,
-    additionalInfo: "",
-    additionalInfoLink: ""
+    additionalInfo: ""
   });
 
   const handleInputChange = (e) => {
@@ -168,23 +167,32 @@ const RedeemedDealDetail = () => {
     }));
   };
 
-  const handleImageChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      image: e.target.files[0]
-    }));
+  const handleCopyCode = (code) => {
+    navigator.clipboard.writeText(code)
+      .then(() => {
+        toast.success("Coupon code copied to clipboard!");
+      })
+      .catch(() => {
+        toast.error("Failed to copy code");
+      });
   };
 
   const approveMutation = useMutation({
     mutationFn: async () => {
       return await apiService.patch(`/deals-redeem/${id}`, {
         "socialMediaLink": formData.socialMediaLink,
-        "additionalInfo": formData.additionalInfo,
-        "additionalInfoLink": formData.additionalInfoLink
+        "additionalInfo": formData.additionalInfo
       });
     },
     onSuccess: () => {
       setOpenDialog(false);
+      toast.success("Deal approved successfully");
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    },
+    onError: (error) => {
+      toast.error(error.message);
     }
   });
 
@@ -251,7 +259,10 @@ const RedeemedDealDetail = () => {
             gap={2}
           >
             <h2 style={{ color: "#000" }}>{data.couponCode}</h2>
-            <IconButton sx={styles.copyButton}>
+            <IconButton
+              sx={styles.copyButton}
+              onClick={() => handleCopyCode(data.couponCode)}
+            >
               <ContentCopy />
             </IconButton>
           </Box>
@@ -296,14 +307,15 @@ const RedeemedDealDetail = () => {
           <h3 style={styles.sectionTitle}>Shop Information</h3>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <h4>{shop.name}</h4>
-              <p>{shop.description}</p>
+              <Box display="flex" alignItems="center" gap={2} marginBottom={2}>
+                <img src={shop.logo} alt={shop.name} style={styles.logo} />
+                <Box>
+                  <h4>{shop.name}</h4>
+                  <p>{shop.description}</p>
+                </Box>
+              </Box>
               <p>{shop.address}</p>
               <Chip label={shop.category.name} sx={styles.chip} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <p>Subscription: {shop.subscriptionStatus}</p>
-              <p>Max Deals: {shop.maxDeals}</p>
             </Grid>
           </Grid>
         </Card>
@@ -327,17 +339,23 @@ const RedeemedDealDetail = () => {
         <Card sx={styles.contentCard}>
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <h3 style={styles.sectionTitle}>Redemption Status</h3>
-            {data.status === 'pending_usage' && (
+            {data.status === 'used' && (
               <Button
                 variant="contained"
                 sx={styles.primaryButton}
                 onClick={() => setOpenDialog(true)}
               >
-                Send Approval
+                Request for Approval
               </Button>
             )}
           </Box>
           <p>{data.status}</p>
+          {data.socialMediaLink && (
+            <p>Social Media Link: {data.socialMediaLink}</p>
+          )}
+          {data.additionalInfo && (
+            <p>Additional Information: {data.additionalInfo}</p>
+          )}
         </Card>
 
         <Dialog
@@ -364,28 +382,12 @@ const RedeemedDealDetail = () => {
                 fullWidth
               />
               <TextField
-                name="image"
-                type="file"
-                onChange={handleImageChange}
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <TextField
                 name="additionalInfo"
                 label="Additional Information"
                 value={formData.additionalInfo}
                 onChange={handleInputChange}
                 multiline
                 rows={4}
-                fullWidth
-              />
-              <TextField
-                name="additionalInfoLink"
-                label="Additional Information Link"
-                value={formData.additionalInfoLink}
-                onChange={handleInputChange}
                 fullWidth
               />
             </Box>
@@ -401,20 +403,6 @@ const RedeemedDealDetail = () => {
             </Button>
           </DialogActions>
         </Dialog>
-
-        <Box sx={styles.actionButtons}>
-          <Button
-            variant="contained"
-            startIcon={<Share />}
-            size="large"
-            sx={styles.primaryButton}
-          >
-            Share Deal
-          </Button>
-          <Button variant="outlined" size="large" sx={styles.outlinedButton}>
-            Contact Support
-          </Button>
-        </Box>
       </Container>
     </Box>
   );

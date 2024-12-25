@@ -1,11 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import {
-    Box,
-    Card,
-    CardContent,
     Typography,
     List,
     CircularProgress,
+    Container
 } from "@mui/material";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { apiService } from "../../Api/apiwrapper";
@@ -64,33 +62,33 @@ const RedeemedCoupons = () => {
     };
 
     return (
-        <Box>
-            <Card sx={{ mb: 3, boxShadow: 0.3 }}>
-                <CardContent>
-                    <Typography variant="h6" fontWeight="bold" gutterBottom>
-                        Redeemed Deals
-                    </Typography>
-                    <List>
-                        {isFetching && !data ? (
-                            [...Array(3)].map((_, index) => (
-                                <SkeletonLoader key={index} />
-                            ))
-                        ) : (
-                            allRedeemedDeals.map((deal) => (
-                                <div key={deal.id} onClick={() => handleDealClick(deal.id)}>
-                                    <RedeemedDealCard deal={deal} />
-                                </div>
-                            ))
-                        )}
-                    </List>
-                    <div ref={loadMoreRef} style={{ textAlign: 'center', padding: '20px' }}>
-                        {isFetchingNextPage && <CircularProgress size={30} />}
-                        {!hasNextPage && <Typography>No more deals to load</Typography>}
-                        {isFetching && !isFetchingNextPage && <CircularProgress size={30} />}
-                    </div>
-                </CardContent>
-            </Card>
-        </Box>
+        <Container>
+            <div style={{ mb: 3, boxShadow: 0.3 }}>
+                {/* <CardContent> */}
+                <Typography variant="h6" fontWeight="bold" gutterBottom>
+                    Redeemed Deals
+                </Typography>
+                <List>
+                    {isFetching && !data ? (
+                        [...Array(3)].map((_, index) => (
+                            <SkeletonLoader key={index} />
+                        ))
+                    ) : (
+                        allRedeemedDeals.map((deal) => (
+                            <div key={deal.id} onClick={() => handleDealClick(deal.id)}>
+                                <RedeemedDealCard deal={deal} />
+                            </div>
+                        ))
+                    )}
+                </List>
+                <div ref={loadMoreRef} style={{ textAlign: 'center', padding: '20px' }}>
+                    {isFetchingNextPage && <CircularProgress size={30} />}
+                    {!hasNextPage && <Typography>No more deals to load</Typography>}
+                    {isFetching && !isFetchingNextPage && <CircularProgress size={30} />}
+                </div>
+                {/* </CardContent> */}
+            </div>
+        </Container>
     );
 };
 
