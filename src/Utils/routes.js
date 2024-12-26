@@ -11,6 +11,9 @@ import ShoppingCart from "../Components/ShoppingCart/ShoppingCart";
 import Profile from "../Pages/Profile";
 import EditProfile from "../Pages/EditProfilePage";
 import RedeemedDealDetail from "../Components/Resuables/RedeemedDealDetailed";
+import RedeemedCoupons from "../Components/Coupons/RedeemedCoupons";
+import Categories from "../Components/Categories/Categories";
+
 export const routes = {
   protected: [
     {
@@ -52,6 +55,14 @@ export const routes = {
     {
       path: "/redeemed-deals/:id",
       element: React.createElement(RedeemedDealDetail),
+    },
+    {
+      path: "/redeemed-coupons",
+      element: React.createElement(RedeemedCoupons),
+    },
+    {
+      path: "/coupons/:categoryId",
+      element: React.createElement(Categories),
     },
   ],
   public: [

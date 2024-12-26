@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Container,
@@ -29,6 +30,7 @@ const ProfileAvatar = styled(Avatar)(({ theme }) => ({
 const EditProfile = () => {
   const { user, updateProfileInfo } = useAuth();
   const { categories } = useCategory();
+  const navigate = useNavigate();
 
   const [profileData, setProfileData] = useState({
     name: user?.name || "",
@@ -65,13 +67,21 @@ const EditProfile = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
 
       // Dynamically append non-empty fields to FormData
       Object.keys(profileData).forEach((key) => {
-        if (profileData[key]) {
+        if (user[key] !== profileData[key]) {
           formData.append(key, profileData[key]);
         }
       });
@@ -82,9 +92,10 @@ const EditProfile = () => {
       }
 
       await updateProfileInfo(formData);
-        toast.success("Profile updated successfully");
+      toast.success("Profile updated successfully");
+      navigate("/profile");
     } catch (error) {
-        toast.error("Failed to update profile");
+      toast.error("Failed to update profile");
       console.error("Profile update error:", error);
     }
   };
@@ -265,6 +276,11 @@ const EditProfile = () => {
                 size="large"
               >
                 Save Changes
+              </Button>
+            </Box>
+            <Box display="flex" justifyContent="center" mt={3}>
+              <Button variant="contained" color="error" onClick={handleLogout}>
+                Logout
               </Button>
             </Box>
           </Box>

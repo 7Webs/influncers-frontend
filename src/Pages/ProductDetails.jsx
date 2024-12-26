@@ -5,7 +5,7 @@ import RelatedProducts from "../Components/Product/RelatedProducts/RelatedProduc
 import { useParams } from "react-router-dom";
 import { apiService } from "../Api/apiwrapper";
 import { useQuery } from "@tanstack/react-query";
-import AnimatedLoader from "../Components/Animated-Loader/AnimatedLoader";
+import AnimatedLoader from "../Components/Loaders/AnimatedLoader";
 import Error from "../Components/Error/Error";
 
 const ProductDetails = () => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Paper,
@@ -12,19 +12,22 @@ import {
   CardContent,
   CardMedia,
   CircularProgress,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import {
   ContentCopy,
   Share,
-  Facebook,
-  Twitter,
-  Instagram,
-  LinkedIn,
-  YouTube,
+  Close as CloseIcon,
 } from "@mui/icons-material";
-import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import { apiService } from "../../Api/apiwrapper";
+import { QRCodeCanvas } from "qrcode.react";
+import { toast } from "react-toastify";
 
 const styles = {
   root: {
@@ -136,10 +139,62 @@ const styles = {
       backgroundColor: "#f8f8f8",
     },
   },
+  qrCode: {
+    marginTop: 2,
+    marginBottom: 2,
+  },
+  formContainer: {
+    marginTop: 4,
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
+  }
 };
 
 const RedeemedDealDetail = () => {
   const { id } = useParams();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [formData, setFormData] = useState({
+    socialMediaLink: "",
+    additionalInfo: ""
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleCopyCode = (code) => {
+    navigator.clipboard.writeText(code)
+      .then(() => {
+        toast.success("Coupon code copied to clipboard!");
+      })
+      .catch(() => {
+        toast.error("Failed to copy code");
+      });
+  };
+
+  const approveMutation = useMutation({
+    mutationFn: async () => {
+      return await apiService.patch(`/deals-redeem/${id}`, {
+        "socialMediaLink": formData.socialMediaLink,
+        "additionalInfo": formData.additionalInfo
+      });
+    },
+    onSuccess: () => {
+      setOpenDialog(false);
+      toast.success("Deal approved successfully");
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    }
+  });
 
   const fetchDealDetails = async () => {
     const { data } = await apiService.get(`/deals-redeem/${id}`);
@@ -204,12 +259,18 @@ const RedeemedDealDetail = () => {
             gap={2}
           >
             <h2 style={{ color: "#000" }}>{data.couponCode}</h2>
-            <IconButton sx={styles.copyButton}>
+            <IconButton
+              sx={styles.copyButton}
+              onClick={() => handleCopyCode(data.couponCode)}
+            >
               <ContentCopy />
             </IconButton>
           </Box>
+          <Box sx={styles.qrCode}>
+            <QRCodeCanvas value={data.couponCode} size={128} level="H" />
+          </Box>
           <p style={{ color: "#666" }}>
-            Use this code at checkout to claim this deal!
+            Use this code or scan QR at checkout to claim this deal!
           </p>
         </Paper>
 
@@ -246,14 +307,15 @@ const RedeemedDealDetail = () => {
           <h3 style={styles.sectionTitle}>Shop Information</h3>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <h4>{shop.name}</h4>
-              <p>{shop.description}</p>
+              <Box display="flex" alignItems="center" gap={2} marginBottom={2}>
+                <img src={shop.logo} alt={shop.name} style={styles.logo} />
+                <Box>
+                  <h4>{shop.name}</h4>
+                  <p>{shop.description}</p>
+                </Box>
+              </Box>
               <p>{shop.address}</p>
               <Chip label={shop.category.name} sx={styles.chip} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <p>Subscription: {shop.subscriptionStatus}</p>
-              <p>Max Deals: {shop.maxDeals}</p>
             </Grid>
           </Grid>
         </Card>
@@ -275,23 +337,72 @@ const RedeemedDealDetail = () => {
         </Card>
 
         <Card sx={styles.contentCard}>
-          <h3 style={styles.sectionTitle}>Redemption Status</h3>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <h3 style={styles.sectionTitle}>Redemption Status</h3>
+            {data.status === 'used' && (
+              <Button
+                variant="contained"
+                sx={styles.primaryButton}
+                onClick={() => setOpenDialog(true)}
+              >
+                Request for Approval
+              </Button>
+            )}
+          </Box>
           <p>{data.status}</p>
+          {data.socialMediaLink && (
+            <p>Social Media Link: {data.socialMediaLink}</p>
+          )}
+          {data.additionalInfo && (
+            <p>Additional Information: {data.additionalInfo}</p>
+          )}
         </Card>
 
-        <Box sx={styles.actionButtons}>
-          <Button
-            variant="contained"
-            startIcon={<Share />}
-            size="large"
-            sx={styles.primaryButton}
-          >
-            Share Deal
-          </Button>
-          <Button variant="outlined" size="large" sx={styles.outlinedButton}>
-            Contact Support
-          </Button>
-        </Box>
+        <Dialog
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle>
+            <Box display="flex" justifyContent="space-between" alignItems="center">
+              <span>Approval Information</span>
+              <IconButton onClick={() => setOpenDialog(false)}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+          </DialogTitle>
+          <DialogContent>
+            <Box sx={styles.formContainer}>
+              <TextField
+                name="socialMediaLink"
+                label="Social Media Link"
+                value={formData.socialMediaLink}
+                onChange={handleInputChange}
+                fullWidth
+              />
+              <TextField
+                name="additionalInfo"
+                label="Additional Information"
+                value={formData.additionalInfo}
+                onChange={handleInputChange}
+                multiline
+                rows={4}
+                fullWidth
+              />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              variant="contained"
+              sx={styles.primaryButton}
+              onClick={() => approveMutation.mutate()}
+              disabled={approveMutation.isLoading}
+            >
+              {approveMutation.isLoading ? "Submitting..." : "Submit"}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </Box>
   );
