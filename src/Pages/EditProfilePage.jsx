@@ -28,7 +28,7 @@ const ProfileAvatar = styled(Avatar)(({ theme }) => ({
 }));
 
 const EditProfile = () => {
-  const { user, updateProfileInfo } = useAuth();
+  const { user, updateProfileInfo, logout } = useAuth();
   const { categories } = useCategory();
   const navigate = useNavigate();
 
