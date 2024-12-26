@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { GoChevronLeft } from "react-icons/go";
 import { GoChevronRight } from "react-icons/go";
 import { PiShareNetworkLight } from "react-icons/pi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Product.css";
 import { apiService } from "../../../Api/apiwrapper";
 import { toast } from "react-toastify";
 
 const Product = ({ data, isLoading, error }) => {
   const [currentImg, setCurrentImg] = useState(0);
+  const nav = useNavigate();
 
   const redeemDeal = async () => {
     try {
@@ -18,6 +19,7 @@ const Product = ({ data, isLoading, error }) => {
         dealId: data.id,
       });
       toast.success("Deal redeemed successfully");
+      nav("/redeemed-coupons");
     } catch (error) {
       toast.error(error.response.data.message.toString());
       console.error("Error redeeming deal:", error);
