@@ -17,17 +17,21 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Typography,
+  Link
 } from "@mui/material";
 import {
   ContentCopy,
   Share,
   Close as CloseIcon,
+  CheckCircleOutline
 } from "@mui/icons-material";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { apiService } from "../../Api/apiwrapper";
 import { QRCodeCanvas } from "qrcode.react";
 import { toast } from "react-toastify";
+import { getStatusConfig } from "../../Utils/Status";
 
 const styles = {
   root: {
@@ -156,7 +160,8 @@ const RedeemedDealDetail = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [formData, setFormData] = useState({
     socialMediaLink: "",
-    additionalInfo: ""
+    additionalInfo: "",
+    image: ""
   });
 
   const handleInputChange = (e) => {
@@ -165,6 +170,20 @@ const RedeemedDealDetail = () => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({
+          ...prev,
+          image: reader.result
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleCopyCode = (code) => {
@@ -181,12 +200,13 @@ const RedeemedDealDetail = () => {
     mutationFn: async () => {
       return await apiService.patch(`/deals-redeem/${id}`, {
         "socialMediaLink": formData.socialMediaLink,
-        "additionalInfo": formData.additionalInfo
+        "additionalInfo": formData.additionalInfo,
+        "image": formData.image
       });
     },
     onSuccess: () => {
       setOpenDialog(false);
-      toast.success("Deal approved successfully");
+      toast.success("Request for approval submitted successfully");
       setTimeout(() => {
         window.location.reload();
       }, 2000);
@@ -234,6 +254,7 @@ const RedeemedDealDetail = () => {
 
   const { deal } = data;
   const { shop } = deal;
+  const statusConfig = getStatusConfig(null, data.status);
 
   return (
     <Box sx={styles.root}>
@@ -249,6 +270,81 @@ const RedeemedDealDetail = () => {
             <p>{data.deal.shortTagLine}</p>
           </Box>
         </Paper>
+
+        <Card sx={styles.contentCard}>
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+            <Box>
+              <h3 style={styles.sectionTitle}>Redemption Status</h3>
+              <Box sx={{
+                px: 2,
+                py: 0.5,
+                borderRadius: 1,
+                bgcolor: `${statusConfig.color}20`,
+                color: statusConfig.color,
+                textTransform: 'capitalize',
+                mt: 1,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1
+              }}>
+                {statusConfig.icon}
+                {statusConfig.label}
+              </Box>
+            </Box>
+            {data.status === 'used' && (
+              <Button
+                variant="contained"
+                sx={styles.primaryButton}
+                onClick={() => setOpenDialog(true)}
+                startIcon={<CheckCircleOutline />}
+              >
+                Request for Approval
+              </Button>
+            )}
+          </Box>
+
+          {(data.socialMediaLink || data.additionalInfo || data.image) && (
+            <Box sx={{
+              bgcolor: '#F8F9FA',
+              p: 2,
+              borderRadius: 1
+            }}>
+              {data.socialMediaLink && (
+                <Box mb={data.additionalInfo ? 2 : 0}>
+                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+                    Social Media Link
+                  </Typography>
+                  <Link href={data.socialMediaLink} target="_blank" sx={{
+                    color: '#0066CC',
+                    wordBreak: 'break-all'
+                  }}>
+                    {data.socialMediaLink}
+                  </Link>
+                </Box>
+              )}
+
+              {data.additionalInfo && (
+                <Box>
+                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+                    Additional Information
+                  </Typography>
+                  <Typography variant="body2">
+                    {data.additionalInfo}
+                  </Typography>
+                </Box>
+              )}
+
+              {data.image && (
+                <Box mt={2}>
+                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+                    Uploaded Image
+                  </Typography>
+                  <img src={data.image} alt="Uploaded" style={{ maxWidth: '100%', height: 'auto' }} />
+                </Box>
+              )}
+            </Box>
+          )}
+        </Card>
 
         <Paper sx={styles.couponSection}>
           <p style={{ color: "#666" }}>Your Coupon Code</p>
@@ -336,28 +432,6 @@ const RedeemedDealDetail = () => {
           </Box>
         </Card>
 
-        <Card sx={styles.contentCard}>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <h3 style={styles.sectionTitle}>Redemption Status</h3>
-            {data.status === 'used' && (
-              <Button
-                variant="contained"
-                sx={styles.primaryButton}
-                onClick={() => setOpenDialog(true)}
-              >
-                Request for Approval
-              </Button>
-            )}
-          </Box>
-          <p>{data.status}</p>
-          {data.socialMediaLink && (
-            <p>Social Media Link: {data.socialMediaLink}</p>
-          )}
-          {data.additionalInfo && (
-            <p>Additional Information: {data.additionalInfo}</p>
-          )}
-        </Card>
-
         <Dialog
           open={openDialog}
           onClose={() => setOpenDialog(false)}
@@ -390,6 +464,32 @@ const RedeemedDealDetail = () => {
                 rows={4}
                 fullWidth
               />
+              <input
+                accept="image/*"
+                style={{ display: 'none' }}
+                id="image-upload"
+                type="file"
+                onChange={handleImageChange}
+              />
+              <label htmlFor="image-upload">
+                <Button
+                  variant="outlined"
+                  component="span"
+                  fullWidth
+                  sx={styles.outlinedButton}
+                >
+                  Upload Image
+                </Button>
+              </label>
+              {formData.image && (
+                <Box mt={2}>
+                  <img
+                    src={formData.image}
+                    alt="Preview"
+                    style={{ maxWidth: '100%', height: 'auto' }}
+                  />
+                </Box>
+              )}
             </Box>
           </DialogContent>
           <DialogActions>

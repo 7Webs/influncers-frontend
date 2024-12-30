@@ -129,17 +129,19 @@ const Footer = () => {
               <img src={logo} alt="Logo" />
             </LogoContainer>
             <Typography sx={{ fontSize: "14px" }}>
-              Deo Nagar, Giridih, Jarkhand, India - 815312
+              Copyright © 2025 nanoinfluencers.io, All rights reserved.
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", mb: 1 }}>
               <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>
-                support@7webs.co.in
+                nanoinfluencers.contacto@gmail.com
               </Typography>
               <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>
-                +91 9876543210
+                +34606662830
               </Typography>
             </Box>
-
+            <Typography sx={{ fontSize: "14px" }}>
+              Designed and developed by webagencyexpert.com
+            </Typography>
           </Box>
         </Grid>
 
@@ -150,7 +152,7 @@ const Footer = () => {
             </Typography>
             <Box component="ul" sx={{ display: "flex", flexDirection: "column", gap: "15px", p: 0 }}>
               {[
-                { text: "Home", link: "/home" },
+                { text: "Home", link: "https://nanoinfluencers.io/" },
                 { text: "My Coupons", link: "/redeemed-coupons" },
                 { text: "Profile", link: "/profile" }
               ].map((item, index) => (

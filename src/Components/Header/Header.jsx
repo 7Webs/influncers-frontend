@@ -36,17 +36,10 @@ const HeaderMain = () => {
 
   const handleForYouClick = () => {
     nav("/home");
-    setTimeout(() => {
-      const trendySection = document.querySelector(".trendyProducts");
-      if (trendySection) {
-        trendySection.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 100);
   };
 
   const handleHomeClick = () => {
-    nav("/home");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.location.href = "https://nanoinfluencers.io/";
   };
 
   return (
@@ -97,7 +90,7 @@ const HeaderMain = () => {
               <HeadsetIcon />
               <Box>
                 <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                  1900 - 888
+                  +34606662830
                 </Typography>
                 <Typography variant="caption">24/7 Support Center</Typography>
               </Box>
@@ -201,38 +194,50 @@ const RedeemedDealTimer = ({ redeemedDeal }) => {
   return (
     <Box
       sx={{
-        background: "#cccccc",
-        color: "black",
-        py: 1,
-        px: 2,
+        background: "linear-gradient(90deg, #1a237e 0%, #0d47a1 100%)",
+        color: "white",
+        py: 0.5,
+        px: 3,
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
       }}
     >
-      <Grid container spacing={1} alignItems="center">
+      <Grid container spacing={2} alignItems="center">
         {/* Left section with image and basic info */}
         <Grid
           item
           xs={12}
           sm={6}
           md={4}
+          sx={{
+            cursor: "pointer",
+            "&:hover": {
+              opacity: 0.9,
+            },
+          }}
           onClick={() => {
             nav(`/redeemed-deals/${redeemedDeal.id}`);
           }}
         >
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" spacing={2} alignItems="center">
             <Avatar
               src={redeemedDeal.deal.images?.[0]}
-              sx={{ width: 40, height: 40 }}
+              sx={{
+                width: 50,
+                height: 50,
+                border: "2px solid rgba(255,255,255,0.2)",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+              }}
               variant="rounded"
             />
             <Box>
-              <h4 style={{ margin: "0 0 2px 0", fontSize: "1rem" }}>
+              <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
                 {redeemedDeal.deal.title}
-              </h4>
+              </Typography>
               <Stack direction="row" spacing={1} alignItems="center">
-                <Store sx={{ fontSize: "0.75rem" }} />
-                <p style={{ margin: 0, fontSize: "0.75rem" }}>
+                <Store sx={{ fontSize: "0.875rem" }} />
+                <Typography variant="body2">
                   {redeemedDeal.deal.shop.name}
-                </p>
+                </Typography>
               </Stack>
             </Box>
           </Stack>
@@ -242,69 +247,83 @@ const RedeemedDealTimer = ({ redeemedDeal }) => {
         <Grid item xs={12} sm={6} md={4}>
           <Stack
             direction="row"
-            spacing={1}
+            spacing={2}
             alignItems="center"
             justifyContent="center"
           >
-            <LocalOffer sx={{ fontSize: "0.875rem" }} />
-            <p
-              style={{
-                margin: 0,
+            <LocalOffer sx={{ fontSize: "1rem" }} />
+            <Typography
+              sx={{
                 fontFamily: "monospace",
-                letterSpacing: 1,
-                fontSize: "0.875rem",
+                letterSpacing: 1.5,
+                fontSize: "1.1rem",
+                fontWeight: 600,
+                background: "rgba(255,255,255,0.1)",
+                padding: "4px 12px",
+                borderRadius: "4px",
               }}
             >
               {redeemedDeal.couponCode}
-            </p>
+            </Typography>
             <Tooltip title="Copy code">
               <IconButton
                 size="small"
                 onClick={handleCopyCode}
-                sx={{ color: "white", p: 0.5 }}
+                sx={{
+                  color: "white",
+                  p: 1,
+                  "&:hover": {
+                    background: "rgba(255,255,255,0.1)"
+                  }
+                }}
               >
-                <ContentCopy sx={{ fontSize: "0.875rem" }} />
+                <ContentCopy />
               </IconButton>
             </Tooltip>
             <Chip
               label={redeemedDeal.status.replace("_", " ")}
               color={getStatusColor(redeemedDeal.status)}
-              size="small"
-              sx={{ textTransform: "capitalize", height: 20 }}
+              sx={{
+                textTransform: "capitalize",
+                fontWeight: 600,
+                px: 1
+              }}
             />
           </Stack>
         </Grid>
 
         {/* Right section with timer */}
         <Grid item xs={12} md={4}>
-          <Stack alignItems="center" spacing={0.5}>
-            <Stack direction="row" spacing={0.5} alignItems="center">
-              <AccessTime sx={{ fontSize: "0.75rem" }} />
-              <p style={{ margin: 0, fontSize: "0.75rem" }}>
-                &nbsp; Use Before: &nbsp;
-              </p>
-              <h4
-                style={{
-                  margin: 0,
+          <Stack alignItems="center" spacing={1}>
+            <Stack direction="row" spacing={1} alignItems="center">
+              <AccessTime />
+              <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                Expires in:
+              </Typography>
+              <Typography
+                sx={{
                   fontFamily: "monospace",
-                  fontSize: "1rem",
+                  fontSize: "1.2rem",
+                  fontWeight: 700,
+                  color: timeRemaining.hours < 6 ? "#ff9800" : "inherit"
                 }}
               >
                 {`${formatNumber(timeRemaining.hours)}:${formatNumber(
                   timeRemaining.minutes
                 )}:${formatNumber(timeRemaining.seconds)}`}
-              </h4>
+              </Typography>
             </Stack>
             <LinearProgress
               variant="determinate"
               value={timeRemaining.progress}
               sx={{
-                height: 2,
+                height: 4,
                 width: "100%",
-                borderRadius: 1,
+                borderRadius: 2,
                 bgcolor: "rgba(255,255,255,0.2)",
                 "& .MuiLinearProgress-bar": {
-                  bgcolor: "white",
+                  bgcolor: timeRemaining.hours < 6 ? "#ff9800" : "#4caf50",
+                  transition: "transform 0.2s linear"
                 },
               }}
             />

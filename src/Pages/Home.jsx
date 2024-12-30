@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <>
       {/* <Popup /> */}
-      <Banner />
+      {/* <Banner /> */}
       {/* <DealTimer /> */}
       <Trendy />
       {/* <CollectionBox /> */}
