@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Box, Typography, TextField, Button, Checkbox, styled, Divider } from "@mui/material";
-import GoogleIcon from '@mui/icons-material/Google';
-import AppleIcon from '@mui/icons-material/Apple';
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Checkbox,
+  styled,
+  Divider,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import GoogleIcon from "@mui/icons-material/Google";
+import AppleIcon from "@mui/icons-material/Apple";
 import { useAuth } from "../../../Utils/AuthContext";
 import AnimatedLoader from "../../Loaders/AnimatedLoader";
 
@@ -111,19 +123,32 @@ const SocialButton = styled(Button)(({ theme }) => ({
   marginBottom: "0px",
 }));
 
-
-
 const LoginSignUp = () => {
   const [activeTab, setActiveTab] = useState("tabButton1");
-  const { user, loading, authChecked, login, register, loginWithGoogle, loginWithApple } = useAuth();
+  const {
+    user,
+    loading,
+    authChecked,
+    login,
+    register,
+    loginWithGoogle,
+    loginWithApple,
+  } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const handleTogglePassword = () => setShowPassword(!showPassword);
+  const handleToggleConfirmPassword = () =>
+    setShowConfirmPassword(!showConfirmPassword);
 
   useEffect(() => {
     if (authChecked && user) {
@@ -229,36 +254,38 @@ const LoginSignUp = () => {
                   fullWidth
                 />
                 <StyledTextField
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Password *"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                   required
                   fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleTogglePassword} edge="end">
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
-                <Box sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-
-                  alignItems: "center"
-                }}>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Checkbox sx={{
-                      color: "#e4e4e4",
-                      "&.Mui-checked": {
-                        color: "black",
-                      }
-                    }} />
-                    <Typography sx={{ color: "#767676", fontSize: "14px" }}>
-                      Remember me
-                    </Typography>
-                  </Box>
-                  <Link to="/resetPassword" style={{
-                    fontSize: "14px",
-                    color: "black",
-                    textDecoration: "none"
-                  }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Link
+                    to="/resetPassword"
+                    style={{
+                      fontSize: "14px",
+                      color: "black",
+                      textDecoration: "none",
+                    }}
+                  >
                     Forgot password?
                   </Link>
                 </Box>
@@ -268,10 +295,18 @@ const LoginSignUp = () => {
 
                 <Divider sx={{ my: 0 }}>OR</Divider>
 
-                <SocialButton fullWidth startIcon={<GoogleIcon />} onClick={handleGoogleLogin}>
+                <SocialButton
+                  fullWidth
+                  startIcon={<GoogleIcon />}
+                  onClick={handleGoogleLogin}
+                >
                   Continue with Google
                 </SocialButton>
-                <SocialButton fullWidth startIcon={<AppleIcon />} onClick={handleAppleLogin}>
+                <SocialButton
+                  fullWidth
+                  startIcon={<AppleIcon />}
+                  onClick={handleAppleLogin}
+                >
                   Continue with Apple
                 </SocialButton>
               </StyledForm>
@@ -324,22 +359,47 @@ const LoginSignUp = () => {
                   fullWidth
                 />
                 <StyledTextField
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Password *"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                   required
                   fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleTogglePassword} edge="end">
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 <StyledTextField
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm Password *"
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required
                   fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleToggleConfirmPassword}
+                          edge="end"
+                        >
+                          {showConfirmPassword ? (
+                            <VisibilityOff />
+                          ) : (
+                            <Visibility />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 <StyledButton type="submit" variant="contained" fullWidth>
                   Register

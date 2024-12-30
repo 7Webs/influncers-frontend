@@ -76,9 +76,9 @@ const Profile = () => {
     <Box>
       <Container maxWidth="lg">
         {/* User Information Card */}
-        <Card sx={{ mb: 3, boxShadow: 0.3 }}>
+        <Card sx={{ mb: 3, boxShadow: 0.3, mt: 5 }}>
           <CoverPhoto>
-            <IconButton
+            {/* <IconButton
               sx={{
                 color: "white",
                 position: "absolute",
@@ -88,7 +88,7 @@ const Profile = () => {
               }}
             >
               <CameraAlt />
-            </IconButton>
+            </IconButton> */}
           </CoverPhoto>
           <CardContent>
             <ProfileAvatar
