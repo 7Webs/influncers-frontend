@@ -30,7 +30,10 @@ const Product = ({ data, isLoading, error }) => {
         dealId: data.id,
       });
       toast.success("Deal redeemed successfully");
-      nav("/redeemed-coupons");
+      window.location.reload();
+      setTimeout(() => {
+        nav(`/redeemed-deals/${response.data.id}`);
+      }, 2000);
     } catch (error) {
       console.error("Error redeeming deal:", error);
     }
@@ -226,18 +229,39 @@ const Product = ({ data, isLoading, error }) => {
               <div className="productColor">
                 <p>Max {data.maxPurchasePerUser} Usage Limit Per User</p>
               </div>
-              <div className="productColor">
-                <p>Percent Off: {data.percentOff}%</p>
-              </div>
-              <div className="productColor">
-                <p>Upto Amount: {data.uptoAmount}</p>
-              </div>
-              <div className="productColor">
-                <p>Min Spend: {data.minSpend}</p>
-              </div>
-              <div className="productColor">
-                <p>Max Spend: {data.maxSpend}</p>
-              </div>
+              {data.percentOff > 0 && data.uptoAmount > 0 && (
+                <div className="productColor">
+                  <p>{data.percentOff}% off up to ${data.uptoAmount}</p>
+                </div>
+              )}
+              {data.percentOff > 0 && !data.uptoAmount && (
+                <div className="productColor">
+                  <p>Flat {data.percentOff}% off</p>
+                </div>
+              )}
+              {!data.percentOff && data.uptoAmount > 0 && (
+                <div className="productColor">
+                  <p>Up to ${data.uptoAmount} off</p>
+                </div>
+              )}
+              {data.minSpend > 0 ? (
+                <div className="productColor">
+                  <p>Min Spend: ${data.minSpend}</p>
+                </div>
+              ) : (
+                <div className="productColor">
+                  <p>No Min Spend</p>
+                </div>
+              )}
+              {data.maxSpend > 0 ? (
+                <div className="productColor">
+                  <p>Max Spend: ${data.maxSpend}</p>
+                </div>
+              ) : (
+                <div className="productColor">
+                  <p>No Max Spend</p>
+                </div>
+              )}
             </div>
             <div className="productCartQuantity">
               <div className="productCartBtn">
@@ -250,19 +274,24 @@ const Product = ({ data, isLoading, error }) => {
                 <p>Share</p>
               </div>
             </div>
-            <div className="productTags">
-              <p>
-                <span>Id: </span>
-                {data.id}
-              </p>
-              <p>
-                <span>Offered By: </span>
-                {data.shop.name}
-              </p>
-              <p>
-                <span>TAGS: </span>
-                {data.keywords}
-              </p>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "15px"
+            }}>
+              <img
+                src={data.shop.logo}
+                alt={data.shop.name}
+                style={{
+                  height: "50px",
+                  width: "50px",
+                  objectFit: "contain"
+                }}
+              />
+              <div>
+                <h4 style={{ margin: "0 0 5px 0" }}>{data.shop.name}</h4>
+                <p style={{ margin: 0, color: "#666", fontSize: "14px" }}>{data.shop.address}</p>
+              </div>
             </div>
           </div>
         </div>

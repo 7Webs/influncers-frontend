@@ -74,9 +74,9 @@ const HeaderMain = () => {
             />
 
             <CategoryDropdown categories={categories} />
-            <Button color="inherit" onClick={handleHomeClick}>
+            {/* <Button color="inherit" onClick={handleHomeClick}>
               Home
-            </Button>
+            </Button> */}
             <Button color="inherit" onClick={handleForYouClick}>
               For You
             </Button>
@@ -129,6 +129,7 @@ const RedeemedDealTimer = ({ redeemedDeal }) => {
     seconds: 0,
     totalSeconds: 0,
     progress: 100,
+    isExpired: false
   });
 
   const nav = useNavigate();
@@ -155,6 +156,7 @@ const RedeemedDealTimer = ({ redeemedDeal }) => {
           seconds,
           totalSeconds: remainingSeconds,
           progress,
+          isExpired: false
         });
       } else {
         setTimeRemaining({
@@ -163,6 +165,7 @@ const RedeemedDealTimer = ({ redeemedDeal }) => {
           seconds: 0,
           totalSeconds: 0,
           progress: 0,
+          isExpired: true
         });
       }
     };
@@ -281,8 +284,8 @@ const RedeemedDealTimer = ({ redeemedDeal }) => {
               </IconButton>
             </Tooltip>
             <Chip
-              label={redeemedDeal.status.replace("_", " ")}
-              color={getStatusColor(redeemedDeal.status)}
+              label={timeRemaining.isExpired ? "Expired" : redeemedDeal.status.replace("_", " ")}
+              color={timeRemaining.isExpired ? "error" : getStatusColor(redeemedDeal.status)}
               sx={{
                 textTransform: "capitalize",
                 fontWeight: 600,
@@ -298,20 +301,22 @@ const RedeemedDealTimer = ({ redeemedDeal }) => {
             <Stack direction="row" spacing={1} alignItems="center">
               <AccessTime />
               <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                Expires in:
+                {timeRemaining.isExpired ? "Expired" : "Expires in:"}
               </Typography>
-              <Typography
-                sx={{
-                  fontFamily: "monospace",
-                  fontSize: "1.2rem",
-                  fontWeight: 700,
-                  color: timeRemaining.hours < 6 ? "#ff9800" : "inherit"
-                }}
-              >
-                {`${formatNumber(timeRemaining.hours)}:${formatNumber(
-                  timeRemaining.minutes
-                )}:${formatNumber(timeRemaining.seconds)}`}
-              </Typography>
+              {!timeRemaining.isExpired && (
+                <Typography
+                  sx={{
+                    fontFamily: "monospace",
+                    fontSize: "1.2rem",
+                    fontWeight: 700,
+                    color: timeRemaining.hours < 6 ? "#ff9800" : "inherit"
+                  }}
+                >
+                  {`${formatNumber(timeRemaining.hours)}:${formatNumber(
+                    timeRemaining.minutes
+                  )}:${formatNumber(timeRemaining.seconds)}`}
+                </Typography>
+              )}
             </Stack>
             <LinearProgress
               variant="determinate"
@@ -322,7 +327,7 @@ const RedeemedDealTimer = ({ redeemedDeal }) => {
                 borderRadius: 2,
                 bgcolor: "rgba(255,255,255,0.2)",
                 "& .MuiLinearProgress-bar": {
-                  bgcolor: timeRemaining.hours < 6 ? "#ff9800" : "#4caf50",
+                  bgcolor: timeRemaining.isExpired ? "#f44336" : timeRemaining.hours < 6 ? "#ff9800" : "#4caf50",
                   transition: "transform 0.2s linear"
                 },
               }}

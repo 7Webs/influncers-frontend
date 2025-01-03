@@ -198,18 +198,18 @@ const RedeemedDealDetail = () => {
 
   const approveMutation = useMutation({
     mutationFn: async () => {
-      return await apiService.patch(`/deals-redeem/${id}`, {
-        "socialMediaLink": formData.socialMediaLink,
-        "additionalInfo": formData.additionalInfo,
-        "image": formData.image
+      return await apiService.patch(`/deals-redeem/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
       });
     },
     onSuccess: () => {
       setOpenDialog(false);
       toast.success("Request for approval submitted successfully");
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 2000);
     },
     onError: (error) => {
       toast.error(error.message);
@@ -438,23 +438,40 @@ const RedeemedDealDetail = () => {
           maxWidth="md"
           fullWidth
         >
-          <DialogTitle>
+          <DialogTitle sx={{ borderBottom: '1px solid #eee', pb: 2 }}>
             <Box display="flex" justifyContent="space-between" alignItems="center">
-              <span>Approval Information</span>
-              <IconButton onClick={() => setOpenDialog(false)}>
+              <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                Submit for Approval
+              </Typography>
+              <IconButton
+                onClick={() => setOpenDialog(false)}
+                sx={{
+                  '&:hover': {
+                    backgroundColor: '#f5f5f5'
+                  }
+                }}
+              >
                 <CloseIcon />
               </IconButton>
             </Box>
           </DialogTitle>
-          <DialogContent>
+          <DialogContent sx={{ py: 3 }}>
             <Box sx={styles.formContainer}>
+              <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 500 }}>
+                Please provide the following information
+              </Typography>
+
               <TextField
                 name="socialMediaLink"
                 label="Social Media Link"
                 value={formData.socialMediaLink}
                 onChange={handleInputChange}
                 fullWidth
+                variant="outlined"
+                sx={{ mb: 2 }}
+                placeholder="Paste your social media post link here"
               />
+
               <TextField
                 name="additionalInfo"
                 label="Additional Information"
@@ -463,43 +480,100 @@ const RedeemedDealDetail = () => {
                 multiline
                 rows={4}
                 fullWidth
+                variant="outlined"
+                sx={{ mb: 3 }}
+                placeholder="Add any additional details about your post"
               />
-              <input
-                accept="image/*"
-                style={{ display: 'none' }}
-                id="image-upload"
-                type="file"
-                onChange={handleImageChange}
-              />
-              <label htmlFor="image-upload">
-                <Button
-                  variant="outlined"
-                  component="span"
-                  fullWidth
-                  sx={styles.outlinedButton}
-                >
-                  Upload Image
-                </Button>
-              </label>
+
+              <Box sx={{
+                p: 2,
+                bgcolor: '#f8f9fa',
+                borderRadius: 1,
+                mb: 3
+              }}>
+                <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500, color: '#1976d2' }}>
+                  Upload Screenshot
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Please attach a screenshot of your social media post to verify the promotion
+                </Typography>
+
+                <input
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  id="image-upload"
+                  type="file"
+                  onChange={handleImageChange}
+                />
+                <label htmlFor="image-upload">
+                  <Button
+                    variant="outlined"
+                    component="span"
+                    fullWidth
+                    startIcon={formData.image ? <CheckCircleOutline color="success" /> : null}
+                    sx={{
+                      ...styles.outlinedButton,
+                      bgcolor: '#fff',
+                      '&:hover': {
+                        bgcolor: '#fafafa'
+                      }
+                    }}
+                  >
+                    {formData.image ? 'Image Selected' : 'Choose Image'}
+                  </Button>
+                </label>
+              </Box>
+
               {formData.image && (
-                <Box mt={2}>
+                <Box
+                  sx={{
+                    p: 2,
+                    border: '1px solid #e0e0e0',
+                    borderRadius: 1,
+                    bgcolor: '#fff'
+                  }}
+                >
+                  <Typography variant="subtitle2" sx={{ mb: 1 }}>Preview:</Typography>
                   <img
                     src={formData.image}
                     alt="Preview"
-                    style={{ maxWidth: '100%', height: 'auto' }}
+                    style={{
+                      maxWidth: '100%',
+                      height: 'auto',
+                      borderRadius: '4px'
+                    }}
                   />
                 </Box>
               )}
             </Box>
           </DialogContent>
-          <DialogActions>
+          <DialogActions sx={{ p: 3, borderTop: '1px solid #eee' }}>
+            <Button
+              onClick={() => setOpenDialog(false)}
+              sx={{
+                mr: 2,
+                color: 'text.secondary',
+                '&:hover': {
+                  bgcolor: '#f5f5f5'
+                }
+              }}
+            >
+              Cancel
+            </Button>
             <Button
               variant="contained"
-              sx={styles.primaryButton}
+              sx={{
+                ...styles.primaryButton,
+                minWidth: '120px'
+              }}
               onClick={() => approveMutation.mutate()}
-              disabled={approveMutation.isLoading}
+              disabled={approveMutation.isLoading || !formData.image}
             >
-              {approveMutation.isLoading ? "Submitting..." : "Submit"}
+              {approveMutation.isLoading ? (
+                <CircularProgress size={24} sx={{ color: '#fff' }} />
+              ) : (
+                "Submit"
+              )}
             </Button>
           </DialogActions>
         </Dialog>

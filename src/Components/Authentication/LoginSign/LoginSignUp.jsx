@@ -10,6 +10,7 @@ import {
   Divider,
   IconButton,
   InputAdornment,
+  CircularProgress,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -145,6 +146,8 @@ const LoginSignUp = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const handleTogglePassword = () => setShowPassword(!showPassword);
   const handleToggleConfirmPassword = () =>
@@ -171,25 +174,31 @@ const LoginSignUp = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoggingIn(true);
     try {
-      const loggedInUser = login(formData.email, formData.password);
+      const loggedInUser = await login(formData.email, formData.password);
       if (loggedInUser) {
         console.log("User logged in:", loggedInUser);
       }
     } catch (error) {
       console.error("Login error:", error);
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setIsRegistering(true);
     try {
-      const registeredUser = register(formData.email, formData.password);
+      const registeredUser = await register(formData.email, formData.password);
       if (registeredUser) {
         console.log("User registered:", registeredUser);
       }
     } catch (error) {
       console.error("Registration error:", error);
+    } finally {
+      setIsRegistering(false);
     }
   };
 
@@ -289,8 +298,13 @@ const LoginSignUp = () => {
                     Forgot password?
                   </Link>
                 </Box>
-                <StyledButton type="submit" variant="contained" fullWidth>
-                  Log In
+                <StyledButton
+                  type="submit"
+                  variant="contained"
+                  fullWidth
+                  disabled={isLoggingIn}
+                >
+                  {isLoggingIn ? <CircularProgress size={24} color="inherit" /> : "Log In"}
                 </StyledButton>
 
                 <Divider sx={{ my: 0 }}>OR</Divider>
@@ -333,7 +347,7 @@ const LoginSignUp = () => {
           {activeTab === "tabButton2" && (
             <Box>
               <StyledForm onSubmit={handleRegister}>
-                <StyledTextField
+                {/* <StyledTextField
                   placeholder="First Name *"
                   name="firstName"
                   value={formData.firstName}
@@ -348,7 +362,7 @@ const LoginSignUp = () => {
                   onChange={handleChange}
                   required
                   fullWidth
-                />
+                /> */}
                 <StyledTextField
                   type="email"
                   placeholder="Email address *"
@@ -401,8 +415,13 @@ const LoginSignUp = () => {
                     ),
                   }}
                 />
-                <StyledButton type="submit" variant="contained" fullWidth>
-                  Register
+                <StyledButton
+                  type="submit"
+                  variant="contained"
+                  fullWidth
+                  disabled={isRegistering}
+                >
+                  {isRegistering ? <CircularProgress size={24} color="inherit" /> : "Register"}
                 </StyledButton>
               </StyledForm>
               <Box sx={{ paddingTop: "20px", textAlign: "center" }}>

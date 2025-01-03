@@ -152,7 +152,7 @@ const Footer = () => {
             </Typography>
             <Box component="ul" sx={{ display: "flex", flexDirection: "column", gap: "15px", p: 0 }}>
               {[
-                { text: "Home", link: "https://nanoinfluencers.io/" },
+                { text: "Home", link: "/home" },
                 { text: "My Coupons", link: "/redeemed-coupons" },
                 { text: "Profile", link: "/profile" }
               ].map((item, index) => (

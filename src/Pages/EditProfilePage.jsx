@@ -12,6 +12,7 @@ import {
   Grid,
   IconButton,
   styled,
+  CircularProgress,
 } from "@mui/material";
 import { CameraAlt, Save } from "@mui/icons-material";
 import { toast } from "react-toastify";
@@ -31,6 +32,7 @@ const EditProfile = () => {
   const { user, updateProfileInfo, logout } = useAuth();
   const { categories } = useCategory();
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [profileData, setProfileData] = useState({
     name: user?.name || "",
@@ -77,6 +79,7 @@ const EditProfile = () => {
 
   const handleSubmit = async () => {
     try {
+      setIsSubmitting(true);
       const formData = new FormData();
 
       // Dynamically append non-empty fields to FormData
@@ -92,11 +95,13 @@ const EditProfile = () => {
       }
 
       await updateProfileInfo(formData);
-      toast.success("Profile updated successfully");
+      // toast.success("Profile updated successfully");
       navigate("/profile");
     } catch (error) {
-      toast.error("Failed to update profile");
+      // toast.error("Failed to update profile");
       console.error("Profile update error:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -271,17 +276,19 @@ const EditProfile = () => {
             <Box display="flex" justifyContent="center" mt={3}>
               <Button
                 variant="contained"
-                startIcon={<Save />}
+                startIcon={!isSubmitting && <Save />}
                 onClick={handleSubmit}
                 size="large"
+                disabled={isSubmitting}
               >
-                Save Changes
+                {isSubmitting ? <CircularProgress size={24} /> : "Save Changes"}
               </Button>
             </Box>
             <Box display="flex" justifyContent="center" mt={3}>
               <Button variant="contained" color="error" onClick={handleLogout}>
                 Logout
               </Button>
+
             </Box>
           </Box>
         </Paper>

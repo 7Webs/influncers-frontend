@@ -1,6 +1,6 @@
 import React from "react";
 import { useAuth } from "./AuthContext";
-import { Container, Typography, Button, Box } from "@mui/material";
+import { Container, Typography, Button, Box, Stack } from "@mui/material";
 
 const WaitForApprovalScreen = () => {
   const { user, logout } = useAuth();
@@ -11,6 +11,10 @@ const WaitForApprovalScreen = () => {
     } catch (error) {
       console.error("Logout failed:", error);
     }
+  };
+
+  const handleContactSupport = () => {
+    window.location.href = "https://nanoinfluencers.io/contact-us/";
   };
 
   return (
@@ -62,23 +66,44 @@ const WaitForApprovalScreen = () => {
           If you need assistance, feel free to contact our support team.
         </Typography>
       </Box>
-      <Button
-        variant="contained"
-        size="large"
-        onClick={handleLogout}
-        sx={{
-          textTransform: "uppercase",
-          fontWeight: 600,
-          px: 4,
-          py: 1.5,
-          backgroundColor: "#000",
-          "&:hover": {
-            backgroundColor: "#333",
-          },
-        }}
-      >
-        Log Out
-      </Button>
+      <Stack direction="row" spacing={2}>
+        <Button
+          variant="outlined"
+          size="large"
+          onClick={handleContactSupport}
+          sx={{
+            textTransform: "uppercase",
+            fontWeight: 600,
+            px: 4,
+            py: 1.5,
+            color: "#000",
+            borderColor: "#000",
+
+            "&:hover": {
+              color: "#000",
+            },
+          }}
+        >
+          Contact Support
+        </Button>
+        <Button
+          variant="contained"
+          size="large"
+          onClick={handleLogout}
+          sx={{
+            textTransform: "uppercase",
+            fontWeight: 600,
+            px: 4,
+            py: 1.5,
+            backgroundColor: "#000",
+            "&:hover": {
+              backgroundColor: "#333",
+            },
+          }}
+        >
+          Log Out
+        </Button>
+      </Stack>
     </Container>
   );
 };
