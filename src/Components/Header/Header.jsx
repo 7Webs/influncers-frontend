@@ -137,7 +137,7 @@ const RedeemedDealTimer = ({ redeemedDeal }) => {
   useEffect(() => {
     const calculateTimeRemaining = () => {
       const createdAt = new Date(redeemedDeal.createdAt);
-      const expiryTime = new Date(createdAt.getTime() + 48 * 60 * 60 * 1000);
+      const expiryTime = new Date(createdAt.getTime() + 1 * 60 * 60 * 1000);
       const now = new Date();
       const diff = expiryTime - now;
 
@@ -284,7 +284,7 @@ const RedeemedDealTimer = ({ redeemedDeal }) => {
               </IconButton>
             </Tooltip>
             <Chip
-              label={timeRemaining.isExpired ? "Expired" : redeemedDeal.status.replace("_", " ")}
+              label={timeRemaining.isExpired ? "OverDue" : redeemedDeal.status.replace("_", " ")}
               color={timeRemaining.isExpired ? "error" : getStatusColor(redeemedDeal.status)}
               sx={{
                 textTransform: "capitalize",
@@ -301,7 +301,7 @@ const RedeemedDealTimer = ({ redeemedDeal }) => {
             <Stack direction="row" spacing={1} alignItems="center">
               <AccessTime />
               <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                {timeRemaining.isExpired ? "Expired" : "Expires in:"}
+                {timeRemaining.isExpired ? "OverDue" : "OverDue in:"}
               </Typography>
               {!timeRemaining.isExpired && (
                 <Typography
