@@ -32,7 +32,7 @@ const Product = ({ data, isLoading, error }) => {
       toast.success("Deal redeemed successfully");
 
       setTimeout(() => {
-        window.location.pathname = `/redeemed-deals/${response.data.id}`;
+        nav(`/redeemed-deals/${response.data.id}`);
       }, 2000);
     } catch (error) {
       console.error("Error redeeming deal:", error);
@@ -242,19 +242,11 @@ const Product = ({ data, isLoading, error }) => {
               <div className="productColor">
                 <p>Max {data.maxPurchasePerUser} Usage Limit Per User</p>
               </div>
-              {data.percentOff > 0 && data.uptoAmount > 0 && (
-                <div className="productColor">
-                  <p>
-                    {data.percentOff}% off up to ${data.uptoAmount}
-                  </p>
-                </div>
-              )}
-              {data.percentOff > 0 && !data.uptoAmount && (
+              {data.percentOff > 0 ? (
                 <div className="productColor">
                   <p>Flat {data.percentOff}% off</p>
                 </div>
-              )}
-              {!data.percentOff && data.uptoAmount > 0 && (
+              ) : (
                 <div className="productColor">
                   <p>Up to ${data.uptoAmount} off</p>
                 </div>
