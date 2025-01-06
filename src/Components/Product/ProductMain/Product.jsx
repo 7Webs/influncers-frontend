@@ -7,11 +7,11 @@ import "./Product.css";
 import { apiService } from "../../../Api/apiwrapper";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../Utils/AuthContext";
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
 
 const Product = ({ data, isLoading, error }) => {
   const [currentImg, setCurrentImg] = useState(0);
@@ -30,9 +30,9 @@ const Product = ({ data, isLoading, error }) => {
         dealId: data.id,
       });
       toast.success("Deal redeemed successfully");
-      window.location.reload();
+
       setTimeout(() => {
-        nav(`/redeemed-deals/${response.data.id}`);
+        window.location.pathname = `/redeemed-deals/${response.data.id}`;
       }, 2000);
     } catch (error) {
       console.error("Error redeeming deal:", error);
@@ -45,7 +45,7 @@ const Product = ({ data, isLoading, error }) => {
         await navigator.share({
           title: data.title,
           text: data.shortTagLine,
-          url: window.location.href
+          url: window.location.href,
         });
       } else {
         // Fallback for browsers that don't support Web Share API
@@ -87,97 +87,110 @@ const Product = ({ data, isLoading, error }) => {
         onClose={() => setOpenDialog(false)}
         PaperProps={{
           style: {
-            borderRadius: '24px',
-            padding: '24px',
-            maxWidth: '480px',
-            position: 'relative',
-            background: 'linear-gradient(to bottom right, #ffffff, #f8f9fa)',
-            boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)'
-          }
+            borderRadius: "24px",
+            padding: "24px",
+            maxWidth: "480px",
+            position: "relative",
+            background: "linear-gradient(to bottom right, #ffffff, #f8f9fa)",
+            boxShadow:
+              "0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)",
+          },
         }}
       >
         <Button
           onClick={() => setOpenDialog(false)}
           sx={{
-            position: 'absolute',
-            right: '16px',
-            top: '16px',
-            minWidth: 'auto',
-            padding: '8px',
-            color: '#94a3b8',
-            borderRadius: '50%',
-            transition: 'all 0.2s ease',
-            '&:hover': {
-              backgroundColor: '#f1f5f9',
-              color: '#475569',
-              transform: 'scale(1.1)'
-            }
+            position: "absolute",
+            right: "16px",
+            top: "16px",
+            minWidth: "auto",
+            padding: "8px",
+            color: "#94a3b8",
+            borderRadius: "50%",
+            transition: "all 0.2s ease",
+            "&:hover": {
+              backgroundColor: "#f1f5f9",
+              color: "#475569",
+              transform: "scale(1.1)",
+            },
           }}
         >
           ✕
         </Button>
-        <DialogTitle sx={{
-          fontSize: '28px',
-          fontWeight: 700,
-          color: '#0f172a',
-          textAlign: 'center',
-          paddingBottom: '16px',
-          paddingRight: '32px',
-          letterSpacing: '-0.02em'
-        }}>
+        <DialogTitle
+          sx={{
+            fontSize: "28px",
+            fontWeight: 700,
+            color: "#0f172a",
+            textAlign: "center",
+            paddingBottom: "16px",
+            paddingRight: "32px",
+            letterSpacing: "-0.02em",
+          }}
+        >
           Pending Deal
         </DialogTitle>
-        <DialogContent sx={{
-          padding: '24px 32px',
-          background: '#ffffff',
-          borderRadius: '16px',
-          margin: '0 8px'
-        }}>
-          <p style={{
-            fontSize: '16px',
-            lineHeight: 1.7,
-            color: '#475569',
-            textAlign: 'center',
-            fontWeight: 500
-          }}>
+        <DialogContent
+          sx={{
+            padding: "24px 32px",
+            background: "#ffffff",
+            borderRadius: "16px",
+            margin: "0 8px",
+          }}
+        >
+          <p
+            style={{
+              fontSize: "16px",
+              lineHeight: 1.7,
+              color: "#475569",
+              textAlign: "center",
+              fontWeight: 500,
+            }}
+          >
             You have a pending deal that needs to be used.
           </p>
-          <p style={{
-            fontSize: '16px',
-            lineHeight: 1.7,
-            color: '#475569',
-            marginTop: '16px',
-            textAlign: 'center',
-            fontWeight: 500
-          }}>
+          <p
+            style={{
+              fontSize: "16px",
+              lineHeight: 1.7,
+              color: "#475569",
+              marginTop: "16px",
+              textAlign: "center",
+              fontWeight: 500,
+            }}
+          >
             Please use your pending deal first before claiming a new one.
           </p>
         </DialogContent>
-        <DialogActions sx={{
-          padding: '24px',
-          justifyContent: 'center',
-          gap: '16px'
-        }}>
+        <DialogActions
+          sx={{
+            padding: "24px",
+            justifyContent: "center",
+            gap: "16px",
+          }}
+        >
           <Button
             onClick={() => nav(`/redeemed-deals/${user?.openRedeemedDeal?.id}`)}
             sx={{
-              textTransform: 'none',
-              background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-              color: 'white',
-              padding: '12px 32px',
-              borderRadius: '12px',
-              fontSize: '16px',
+              textTransform: "none",
+              background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
+              color: "white",
+              padding: "12px 32px",
+              borderRadius: "12px",
+              fontSize: "16px",
               fontWeight: 600,
-              transition: 'all 0.2s ease',
-              boxShadow: '0 4px 6px -1px rgba(37,99,235,0.2), 0 2px 4px -2px rgba(37,99,235,0.1)',
-              '&:hover': {
-                transform: 'translateY(-2px)',
-                boxShadow: '0 10px 15px -3px rgba(37,99,235,0.3), 0 4px 6px -4px rgba(37,99,235,0.1)',
-                background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)'
+              transition: "all 0.2s ease",
+              boxShadow:
+                "0 4px 6px -1px rgba(37,99,235,0.2), 0 2px 4px -2px rgba(37,99,235,0.1)",
+              "&:hover": {
+                transform: "translateY(-2px)",
+                boxShadow:
+                  "0 10px 15px -3px rgba(37,99,235,0.3), 0 4px 6px -4px rgba(37,99,235,0.1)",
+                background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
               },
-              '&:active': {
-                transform: 'translateY(0)'
-              }
+              "&:active": {
+                transform: "translateY(0)",
+              },
             }}
           >
             View Details
@@ -231,7 +244,9 @@ const Product = ({ data, isLoading, error }) => {
               </div>
               {data.percentOff > 0 && data.uptoAmount > 0 && (
                 <div className="productColor">
-                  <p>{data.percentOff}% off up to ${data.uptoAmount}</p>
+                  <p>
+                    {data.percentOff}% off up to ${data.uptoAmount}
+                  </p>
                 </div>
               )}
               {data.percentOff > 0 && !data.uptoAmount && (
@@ -269,28 +284,36 @@ const Product = ({ data, isLoading, error }) => {
               </div>
             </div>
             <div className="productWishShare">
-              <div className="productShare" onClick={handleShare} style={{ cursor: 'pointer' }}>
+              <div
+                className="productShare"
+                onClick={handleShare}
+                style={{ cursor: "pointer" }}
+              >
                 <PiShareNetworkLight size={22} />
                 <p>Share</p>
               </div>
             </div>
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "15px"
-            }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "15px",
+              }}
+            >
               <img
                 src={data.shop.logo}
                 alt={data.shop.name}
                 style={{
                   height: "50px",
                   width: "50px",
-                  objectFit: "contain"
+                  objectFit: "contain",
                 }}
               />
               <div>
                 <h4 style={{ margin: "0 0 5px 0" }}>{data.shop.name}</h4>
-                <p style={{ margin: 0, color: "#666", fontSize: "14px" }}>{data.shop.address}</p>
+                <p style={{ margin: 0, color: "#666", fontSize: "14px" }}>
+                  {data.shop.address}
+                </p>
               </div>
             </div>
           </div>

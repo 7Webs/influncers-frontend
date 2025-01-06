@@ -18,13 +18,13 @@ import {
   DialogContent,
   DialogActions,
   Typography,
-  Link
+  Link,
 } from "@mui/material";
 import {
   ContentCopy,
   Share,
   Close as CloseIcon,
-  CheckCircleOutline
+  CheckCircleOutline,
 } from "@mui/icons-material";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -152,7 +152,7 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     gap: 2,
-  }
+  },
 };
 
 const RedeemedDealDetail = () => {
@@ -161,14 +161,14 @@ const RedeemedDealDetail = () => {
   const [formData, setFormData] = useState({
     socialMediaLink: "",
     additionalInfo: "",
-    image: ""
+    image: "",
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -177,9 +177,9 @@ const RedeemedDealDetail = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
-          image: reader.result
+          image: reader.result,
         }));
       };
       reader.readAsDataURL(file);
@@ -187,7 +187,8 @@ const RedeemedDealDetail = () => {
   };
 
   const handleCopyCode = (code) => {
-    navigator.clipboard.writeText(code)
+    navigator.clipboard
+      .writeText(code)
       .then(() => {
         toast.success("Coupon code copied to clipboard!");
       })
@@ -198,22 +199,29 @@ const RedeemedDealDetail = () => {
 
   const approveMutation = useMutation({
     mutationFn: async () => {
-      return await apiService.patch(`/deals-redeem/${id}`, formData, {
+      const dataToSend = new FormData();
+
+      dataToSend.append("socialMediaLink", formData.socialMediaLink);
+      dataToSend.append("additionalInfo", formData.additionalInfo);
+      dataToSend.append("image", formData.image);
+      console.log(dataToSend);
+
+      return await apiService.patch(`/deals-redeem/${id}`, dataToSend, {
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
     },
     onSuccess: () => {
       setOpenDialog(false);
       toast.success("Request for approval submitted successfully");
       setTimeout(() => {
-        window.location.reload();
+        // window.location.reload();
       }, 2000);
     },
     onError: (error) => {
       toast.error(error.message);
-    }
+    },
   });
 
   const fetchDealDetails = async () => {
@@ -272,26 +280,33 @@ const RedeemedDealDetail = () => {
         </Paper>
 
         <Card sx={styles.contentCard}>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            mb={3}
+          >
             <Box>
               <h3 style={styles.sectionTitle}>Redemption Status</h3>
-              <Box sx={{
-                px: 2,
-                py: 0.5,
-                borderRadius: 1,
-                bgcolor: `${statusConfig.color}20`,
-                color: statusConfig.color,
-                textTransform: 'capitalize',
-                mt: 1,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1
-              }}>
+              <Box
+                sx={{
+                  px: 2,
+                  py: 0.5,
+                  borderRadius: 1,
+                  bgcolor: `${statusConfig.color}20`,
+                  color: statusConfig.color,
+                  textTransform: "capitalize",
+                  mt: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
                 {statusConfig.icon}
                 {statusConfig.label}
               </Box>
             </Box>
-            {data.status === 'used' && (
+            {data.status === "used" && (
               <Button
                 variant="contained"
                 sx={styles.primaryButton}
@@ -304,20 +319,30 @@ const RedeemedDealDetail = () => {
           </Box>
 
           {(data.socialMediaLink || data.additionalInfo || data.image) && (
-            <Box sx={{
-              bgcolor: '#F8F9FA',
-              p: 2,
-              borderRadius: 1
-            }}>
+            <Box
+              sx={{
+                bgcolor: "#F8F9FA",
+                p: 2,
+                borderRadius: 1,
+              }}
+            >
               {data.socialMediaLink && (
                 <Box mb={data.additionalInfo ? 2 : 0}>
-                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+                  <Typography
+                    variant="subtitle2"
+                    fontWeight="bold"
+                    gutterBottom
+                  >
                     Social Media Link
                   </Typography>
-                  <Link href={data.socialMediaLink} target="_blank" sx={{
-                    color: '#0066CC',
-                    wordBreak: 'break-all'
-                  }}>
+                  <Link
+                    href={data.socialMediaLink}
+                    target="_blank"
+                    sx={{
+                      color: "#0066CC",
+                      wordBreak: "break-all",
+                    }}
+                  >
                     {data.socialMediaLink}
                   </Link>
                 </Box>
@@ -325,21 +350,31 @@ const RedeemedDealDetail = () => {
 
               {data.additionalInfo && (
                 <Box>
-                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+                  <Typography
+                    variant="subtitle2"
+                    fontWeight="bold"
+                    gutterBottom
+                  >
                     Additional Information
                   </Typography>
-                  <Typography variant="body2">
-                    {data.additionalInfo}
-                  </Typography>
+                  <Typography variant="body2">{data.additionalInfo}</Typography>
                 </Box>
               )}
 
               {data.image && (
                 <Box mt={2}>
-                  <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
+                  <Typography
+                    variant="subtitle2"
+                    fontWeight="bold"
+                    gutterBottom
+                  >
                     Uploaded Image
                   </Typography>
-                  <img src={data.image} alt="Uploaded" style={{ maxWidth: '100%', height: 'auto' }} />
+                  <img
+                    src={data.image}
+                    alt="Uploaded"
+                    style={{ maxWidth: "100%", height: "auto" }}
+                  />
                 </Box>
               )}
             </Box>
@@ -438,17 +473,21 @@ const RedeemedDealDetail = () => {
           maxWidth="md"
           fullWidth
         >
-          <DialogTitle sx={{ borderBottom: '1px solid #eee', pb: 2 }}>
-            <Box display="flex" justifyContent="space-between" alignItems="center">
+          <DialogTitle sx={{ borderBottom: "1px solid #eee", pb: 2 }}>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
                 Submit for Approval
               </Typography>
               <IconButton
                 onClick={() => setOpenDialog(false)}
                 sx={{
-                  '&:hover': {
-                    backgroundColor: '#f5f5f5'
-                  }
+                  "&:hover": {
+                    backgroundColor: "#f5f5f5",
+                  },
                 }}
               >
                 <CloseIcon />
@@ -485,22 +524,32 @@ const RedeemedDealDetail = () => {
                 placeholder="Add any additional details about your post"
               />
 
-              <Box sx={{
-                p: 2,
-                bgcolor: '#f8f9fa',
-                borderRadius: 1,
-                mb: 3
-              }}>
-                <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500, color: '#1976d2' }}>
+              <Box
+                sx={{
+                  p: 2,
+                  bgcolor: "#f8f9fa",
+                  borderRadius: 1,
+                  mb: 3,
+                }}
+              >
+                <Typography
+                  variant="subtitle1"
+                  sx={{ mb: 2, fontWeight: 500, color: "#1976d2" }}
+                >
                   Upload Screenshot
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                  Please attach a screenshot of your social media post to verify the promotion
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 2 }}
+                >
+                  Please attach a screenshot of your social media post to verify
+                  the promotion
                 </Typography>
 
                 <input
                   accept="image/*"
-                  style={{ display: 'none' }}
+                  style={{ display: "none" }}
                   id="image-upload"
                   type="file"
                   onChange={handleImageChange}
@@ -510,16 +559,20 @@ const RedeemedDealDetail = () => {
                     variant="outlined"
                     component="span"
                     fullWidth
-                    startIcon={formData.image ? <CheckCircleOutline color="success" /> : null}
+                    startIcon={
+                      formData.image ? (
+                        <CheckCircleOutline color="success" />
+                      ) : null
+                    }
                     sx={{
                       ...styles.outlinedButton,
-                      bgcolor: '#fff',
-                      '&:hover': {
-                        bgcolor: '#fafafa'
-                      }
+                      bgcolor: "#fff",
+                      "&:hover": {
+                        bgcolor: "#fafafa",
+                      },
                     }}
                   >
-                    {formData.image ? 'Image Selected' : 'Choose Image'}
+                    {formData.image ? "Image Selected" : "Choose Image"}
                   </Button>
                 </label>
               </Box>
@@ -528,34 +581,38 @@ const RedeemedDealDetail = () => {
                 <Box
                   sx={{
                     p: 2,
-                    border: '1px solid #e0e0e0',
+                    border: "1px solid #e0e0e0",
                     borderRadius: 1,
-                    bgcolor: '#fff'
+                    bgcolor: "#fff",
+                    textAlign: "center",
                   }}
                 >
-                  <Typography variant="subtitle2" sx={{ mb: 1 }}>Preview:</Typography>
+                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                    Preview:
+                  </Typography>
                   <img
                     src={formData.image}
                     alt="Preview"
                     style={{
-                      maxWidth: '100%',
-                      height: 'auto',
-                      borderRadius: '4px'
+                      maxWidth: "100%",
+                      maxHeight: "200px",
+                      height: "auto",
+                      borderRadius: "4px",
                     }}
                   />
                 </Box>
               )}
             </Box>
           </DialogContent>
-          <DialogActions sx={{ p: 3, borderTop: '1px solid #eee' }}>
+          <DialogActions sx={{ p: 3, borderTop: "1px solid #eee" }}>
             <Button
               onClick={() => setOpenDialog(false)}
               sx={{
                 mr: 2,
-                color: 'text.secondary',
-                '&:hover': {
-                  bgcolor: '#f5f5f5'
-                }
+                color: "text.secondary",
+                "&:hover": {
+                  bgcolor: "#f5f5f5",
+                },
               }}
             >
               Cancel
@@ -564,13 +621,13 @@ const RedeemedDealDetail = () => {
               variant="contained"
               sx={{
                 ...styles.primaryButton,
-                minWidth: '120px'
+                minWidth: "120px",
               }}
               onClick={() => approveMutation.mutate()}
               disabled={approveMutation.isLoading || !formData.image}
             >
               {approveMutation.isLoading ? (
-                <CircularProgress size={24} sx={{ color: '#fff' }} />
+                <CircularProgress size={24} sx={{ color: "#fff" }} />
               ) : (
                 "Submit"
               )}
