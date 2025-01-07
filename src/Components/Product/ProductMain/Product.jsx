@@ -34,6 +34,7 @@ const Product = ({ data, isLoading, error }) => {
       setTimeout(() => {
         nav(`/redeemed-deals/${response.data.id}`);
       }, 2000);
+      window.location.reload();
     } catch (error) {
       console.error("Error redeeming deal:", error);
     }

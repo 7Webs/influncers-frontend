@@ -137,7 +137,7 @@ const RedeemedDealTimer = ({ redeemedDeal }) => {
   useEffect(() => {
     const calculateTimeRemaining = () => {
       const createdAt = new Date(redeemedDeal.createdAt);
-      const expiryTime = new Date(createdAt.getTime() + 1 * 60 * 60 * 1000);
+      const expiryTime = new Date(createdAt.getTime() + 48 * 60 * 60 * 1000);
       const now = new Date();
       const diff = expiryTime - now;
 
