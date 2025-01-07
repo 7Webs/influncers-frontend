@@ -32,9 +32,9 @@ const Product = ({ data, isLoading, error }) => {
       toast.success("Deal redeemed successfully");
 
       setTimeout(() => {
-        nav(`/redeemed-deals/${response.data.id}`);
+        // nav(`/redeemed-deals/${response.data.id}`);
+        window.location.pathname = `/redeemed-deals/${response.data.id}`;
       }, 2000);
-      window.location.reload();
     } catch (error) {
       console.error("Error redeeming deal:", error);
     }
