@@ -230,7 +230,7 @@ const RedeemedDealDetail = () => {
       setOpenDialog(false);
       toast.success("Request for approval submitted successfully");
       setTimeout(() => {
-        // window.location.reload();
+        window.location.reload();
       }, 2000);
     },
     onError: (error) => {
