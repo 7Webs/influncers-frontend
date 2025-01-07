@@ -19,6 +19,9 @@ import {
   DialogActions,
   Typography,
   Link,
+  ImageList,
+  ImageListItem,
+  IconButton as MuiIconButton,
 } from "@mui/material";
 import {
   ContentCopy,
@@ -26,6 +29,7 @@ import {
   Close as CloseIcon,
   CheckCircleOutline,
 } from "@mui/icons-material";
+import { Delete as DeleteIcon } from "@mui/icons-material";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { apiService } from "../../Api/apiwrapper";
@@ -163,6 +167,7 @@ const RedeemedDealDetail = () => {
     additionalInfo: "",
     image: "",
   });
+  const [previewUrls, setPreviewUrls] = useState([]); // Store preview URLs separately
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -173,17 +178,23 @@ const RedeemedDealDetail = () => {
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData((prev) => ({
-          ...prev,
-          image: reader.result,
-        }));
-      };
-      reader.readAsDataURL(file);
+    const files = Array.from(e.target.files);
+    const totalFiles = formData.image.length + files.length;
+
+    if (totalFiles > 10) {
+      toast.error("Maximum 10 images allowed");
+      return;
     }
+
+    // Create preview URLs for new images
+    const newPreviewUrls = files.map((file) => URL.createObjectURL(file));
+    setPreviewUrls((prev) => [...prev, ...newPreviewUrls]);
+
+    // Store the actual file objects
+    setFormData((prev) => ({
+      ...prev,
+      image: [...prev.image, ...files],
+    }));
   };
 
   const handleCopyCode = (code) => {
@@ -199,14 +210,17 @@ const RedeemedDealDetail = () => {
 
   const approveMutation = useMutation({
     mutationFn: async () => {
-      const dataToSend = new FormData();
+      const formDataToSend = new FormData();
 
-      dataToSend.append("socialMediaLink", formData.socialMediaLink);
-      dataToSend.append("additionalInfo", formData.additionalInfo);
-      dataToSend.append("image", formData.image);
-      console.log(dataToSend);
+      formDataToSend.append("socialMediaLink", formData.socialMediaLink);
+      formDataToSend.append("additionalInfo", formData.additionalInfo);
 
-      return await apiService.patch(`/deals-redeem/${id}`, dataToSend, {
+      // Append each image file individually
+      formData.image.forEach((file, index) => {
+        formDataToSend.append(`image`, file); // Use the same field name for all images
+      });
+
+      return await apiService.patch(`/deals-redeem/${id}`, formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -233,6 +247,25 @@ const RedeemedDealDetail = () => {
     queryKey: ["dealDetails", id],
     queryFn: fetchDealDetails,
   });
+
+  const handleRemoveImage = (index) => {
+    // Remove image and its preview
+    setFormData((prev) => ({
+      ...prev,
+      image: prev.image.filter((_, i) => i !== index),
+    }));
+
+    // Revoke the URL to prevent memory leaks
+    URL.revokeObjectURL(previewUrls[index]);
+    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Clean up preview URLs when component unmounts
+  React.useEffect(() => {
+    return () => {
+      previewUrls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, []);
 
   if (isLoading) {
     return (
@@ -370,11 +403,22 @@ const RedeemedDealDetail = () => {
                   >
                     Uploaded Image
                   </Typography>
-                  <img
-                    src={data.image}
-                    alt="Uploaded"
-                    style={{ maxWidth: "100%", height: "auto" }}
-                  />
+                  <ImageList
+                    sx={{ width: "100%", height: "auto" }}
+                    cols={3}
+                    rowHeight={164}
+                  >
+                    {data.image.map((url, index) => (
+                      <ImageListItem key={index} sx={{ position: "relative" }}>
+                        <img
+                          src={url}
+                          alt={`Preview ${index + 1}`}
+                          loading="lazy"
+                          style={{ height: "164px", objectFit: "cover" }}
+                        />
+                      </ImageListItem>
+                    ))}
+                  </ImageList>
                 </Box>
               )}
             </Box>
@@ -536,14 +580,14 @@ const RedeemedDealDetail = () => {
                   variant="subtitle1"
                   sx={{ mb: 2, fontWeight: 500, color: "#1976d2" }}
                 >
-                  Upload Screenshot
+                  Upload Screenshots (Max 10)
                 </Typography>
                 <Typography
                   variant="body2"
                   color="text.secondary"
                   sx={{ mb: 2 }}
                 >
-                  Please attach a screenshot of your social media post to verify
+                  Please attach screenshots of your social media posts to verify
                   the promotion
                 </Typography>
 
@@ -552,6 +596,7 @@ const RedeemedDealDetail = () => {
                   style={{ display: "none" }}
                   id="image-upload"
                   type="file"
+                  multiple
                   onChange={handleImageChange}
                 />
                 <label htmlFor="image-upload">
@@ -560,7 +605,7 @@ const RedeemedDealDetail = () => {
                     component="span"
                     fullWidth
                     startIcon={
-                      formData.image ? (
+                      formData.image.length > 0 ? (
                         <CheckCircleOutline color="success" />
                       ) : null
                     }
@@ -572,34 +617,57 @@ const RedeemedDealDetail = () => {
                       },
                     }}
                   >
-                    {formData.image ? "Image Selected" : "Choose Image"}
+                    {formData.image.length > 0
+                      ? `${formData.image.length} Image${
+                          formData.image.length !== 1 ? "s" : ""
+                        } Selected`
+                      : "Choose Images"}
                   </Button>
                 </label>
               </Box>
 
-              {formData.image && (
+              {previewUrls.length > 0 && (
                 <Box
                   sx={{
                     p: 2,
                     border: "1px solid #e0e0e0",
                     borderRadius: 1,
                     bgcolor: "#fff",
-                    textAlign: "center",
                   }}
                 >
                   <Typography variant="subtitle2" sx={{ mb: 1 }}>
                     Preview:
                   </Typography>
-                  <img
-                    src={formData.image}
-                    alt="Preview"
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "200px",
-                      height: "auto",
-                      borderRadius: "4px",
-                    }}
-                  />
+                  <ImageList
+                    sx={{ width: "100%", height: "auto" }}
+                    cols={3}
+                    rowHeight={164}
+                  >
+                    {previewUrls.map((url, index) => (
+                      <ImageListItem key={index} sx={{ position: "relative" }}>
+                        <img
+                          src={url}
+                          alt={`Preview ${index + 1}`}
+                          loading="lazy"
+                          style={{ height: "164px", objectFit: "cover" }}
+                        />
+                        <MuiIconButton
+                          sx={{
+                            position: "absolute",
+                            top: 5,
+                            right: 5,
+                            bgcolor: "rgba(255, 255, 255, 0.8)",
+                            "&:hover": {
+                              bgcolor: "rgba(255, 255, 255, 0.9)",
+                            },
+                          }}
+                          onClick={() => handleRemoveImage(index)}
+                        >
+                          <DeleteIcon />
+                        </MuiIconButton>
+                      </ImageListItem>
+                    ))}
+                  </ImageList>
                 </Box>
               )}
             </Box>
