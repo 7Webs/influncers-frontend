@@ -17,10 +17,7 @@ import {
   ImageList,
   ImageListItem,
 } from "@mui/material";
-import {
-  ContentCopy,
-  CheckCircleOutline,
-} from "@mui/icons-material";
+import { ContentCopy, CheckCircleOutline } from "@mui/icons-material";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { apiService } from "../../Api/apiwrapper";
@@ -260,20 +257,27 @@ const RedeemedDealDetail = () => {
             )}
           </Box>
 
-          {(data.socialMediaLink || data.additionalInfo || data.image) && (
+          {(data.socialMediaLink ||
+            data.additionalInfo ||
+            data.image ||
+            data.totalViews ||
+            data.totalLikes ||
+            data.totalComments) && (
             <Box
               sx={{
                 bgcolor: "#F8F9FA",
-                p: 2,
-                borderRadius: 1,
+                p: 3,
+                borderRadius: 2,
               }}
             >
+              {/* Social Media Link */}
               {data.socialMediaLink && (
-                <Box mb={data.additionalInfo ? 2 : 0}>
+                <Box mb={3}>
                   <Typography
-                    variant="subtitle2"
+                    variant="subtitle1"
                     fontWeight="bold"
                     gutterBottom
+                    sx={{ color: "#343A40" }}
                   >
                     Social Media Link
                   </Typography>
@@ -282,7 +286,8 @@ const RedeemedDealDetail = () => {
                     target="_blank"
                     sx={{
                       color: "#0066CC",
-                      wordBreak: "break-all",
+                      wordBreak: "break-word",
+                      fontSize: "1rem",
                     }}
                   >
                     {data.socialMediaLink}
@@ -290,30 +295,42 @@ const RedeemedDealDetail = () => {
                 </Box>
               )}
 
+              {/* Additional Information */}
               {data.additionalInfo && (
-                <Box>
+                <Box mb={3}>
                   <Typography
-                    variant="subtitle2"
+                    variant="subtitle1"
                     fontWeight="bold"
                     gutterBottom
+                    sx={{ color: "#343A40" }}
                   >
                     Additional Information
                   </Typography>
-                  <Typography variant="body2">{data.additionalInfo}</Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{ color: "#495057", lineHeight: 1.5 }}
+                  >
+                    {data.additionalInfo}
+                  </Typography>
                 </Box>
               )}
 
+              {/* Uploaded Images */}
               {data.image && (
-                <Box mt={2}>
+                <Box mb={3}>
                   <Typography
-                    variant="subtitle2"
+                    variant="subtitle1"
                     fontWeight="bold"
                     gutterBottom
+                    sx={{ color: "#343A40" }}
                   >
-                    Uploaded Image
+                    Uploaded Images
                   </Typography>
                   <ImageList
-                    sx={{ width: "100%", height: "auto" }}
+                    sx={{
+                      width: "100%",
+                      height: "auto",
+                    }}
                     cols={3}
                     rowHeight={164}
                   >
@@ -323,11 +340,73 @@ const RedeemedDealDetail = () => {
                           src={url}
                           alt={`Preview ${index + 1}`}
                           loading="lazy"
-                          style={{ height: "164px", objectFit: "cover" }}
+                          style={{
+                            height: "164px",
+                            objectFit: "cover",
+                            borderRadius: 4,
+                          }}
                         />
                       </ImageListItem>
                     ))}
                   </ImageList>
+                </Box>
+              )}
+
+              {/* Engagement Metrics */}
+              {(data.totalViews || data.totalLikes || data.totalComments) && (
+                <Box>
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    gutterBottom
+                    sx={{ color: "#343A40" }}
+                  >
+                    Engagement Metrics
+                  </Typography>
+                  <Box display="flex" flexDirection="row" gap={4}>
+                    {data.totalViews !== undefined && (
+                      <Box>
+                        <Typography
+                          variant="body2"
+                          fontWeight="bold"
+                          sx={{ color: "#6C757D" }}
+                        >
+                          Total Views
+                        </Typography>
+                        <Typography variant="body1" sx={{ color: "#495057" }}>
+                          {data.totalViews}
+                        </Typography>
+                      </Box>
+                    )}
+                    {data.totalLikes !== undefined && (
+                      <Box>
+                        <Typography
+                          variant="body2"
+                          fontWeight="bold"
+                          sx={{ color: "#6C757D" }}
+                        >
+                          Total Likes
+                        </Typography>
+                        <Typography variant="body1" sx={{ color: "#495057" }}>
+                          {data.totalLikes}
+                        </Typography>
+                      </Box>
+                    )}
+                    {data.totalComments !== undefined && (
+                      <Box>
+                        <Typography
+                          variant="body2"
+                          fontWeight="bold"
+                          sx={{ color: "#6C757D" }}
+                        >
+                          Total Comments
+                        </Typography>
+                        <Typography variant="body1" sx={{ color: "#495057" }}>
+                          {data.totalComments}
+                        </Typography>
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
               )}
             </Box>
@@ -401,7 +480,19 @@ const RedeemedDealDetail = () => {
               <p>{shop.address}</p>
               <Chip label={shop.category.name} sx={styles.chip} />
               <br />
-              <a href={shop.website} target="_blank" rel="noopener noreferrer" style={{ color: "#0066cc", fontSize: "14px", textDecoration: "none", display: "inline-block", transition: "color 0.2s ease", "&:hover": { color: "#004d99", textDecoration: "underline" } }}>
+              <a
+                href={shop.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: "#0066cc",
+                  fontSize: "14px",
+                  textDecoration: "none",
+                  display: "inline-block",
+                  transition: "color 0.2s ease",
+                  "&:hover": { color: "#004d99", textDecoration: "underline" },
+                }}
+              >
                 Visit Website
               </a>
             </Grid>
@@ -429,7 +520,6 @@ const RedeemedDealDetail = () => {
           onClose={() => setOpenDialog(false)}
           id={id}
         />
-
       </Container>
     </Box>
   );
