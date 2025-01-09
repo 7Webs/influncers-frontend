@@ -8,6 +8,8 @@ import {
   ListItemText,
   Paper,
   styled,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
@@ -65,6 +67,8 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
 const CategoryDropdown = ({ categories }) => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleCategoryClick = (categoryId) => {
     navigate(`/coupons/${categoryId}`);
@@ -79,7 +83,7 @@ const CategoryDropdown = ({ categories }) => {
         onClick={() => setIsOpen(!isOpen)}
         isOpen={isOpen}
       >
-        Browse All Categories
+        {!isMobile && "All Categories"}
       </StyledButton>
 
       <Collapse in={isOpen}>
