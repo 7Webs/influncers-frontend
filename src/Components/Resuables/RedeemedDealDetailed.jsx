@@ -12,30 +12,22 @@ import {
   CardContent,
   CardMedia,
   CircularProgress,
-  TextField,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Typography,
   Link,
   ImageList,
   ImageListItem,
-  IconButton as MuiIconButton,
 } from "@mui/material";
 import {
   ContentCopy,
-  Share,
-  Close as CloseIcon,
   CheckCircleOutline,
 } from "@mui/icons-material";
-import { Delete as DeleteIcon } from "@mui/icons-material";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { apiService } from "../../Api/apiwrapper";
 import { QRCodeCanvas } from "qrcode.react";
 import { toast } from "react-toastify";
 import { getStatusConfig } from "../../Utils/Status";
+import ApprovalDialogBox from "./ApprovalDialogBox";
 
 const styles = {
   root: {
@@ -162,40 +154,6 @@ const styles = {
 const RedeemedDealDetail = () => {
   const { id } = useParams();
   const [openDialog, setOpenDialog] = useState(false);
-  const [formData, setFormData] = useState({
-    socialMediaLink: "",
-    additionalInfo: "",
-    image: "",
-  });
-  const [previewUrls, setPreviewUrls] = useState([]); // Store preview URLs separately
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    const totalFiles = formData.image.length + files.length;
-
-    if (totalFiles > 10) {
-      toast.error("Maximum 10 images allowed");
-      return;
-    }
-
-    // Create preview URLs for new images
-    const newPreviewUrls = files.map((file) => URL.createObjectURL(file));
-    setPreviewUrls((prev) => [...prev, ...newPreviewUrls]);
-
-    // Store the actual file objects
-    setFormData((prev) => ({
-      ...prev,
-      image: [...prev.image, ...files],
-    }));
-  };
 
   const handleCopyCode = (code) => {
     navigator.clipboard
@@ -208,36 +166,6 @@ const RedeemedDealDetail = () => {
       });
   };
 
-  const approveMutation = useMutation({
-    mutationFn: async () => {
-      const formDataToSend = new FormData();
-
-      formDataToSend.append("socialMediaLink", formData.socialMediaLink);
-      formDataToSend.append("additionalInfo", formData.additionalInfo);
-
-      // Append each image file individually
-      formData.image.forEach((file, index) => {
-        formDataToSend.append(`image`, file); // Use the same field name for all images
-      });
-
-      return await apiService.patch(`/deals-redeem/${id}`, formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-    },
-    onSuccess: () => {
-      setOpenDialog(false);
-      toast.success("Request for approval submitted successfully");
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
-
   const fetchDealDetails = async () => {
     const { data } = await apiService.get(`/deals-redeem/${id}`);
     return data;
@@ -247,25 +175,6 @@ const RedeemedDealDetail = () => {
     queryKey: ["dealDetails", id],
     queryFn: fetchDealDetails,
   });
-
-  const handleRemoveImage = (index) => {
-    // Remove image and its preview
-    setFormData((prev) => ({
-      ...prev,
-      image: prev.image.filter((_, i) => i !== index),
-    }));
-
-    // Revoke the URL to prevent memory leaks
-    URL.revokeObjectURL(previewUrls[index]);
-    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  // Clean up preview URLs when component unmounts
-  React.useEffect(() => {
-    return () => {
-      previewUrls.forEach((url) => URL.revokeObjectURL(url));
-    };
-  }, []);
 
   if (isLoading) {
     return (
@@ -491,6 +400,10 @@ const RedeemedDealDetail = () => {
               </Box>
               <p>{shop.address}</p>
               <Chip label={shop.category.name} sx={styles.chip} />
+              <br />
+              <a href={shop.website} target="_blank" rel="noopener noreferrer" style={{ color: "#0066cc", fontSize: "14px", textDecoration: "none", display: "inline-block", transition: "color 0.2s ease", "&:hover": { color: "#004d99", textDecoration: "underline" } }}>
+                Visit Website
+              </a>
             </Grid>
           </Grid>
         </Card>
@@ -511,197 +424,12 @@ const RedeemedDealDetail = () => {
           </Box>
         </Card>
 
-        <Dialog
+        <ApprovalDialogBox
           open={openDialog}
           onClose={() => setOpenDialog(false)}
-          maxWidth="md"
-          fullWidth
-        >
-          <DialogTitle sx={{ borderBottom: "1px solid #eee", pb: 2 }}>
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                Submit for Approval
-              </Typography>
-              <IconButton
-                onClick={() => setOpenDialog(false)}
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "#f5f5f5",
-                  },
-                }}
-              >
-                <CloseIcon />
-              </IconButton>
-            </Box>
-          </DialogTitle>
-          <DialogContent sx={{ py: 3 }}>
-            <Box sx={styles.formContainer}>
-              <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 500 }}>
-                Please provide the following information
-              </Typography>
+          id={id}
+        />
 
-              <TextField
-                name="socialMediaLink"
-                label="Social Media Link"
-                value={formData.socialMediaLink}
-                onChange={handleInputChange}
-                fullWidth
-                variant="outlined"
-                sx={{ mb: 2 }}
-                placeholder="Paste your social media post link here"
-              />
-
-              <TextField
-                name="additionalInfo"
-                label="Additional Information"
-                value={formData.additionalInfo}
-                onChange={handleInputChange}
-                multiline
-                rows={4}
-                fullWidth
-                variant="outlined"
-                sx={{ mb: 3 }}
-                placeholder="Add any additional details about your post"
-              />
-
-              <Box
-                sx={{
-                  p: 2,
-                  bgcolor: "#f8f9fa",
-                  borderRadius: 1,
-                  mb: 3,
-                }}
-              >
-                <Typography
-                  variant="subtitle1"
-                  sx={{ mb: 2, fontWeight: 500, color: "#1976d2" }}
-                >
-                  Upload Screenshots (Max 10)
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 2 }}
-                >
-                  Please attach screenshots of your social media posts to verify
-                  the promotion
-                </Typography>
-
-                <input
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  id="image-upload"
-                  type="file"
-                  multiple
-                  onChange={handleImageChange}
-                />
-                <label htmlFor="image-upload">
-                  <Button
-                    variant="outlined"
-                    component="span"
-                    fullWidth
-                    startIcon={
-                      formData.image.length > 0 ? (
-                        <CheckCircleOutline color="success" />
-                      ) : null
-                    }
-                    sx={{
-                      ...styles.outlinedButton,
-                      bgcolor: "#fff",
-                      "&:hover": {
-                        bgcolor: "#fafafa",
-                      },
-                    }}
-                  >
-                    {formData.image.length > 0
-                      ? `${formData.image.length} Image${
-                          formData.image.length !== 1 ? "s" : ""
-                        } Selected`
-                      : "Choose Images"}
-                  </Button>
-                </label>
-              </Box>
-
-              {previewUrls.length > 0 && (
-                <Box
-                  sx={{
-                    p: 2,
-                    border: "1px solid #e0e0e0",
-                    borderRadius: 1,
-                    bgcolor: "#fff",
-                  }}
-                >
-                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                    Preview:
-                  </Typography>
-                  <ImageList
-                    sx={{ width: "100%", height: "auto" }}
-                    cols={3}
-                    rowHeight={164}
-                  >
-                    {previewUrls.map((url, index) => (
-                      <ImageListItem key={index} sx={{ position: "relative" }}>
-                        <img
-                          src={url}
-                          alt={`Preview ${index + 1}`}
-                          loading="lazy"
-                          style={{ height: "164px", objectFit: "cover" }}
-                        />
-                        <MuiIconButton
-                          sx={{
-                            position: "absolute",
-                            top: 5,
-                            right: 5,
-                            bgcolor: "rgba(255, 255, 255, 0.8)",
-                            "&:hover": {
-                              bgcolor: "rgba(255, 255, 255, 0.9)",
-                            },
-                          }}
-                          onClick={() => handleRemoveImage(index)}
-                        >
-                          <DeleteIcon />
-                        </MuiIconButton>
-                      </ImageListItem>
-                    ))}
-                  </ImageList>
-                </Box>
-              )}
-            </Box>
-          </DialogContent>
-          <DialogActions sx={{ p: 3, borderTop: "1px solid #eee" }}>
-            <Button
-              onClick={() => setOpenDialog(false)}
-              sx={{
-                mr: 2,
-                color: "text.secondary",
-                "&:hover": {
-                  bgcolor: "#f5f5f5",
-                },
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              sx={{
-                ...styles.primaryButton,
-                minWidth: "120px",
-              }}
-              onClick={() => approveMutation.mutate()}
-              disabled={approveMutation.isLoading || !formData.image}
-            >
-              {approveMutation.isLoading ? (
-                <CircularProgress size={24} sx={{ color: "#fff" }} />
-              ) : (
-                "Submit"
-              )}
-            </Button>
-          </DialogActions>
-        </Dialog>
       </Container>
     </Box>
   );

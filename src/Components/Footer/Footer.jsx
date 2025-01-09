@@ -139,9 +139,6 @@ const Footer = () => {
                 +34606662830
               </Typography>
             </Box>
-            <Typography sx={{ fontSize: "14px" }}>
-              Designed and developed by webagencyexpert.com
-            </Typography>
           </Box>
         </Grid>
 
