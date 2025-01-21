@@ -307,9 +307,11 @@ const Product = ({ data, isLoading, error }) => {
                 <p style={{ margin: 0, color: "#666", fontSize: "14px" }}>
                   {data.shop.address}
                 </p>
-                <a href={data.shop.website} target="_blank" rel="noopener noreferrer" style={{ color: "#0066cc", fontSize: "14px", textDecoration: "none", display: "inline-block", transition: "color 0.2s ease", "&:hover": { color: "#004d99", textDecoration: "underline" } }}>
-                  Visit Website
-                </a>
+                {data.shop.website && (
+                  <a href={data.shop.website?.startsWith('https') ? data.shop.website : `https://${data.shop.website}`} target="_blank" rel="noopener noreferrer" style={{ color: "#0066cc", fontSize: "14px", textDecoration: "none", display: "inline-block", transition: "color 0.2s ease", "&:hover": { color: "#004d99", textDecoration: "underline" } }}>
+                    Visit Website
+                  </a>
+                )}
               </div>
             </div>
           </div>

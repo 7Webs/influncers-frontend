@@ -263,154 +263,154 @@ const RedeemedDealDetail = () => {
             data.totalViews ||
             data.totalLikes ||
             data.totalComments) && (
-            <Box
-              sx={{
-                bgcolor: "#F8F9FA",
-                p: 3,
-                borderRadius: 2,
-              }}
-            >
-              {/* Social Media Link */}
-              {data.socialMediaLink && (
-                <Box mb={3}>
-                  <Typography
-                    variant="subtitle1"
-                    fontWeight="bold"
-                    gutterBottom
-                    sx={{ color: "#343A40" }}
-                  >
-                    Social Media Link
-                  </Typography>
-                  <Link
-                    href={data.socialMediaLink}
-                    target="_blank"
-                    sx={{
-                      color: "#0066CC",
-                      wordBreak: "break-word",
-                      fontSize: "1rem",
-                    }}
-                  >
-                    {data.socialMediaLink}
-                  </Link>
-                </Box>
-              )}
-
-              {/* Additional Information */}
-              {data.additionalInfo && (
-                <Box mb={3}>
-                  <Typography
-                    variant="subtitle1"
-                    fontWeight="bold"
-                    gutterBottom
-                    sx={{ color: "#343A40" }}
-                  >
-                    Additional Information
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{ color: "#495057", lineHeight: 1.5 }}
-                  >
-                    {data.additionalInfo}
-                  </Typography>
-                </Box>
-              )}
-
-              {/* Uploaded Images */}
-              {data.image && (
-                <Box mb={3}>
-                  <Typography
-                    variant="subtitle1"
-                    fontWeight="bold"
-                    gutterBottom
-                    sx={{ color: "#343A40" }}
-                  >
-                    Uploaded Images
-                  </Typography>
-                  <ImageList
-                    sx={{
-                      width: "100%",
-                      height: "auto",
-                    }}
-                    cols={3}
-                    rowHeight={164}
-                  >
-                    {data.image.map((url, index) => (
-                      <ImageListItem key={index} sx={{ position: "relative" }}>
-                        <img
-                          src={url}
-                          alt={`Preview ${index + 1}`}
-                          loading="lazy"
-                          style={{
-                            height: "164px",
-                            objectFit: "cover",
-                            borderRadius: 4,
-                          }}
-                        />
-                      </ImageListItem>
-                    ))}
-                  </ImageList>
-                </Box>
-              )}
-
-              {/* Engagement Metrics */}
-              {(data.totalViews || data.totalLikes || data.totalComments) && (
-                <Box>
-                  <Typography
-                    variant="subtitle1"
-                    fontWeight="bold"
-                    gutterBottom
-                    sx={{ color: "#343A40" }}
-                  >
-                    Engagement Metrics
-                  </Typography>
-                  <Box display="flex" flexDirection="row" gap={4}>
-                    {data.totalViews !== undefined && (
-                      <Box>
-                        <Typography
-                          variant="body2"
-                          fontWeight="bold"
-                          sx={{ color: "#6C757D" }}
-                        >
-                          Total Views
-                        </Typography>
-                        <Typography variant="body1" sx={{ color: "#495057" }}>
-                          {data.totalViews}
-                        </Typography>
-                      </Box>
-                    )}
-                    {data.totalLikes !== undefined && (
-                      <Box>
-                        <Typography
-                          variant="body2"
-                          fontWeight="bold"
-                          sx={{ color: "#6C757D" }}
-                        >
-                          Total Likes
-                        </Typography>
-                        <Typography variant="body1" sx={{ color: "#495057" }}>
-                          {data.totalLikes}
-                        </Typography>
-                      </Box>
-                    )}
-                    {data.totalComments !== undefined && (
-                      <Box>
-                        <Typography
-                          variant="body2"
-                          fontWeight="bold"
-                          sx={{ color: "#6C757D" }}
-                        >
-                          Total Comments
-                        </Typography>
-                        <Typography variant="body1" sx={{ color: "#495057" }}>
-                          {data.totalComments}
-                        </Typography>
-                      </Box>
-                    )}
+              <Box
+                sx={{
+                  bgcolor: "#F8F9FA",
+                  p: 3,
+                  borderRadius: 2,
+                }}
+              >
+                {/* Social Media Link */}
+                {data.socialMediaLink && (
+                  <Box mb={3}>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="bold"
+                      gutterBottom
+                      sx={{ color: "#343A40" }}
+                    >
+                      Social Media Link
+                    </Typography>
+                    <Link
+                      href={data.socialMediaLink}
+                      target="_blank"
+                      sx={{
+                        color: "#0066CC",
+                        wordBreak: "break-word",
+                        fontSize: "1rem",
+                      }}
+                    >
+                      {data.socialMediaLink}
+                    </Link>
                   </Box>
-                </Box>
-              )}
-            </Box>
-          )}
+                )}
+
+                {/* Additional Information */}
+                {data.additionalInfo && (
+                  <Box mb={3}>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="bold"
+                      gutterBottom
+                      sx={{ color: "#343A40" }}
+                    >
+                      Additional Information
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{ color: "#495057", lineHeight: 1.5 }}
+                    >
+                      {data.additionalInfo}
+                    </Typography>
+                  </Box>
+                )}
+
+                {/* Uploaded Images */}
+                {data.image && (
+                  <Box mb={3}>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="bold"
+                      gutterBottom
+                      sx={{ color: "#343A40" }}
+                    >
+                      Uploaded Images
+                    </Typography>
+                    <ImageList
+                      sx={{
+                        width: "100%",
+                        height: "auto",
+                      }}
+                      cols={3}
+                      rowHeight={164}
+                    >
+                      {data.image.map((url, index) => (
+                        <ImageListItem key={index} sx={{ position: "relative" }}>
+                          <img
+                            src={url}
+                            alt={`Preview ${index + 1}`}
+                            loading="lazy"
+                            style={{
+                              height: "164px",
+                              objectFit: "cover",
+                              borderRadius: 4,
+                            }}
+                          />
+                        </ImageListItem>
+                      ))}
+                    </ImageList>
+                  </Box>
+                )}
+
+                {/* Engagement Metrics */}
+                {(data.totalViews || data.totalLikes || data.totalComments) && (
+                  <Box>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="bold"
+                      gutterBottom
+                      sx={{ color: "#343A40" }}
+                    >
+                      Engagement Metrics
+                    </Typography>
+                    <Box display="flex" flexDirection="row" gap={4}>
+                      {data.totalViews !== undefined && (
+                        <Box>
+                          <Typography
+                            variant="body2"
+                            fontWeight="bold"
+                            sx={{ color: "#6C757D" }}
+                          >
+                            Total Views
+                          </Typography>
+                          <Typography variant="body1" sx={{ color: "#495057" }}>
+                            {data.totalViews}
+                          </Typography>
+                        </Box>
+                      )}
+                      {data.totalLikes !== undefined && (
+                        <Box>
+                          <Typography
+                            variant="body2"
+                            fontWeight="bold"
+                            sx={{ color: "#6C757D" }}
+                          >
+                            Total Likes
+                          </Typography>
+                          <Typography variant="body1" sx={{ color: "#495057" }}>
+                            {data.totalLikes}
+                          </Typography>
+                        </Box>
+                      )}
+                      {data.totalComments !== undefined && (
+                        <Box>
+                          <Typography
+                            variant="body2"
+                            fontWeight="bold"
+                            sx={{ color: "#6C757D" }}
+                          >
+                            Total Comments
+                          </Typography>
+                          <Typography variant="body1" sx={{ color: "#495057" }}>
+                            {data.totalComments}
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+            )}
         </Card>
 
         <Paper sx={styles.couponSection}>
@@ -480,21 +480,23 @@ const RedeemedDealDetail = () => {
               <p>{shop.address}</p>
               <Chip label={shop.category.name} sx={styles.chip} />
               <br />
-              <a
-                href={shop.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  color: "#0066cc",
-                  fontSize: "14px",
-                  textDecoration: "none",
-                  display: "inline-block",
-                  transition: "color 0.2s ease",
-                  "&:hover": { color: "#004d99", textDecoration: "underline" },
-                }}
-              >
-                Visit Website
-              </a>
+              {shop.website && (
+                <a
+                  href={shop.website?.startsWith('https') ? shop.website : `https://${shop.website}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    color: "#0066cc",
+                    fontSize: "14px",
+                    textDecoration: "none",
+                    display: "inline-block",
+                    transition: "color 0.2s ease",
+                    "&:hover": { color: "#004d99", textDecoration: "underline" },
+                  }}
+                >
+                  Visit Website
+                </a>
+              )}
             </Grid>
           </Grid>
         </Card>
