@@ -12,12 +12,39 @@ import store from "./redux/Store";
 import Footer from "./Components/Footer/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// Import css files
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import HeaderMain from "./Components/Header/Header";
 import { CategoryProvider } from "./Utils/CategoryContext";
 import { ShopProvider } from "./Utils/ShopContext";
+
+// 404 Component
+const NotFound = () => {
+  const styles = {
+    container: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "100vh",
+      width: "100vw",
+      backgroundColor: "#f3f4f6", // Equivalent to bg-gray-100
+    },
+    image: {
+      maxWidth: "100%",
+      maxHeight: "100%",
+    },
+  };
+
+  return (
+    <div style={styles.container}>
+      <img
+        src="https://tailwindflex.com/storage/thumbnails/minimal-404-page/thumb_u.min.webp?v=1"
+        alt="404 Not Found"
+        style={styles.image}
+      />
+    </div>
+  );
+};
 
 const App = () => {
   return (
@@ -45,11 +72,15 @@ const App = () => {
                                 element={route.element}
                               />
                             ))}
+                          {/* Catch-all route for protected routes */}
+                          <Route path="*" element={<NotFound />} />
                         </Routes>
                         <Footer />
                       </ProtectedRoute>
                     }
                   />
+                  {/* Catch-all route for public routes */}
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </AuthProvider>
             </CategoryProvider>

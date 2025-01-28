@@ -76,7 +76,11 @@ const CategoryDropdown = ({ categories }) => {
   };
 
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box
+      sx={{ position: "relative" }}
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
       <StyledButton
         startIcon={<MenuIcon />}
         endIcon={<ArrowDownIcon />}
