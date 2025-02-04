@@ -10,7 +10,13 @@ import {
 import { Link } from "react-router-dom";
 import logo from "../../Assets/logo.png";
 import paymentIcon from "../../Assets/paymentIcon.png";
-import { FaFacebookF, FaInstagram, FaYoutube, FaPinterest, FaTiktok } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaYoutube,
+  FaPinterest,
+  FaTiktok,
+} from "react-icons/fa";
 
 const StyledFooter = styled(Box)(({ theme }) => ({
   padding: "30px 160px",
@@ -102,14 +108,14 @@ const PaymentContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const SocialIconLink = styled('a')(({ theme }) => ({
-  color: 'black',
-  textDecoration: 'none',
-  fontSize: '24px',
-  transition: 'color 0.3s ease',
-  '&:hover': {
-    color: '#666',
-  }
+const SocialIconLink = styled("a")(({ theme }) => ({
+  color: "black",
+  textDecoration: "none",
+  fontSize: "24px",
+  transition: "color 0.3s ease",
+  "&:hover": {
+    color: "#666",
+  },
 }));
 
 const Footer = () => {
@@ -144,14 +150,29 @@ const Footer = () => {
 
         <Grid item xs={12} md={2}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: "30px" }}>
-            <Typography variant="h5" sx={{ fontSize: "18px", fontWeight: 600, textTransform: "uppercase" }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontSize: "18px",
+                fontWeight: 600,
+                textTransform: "uppercase",
+              }}
+            >
               Pages
             </Typography>
-            <Box component="ul" sx={{ display: "flex", flexDirection: "column", gap: "15px", p: 0 }}>
+            <Box
+              component="ul"
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "15px",
+                p: 0,
+              }}
+            >
               {[
                 { text: "Home", link: "/home" },
                 { text: "My Coupons", link: "/redeemed-coupons" },
-                { text: "Profile", link: "/profile" }
+                { text: "Profile", link: "/profile" },
               ].map((item, index) => (
                 <Box component="li" key={index} sx={{ listStyle: "none" }}>
                   <StyledLink to={item.link} onClick={scrollToTop}>
@@ -165,11 +186,19 @@ const Footer = () => {
 
         <Grid item xs={12} md={3}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: "30px" }}>
-            <Typography variant="h5" sx={{ fontSize: "18px", fontWeight: 600, textTransform: "uppercase" }}>
+            <Typography
+              variant="h5"
+              sx={{
+                fontSize: "18px",
+                fontWeight: 600,
+                textTransform: "uppercase",
+              }}
+            >
               Follow Us
             </Typography>
             <Typography sx={{ fontSize: "14px" }}>
-              Stay connected with us on social media for updates and exclusive offers!
+              Stay connected with us on social media for updates and exclusive
+              offers!
             </Typography>
             <Box sx={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
               <SocialIconLink href="#" target="_blank" aria-label="Facebook">
@@ -188,12 +217,12 @@ const Footer = () => {
                 <FaTiktok />
               </SocialIconLink>
             </Box>
-            <Typography variant="h6" sx={{ fontSize: "14px", fontWeight: 500 }}>
+            {/* <Typography variant="h6" sx={{ fontSize: "14px", fontWeight: 500 }}>
               Secure Payments
             </Typography>
             <PaymentContainer>
               <img src={paymentIcon} alt="Payment Methods" />
-            </PaymentContainer>
+            </PaymentContainer> */}
           </Box>
         </Grid>
       </FooterContainer>
