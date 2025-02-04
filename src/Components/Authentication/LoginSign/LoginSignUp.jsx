@@ -11,6 +11,7 @@ import {
   IconButton,
   InputAdornment,
   CircularProgress,
+  Container,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -20,145 +21,110 @@ import { useAuth } from "../../../Utils/AuthContext";
 import AnimatedLoader from "../../Loaders/AnimatedLoader";
 
 const StyledSection = styled(Box)(({ theme }) => ({
+  minHeight: "100vh",
   display: "flex",
-  justifyContent: "center",
   alignItems: "center",
-  paddingTop: "50px",
-  paddingBottom: "70px",
+  background: "linear-gradient(135deg, #f5f7ff 0%, #ffffff 100%)",
+  padding: "30px 0",
 }));
 
-const StyledContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  gap: "55px",
-}));
-
-const TabsContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  flexWrap: "wrap",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: "50px",
-}));
-
-const TabButton = styled(Typography)(({ theme, active }) => ({
-  border: "none",
-  cursor: "pointer",
-  textTransform: "uppercase",
-  fontSize: "16px",
-  fontWeight: 600,
-  position: "relative",
-  transition: "color 0.3s",
-  color: active ? "black" : "#767676",
-  "&:hover": {
-    color: "black",
-  },
-  "&::after": {
-    content: '""',
-    position: "absolute",
-    bottom: "-5px",
-    left: 0,
-    width: active ? "100%" : 0,
-    height: "2px",
-    backgroundColor: "black",
-    transition: "width 0.2s ease, left 0.2s ease",
-  },
-  "&:hover::after": {
-    width: "100%",
-    left: 0,
-    transitionDelay: "0.2s",
-  },
-}));
-
-const StyledForm = styled("form")(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  gap: "15px",
-  width: "400px",
-  [theme.breakpoints.down("sm")]: {
-    width: "100%",
-    padding: "0 20px",
-  },
+const AuthCard = styled(Box)(({ theme }) => ({
+  background: "#ffffff",
+  borderRadius: "24px",
+  padding: "40px",
+  maxWidth: "480px",
+  margin: "0 auto",
+  boxShadow: "0 10px 40px rgba(0,0,0,0.04)",
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
+  marginBottom: "16px",
   "& .MuiOutlinedInput-root": {
-    padding: "5px",
+    borderRadius: "12px",
+    backgroundColor: "#f8faff",
     "& fieldset": {
-      borderColor: "#e4e4e4",
-      borderWidth: "2px",
+      borderColor: "#e1e8ff",
     },
     "&:hover fieldset": {
-      borderColor: "black",
+      borderColor: "#1E3FE4",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "black",
+      borderColor: "#1E3FE4",
+    },
+  },
+  "& .MuiInputLabel-root": {
+    color: "#666",
+    "&.Mui-focused": {
+      color: "#1E3FE4",
     },
   },
 }));
 
-const StyledButton = styled(Button)(({ theme }) => ({
-  padding: "10px",
-  backgroundColor: "black",
+const PrimaryButton = styled(Button)(({ theme }) => ({
+  backgroundColor: "#1E3FE4",
   color: "white",
-  "&:hover": {
-    backgroundColor: "#333",
-  },
-  textTransform: "uppercase",
+  padding: "12px",
+  borderRadius: "12px",
+  textTransform: "none",
+  fontSize: "16px",
   fontWeight: 600,
+  "&:hover": {
+    backgroundColor: "#1733b7",
+  },
 }));
 
 const SocialButton = styled(Button)(({ theme }) => ({
-  padding: "10px",
-  backgroundColor: "white",
-  color: "black",
-  border: "2px solid #e4e4e4",
-  "&:hover": {
-    backgroundColor: "#f5f5f5",
-    border: "2px solid black",
-  },
+  padding: "12px",
+  borderRadius: "12px",
+  backgroundColor: "#f8faff",
+  color: "#333",
+  border: "1px solid #e1e8ff",
   textTransform: "none",
   fontWeight: 500,
-  marginBottom: "0px",
+  "&:hover": {
+    backgroundColor: "#f0f4ff",
+    borderColor: "#1E3FE4",
+  },
+}));
+
+const TabButton = styled(Typography)(({ isactive }) => ({
+  fontSize: "24px",
+  fontWeight: 600,
+  color: isactive === "true" ? "#1E3FE4" : "#999",
+  cursor: "pointer",
+  position: "relative",
+  "&:after": {
+    content: '""',
+    position: "absolute",
+    bottom: "-8px",
+    left: 0,
+    width: isactive === "true" ? "100%" : 0,
+    height: "3px",
+    backgroundColor: "#1E3FE4",
+    borderRadius: "2px",
+    transition: "width 0.3s ease",
+  },
 }));
 
 const LoginSignUp = () => {
   const [activeTab, setActiveTab] = useState("tabButton1");
-  const {
-    user,
-    loading,
-    authChecked,
-    login,
-    register,
-    loginWithGoogle,
-    loginWithApple,
-  } = useAuth();
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
-
-  const handleTogglePassword = () => setShowPassword(!showPassword);
-  const handleToggleConfirmPassword = () =>
-    setShowConfirmPassword(!showConfirmPassword);
+  const { user, loading, authChecked, login, register, loginWithGoogle, loginWithApple } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (authChecked && user) {
-      console.log("User logged in:", user);
       navigate("/home");
     }
-  }, [user, authChecked]);
+  }, [user, authChecked, navigate]);
 
   const handleTab = (tab) => {
     setActiveTab(tab);
@@ -166,9 +132,9 @@ const LoginSignUp = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
-      [name]: value,
+      [name]: value || "", // Ensure value is never null
     }));
   };
 
@@ -176,10 +142,7 @@ const LoginSignUp = () => {
     e.preventDefault();
     setIsLoggingIn(true);
     try {
-      const loggedInUser = await login(formData.email, formData.password);
-      if (loggedInUser) {
-        console.log("User logged in:", loggedInUser);
-      }
+      await login(formData.email, formData.password);
     } catch (error) {
       console.error("Login error:", error);
     } finally {
@@ -191,10 +154,7 @@ const LoginSignUp = () => {
     e.preventDefault();
     setIsRegistering(true);
     try {
-      const registeredUser = await register(formData.email, formData.password);
-      if (registeredUser) {
-        console.log("User registered:", registeredUser);
-      }
+      await register(formData.email, formData.password);
     } catch (error) {
       console.error("Registration error:", error);
     } finally {
@@ -202,249 +162,152 @@ const LoginSignUp = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    try {
-      const googleUser = await loginWithGoogle();
-      if (googleUser) {
-        console.log("Google login successful:", googleUser);
-      }
-    } catch (error) {
-      console.error("Google login error:", error);
-    }
-  };
-
-  const handleAppleLogin = async () => {
-    try {
-      const appleUser = await loginWithApple();
-      if (appleUser) {
-        console.log("Apple login successful:", appleUser);
-      }
-    } catch (error) {
-      console.error("Apple login error:", error);
-    }
-  };
-
   if (!authChecked || loading) {
-    return (
-      <div>
-        <AnimatedLoader />
-      </div>
-    );
+    return <AnimatedLoader />;
   }
 
   return (
     <StyledSection>
-      <StyledContainer>
-        <TabsContainer>
-          <TabButton
-            onClick={() => handleTab("tabButton1")}
-            active={activeTab === "tabButton1"}
-          >
-            Login
-          </TabButton>
-          <TabButton
-            onClick={() => handleTab("tabButton2")}
-            active={activeTab === "tabButton2"}
-          >
-            Register
-          </TabButton>
-        </TabsContainer>
-        <Box>
+      <Container maxWidth="lg">
+        <Box sx={{ textAlign: "center", mb: 4 }}>
+          <img 
+            src="https://nanoinfluencers.io/wp-content/uploads/2024/11/nanoinfluencers.io_Logo_small-removebg-preview.png" 
+            alt="Logo" 
+            style={{ height: "60px", marginBottom: "24px" }} 
+          />
+        </Box>
+        
+        <AuthCard>
+          <Box sx={{ display: "flex", justifyContent: "center", gap: 4, mb: 4 }}>
+            <TabButton 
+              isactive={(activeTab === "tabButton1").toString()}
+              onClick={() => handleTab("tabButton1")}
+              variant="h5"
+            >
+              Login
+            </TabButton>
+            <TabButton 
+              isactive={(activeTab === "tabButton2").toString()}
+              onClick={() => handleTab("tabButton2")}
+              variant="h5"
+            >
+              Register
+            </TabButton>
+          </Box>
+
           {activeTab === "tabButton1" && (
-            <Box>
-              <StyledForm onSubmit={handleLogin}>
-                <StyledTextField
-                  type="email"
-                  placeholder="Email address *"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  fullWidth
-                />
-                <StyledTextField
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password *"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={handleTogglePassword} edge="end">
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Link
-                    to="/resetPassword"
-                    style={{
-                      fontSize: "14px",
-                      color: "black",
-                      textDecoration: "none",
-                    }}
-                  >
-                    Forgot password?
-                  </Link>
-                </Box>
-                <StyledButton
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  disabled={isLoggingIn}
-                >
-                  {isLoggingIn ? <CircularProgress size={24} color="inherit" /> : "Log In"}
-                </StyledButton>
+            <Box component="form" onSubmit={handleLogin}>
+              <StyledTextField
+                fullWidth
+                label="Email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              <StyledTextField
+                fullWidth
+                label="Password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={handleChange}
+                required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Box sx={{ mb: 2 }}>
+                <Link to="/resetPassword" style={{ color: "#1E3FE4", textDecoration: "none" }}>
+                  Forgot password?
+                </Link>
+              </Box>
+              <PrimaryButton
+                fullWidth
+                type="submit"
+                disabled={isLoggingIn}
+              >
+                {isLoggingIn ? <CircularProgress size={24} /> : "Login"}
+              </PrimaryButton>
 
-                <Divider sx={{ my: 0 }}>OR</Divider>
+              <Divider sx={{ my: 3 }}>or continue with</Divider>
 
-                <SocialButton
-                  fullWidth
-                  startIcon={<GoogleIcon />}
-                  onClick={handleGoogleLogin}
-                >
-                  Continue with Google
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <SocialButton fullWidth onClick={loginWithGoogle} startIcon={<GoogleIcon />}>
+                  Google
                 </SocialButton>
-                <SocialButton
-                  fullWidth
-                  startIcon={<AppleIcon />}
-                  onClick={handleAppleLogin}
-                >
-                  Continue with Apple
+                <SocialButton fullWidth onClick={loginWithApple} startIcon={<AppleIcon />}>
+                  Apple
                 </SocialButton>
-              </StyledForm>
-              <Box sx={{ paddingTop: "20px", textAlign: "center" }}>
-                <Typography sx={{ fontSize: "14px", color: "#767676" }}>
-                  No account yet?{" "}
-                  <Box
-                    component="span"
-                    onClick={() => handleTab("tabButton2")}
-                    sx={{
-                      color: "black",
-                      cursor: "pointer",
-                      textDecoration: "underline",
-                      fontWeight: 500,
-                    }}
-                  >
-                    Create Account
-                  </Box>
-                </Typography>
               </Box>
             </Box>
           )}
 
           {activeTab === "tabButton2" && (
-            <Box>
-              <StyledForm onSubmit={handleRegister}>
-                {/* <StyledTextField
-                  placeholder="First Name *"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                  fullWidth
-                />
-                <StyledTextField
-                  placeholder="Last Name *"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                  fullWidth
-                /> */}
-                <StyledTextField
-                  type="email"
-                  placeholder="Email address *"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  fullWidth
-                />
-                <StyledTextField
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password *"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={handleTogglePassword} edge="end">
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                <StyledTextField
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Confirm Password *"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={handleToggleConfirmPassword}
-                          edge="end"
-                        >
-                          {showConfirmPassword ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                <StyledButton
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  disabled={isRegistering}
-                >
-                  {isRegistering ? <CircularProgress size={24} color="inherit" /> : "Register"}
-                </StyledButton>
-              </StyledForm>
-              <Box sx={{ paddingTop: "20px", textAlign: "center" }}>
-                <Typography sx={{ fontSize: "14px", color: "#767676" }}>
-                  Already have an account?{" "}
-                  <Box
-                    component="span"
-                    onClick={() => handleTab("tabButton1")}
-                    sx={{
-                      color: "black",
-                      cursor: "pointer",
-                      textDecoration: "underline",
-                      fontWeight: 500,
-                    }}
-                  >
-                    Sign in
-                  </Box>
-                </Typography>
-              </Box>
+            <Box component="form" onSubmit={handleRegister}>
+              <StyledTextField
+                fullWidth
+                label="Email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              <StyledTextField
+                fullWidth
+                label="Password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={handleChange}
+                required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <StyledTextField
+                fullWidth
+                label="Confirm Password"
+                name="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end">
+                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <PrimaryButton
+                fullWidth
+                type="submit"
+                disabled={isRegistering}
+              >
+                {isRegistering ? <CircularProgress size={24} /> : "Register"}
+              </PrimaryButton>
             </Box>
           )}
-        </Box>
-      </StyledContainer>
+        </AuthCard>
+      </Container>
     </StyledSection>
   );
 };

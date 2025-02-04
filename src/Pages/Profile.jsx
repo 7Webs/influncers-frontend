@@ -12,48 +12,116 @@ import {
   CardContent,
   IconButton,
   Divider,
+  Paper,
 } from "@mui/material";
 import {
   Facebook,
   Instagram,
   Twitter,
   LinkedIn,
-  CameraAlt,
-  Edit,
   YouTube,
+  Edit,
+  LocationOn,
+  Phone,
+  Email,
+  Person,
+  Category,
 } from "@mui/icons-material";
-import { PiEnvelope, PiGenderIntersex, PiPhone } from "react-icons/pi";
-import { IoCalendar, IoLocation } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
 import { FaTiktok } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 // Styled Components
-const CoverPhoto = styled(Box)({
-  height: 200,
-  background: "linear-gradient(120deg, #2196f3 0%, #673ab7 100%)",
+const PageContainer = styled(Box)(({ theme }) => ({
+  minHeight: "100vh",
+  backgroundColor: "#f8faff",
+  paddingTop: "100px",
+  paddingBottom: "50px",
+}));
+
+const ProfileCard = styled(Paper)(({ theme }) => ({
+  backgroundColor: "#ffffff",
+  borderRadius: "24px",
+  padding: "40px",
+  boxShadow: "0 10px 40px rgba(0,0,0,0.04)",
   position: "relative",
+  overflow: "hidden",
+}));
+
+const CoverPhoto = styled(Box)({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  height: "200px",
+  background: "linear-gradient(135deg, #1E3FE4 0%, #1733b7 100%)",
 });
 
 const ProfileAvatar = styled(Avatar)(({ theme }) => ({
-  width: 120,
-  height: 120,
-  border: `4px solid ${theme.palette.background.paper}`,
-  margin: "auto",
-  marginTop: -60,
+  width: 150,
+  height: 150,
+  border: "4px solid #ffffff",
+  boxShadow: "0 4px 14px rgba(0,0,0,0.1)",
+  margin: "120px auto 20px",
+  position: "relative",
+  zIndex: 1,
+}));
+
+const EditButton = styled(Button)(({ theme }) => ({
+  backgroundColor: "#1E3FE4",
+  color: "white",
+  padding: "8px 24px",
+  borderRadius: "12px",
+  textTransform: "none",
+  fontSize: "16px",
+  fontWeight: 500,
+  "&:hover": {
+    backgroundColor: "#1733b7",
+  },
+}));
+
+const LogoutButton = styled(Button)(({ theme }) => ({
+  backgroundColor: "#ff4444",
+  color: "white",
+  padding: "8px 24px",
+  borderRadius: "12px",
+  textTransform: "none",
+  fontSize: "16px",
+  fontWeight: 500,
+  "&:hover": {
+    backgroundColor: "#cc0000",
+  },
+}));
+
+const InfoCard = styled(Card)(({ theme }) => ({
+  height: "100%",
+  borderRadius: "16px",
+  boxShadow: "0 4px 14px rgba(0,0,0,0.04)",
+  backgroundColor: "#ffffff",
 }));
 
 const SocialButton = styled(IconButton)(({ color }) => ({
   backgroundColor: color,
   color: "white",
   "&:hover": {
+    backgroundColor: color,
     opacity: 0.9,
   },
   margin: 4,
 }));
 
+const InfoItem = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: "12px",
+  marginBottom: "16px",
+  "& .MuiSvgIcon-root": {
+    color: "#1E3FE4",
+  },
+}));
+
 const Profile = () => {
   const { user, logout } = useAuth();
-  const nav = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -73,118 +141,128 @@ const Profile = () => {
   ];
 
   return (
-    <Box>
+    <PageContainer>
       <Container maxWidth="lg">
-        {/* User Information Card */}
-        <Card sx={{ mb: 3, boxShadow: 0.3, mt: 5 }}>
-          <CoverPhoto>
-            {/* <IconButton
-              sx={{
-                color: "white",
-                position: "absolute",
-                right: 16,
-                bottom: 16,
-                bgcolor: "rgba(0,0,0,0.3)",
-              }}
-            >
-              <CameraAlt />
-            </IconButton> */}
-          </CoverPhoto>
-          <CardContent>
-            <ProfileAvatar
-              src={user?.photo || "https://via.placeholder.com/150"}
-            >
-              {!user?.photo && (user?.name?.[0] || "U")}
-            </ProfileAvatar>
-            <Typography variant="h5" align="center" fontWeight="bold">
+        
+
+        <ProfileCard>
+          <CoverPhoto />
+          <ProfileAvatar src={user?.photo || "https://via.placeholder.com/150"}>
+            {!user?.photo && (user?.name?.[0] || "U")}
+          </ProfileAvatar>
+
+          <Box sx={{ textAlign: "center", position: "relative", zIndex: 1 }}>
+            <Typography variant="h4" sx={{ fontWeight: 600, mb: 1 }}>
               {user?.name || "User Name"}
             </Typography>
-            <Typography
-              variant="subtitle1"
-              align="center"
-              color="text.secondary"
-              gutterBottom
-            >
+            <Typography variant="subtitle1" color="text.secondary" gutterBottom>
               {user?.category?.name + " Influencer" || "General User"}
             </Typography>
-            <Divider sx={{ my: 2 }} />
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <PiGenderIntersex size={20} color="#757575" />
-                  <Typography variant="body1" color="text.secondary">
-                    {user?.gender || "Not specified"}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={6}>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <PiEnvelope size={20} color="#757575" />
-                  <Typography variant="body1" color="text.secondary">
-                    {user?.email || "Not provided"}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={6}>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <PiPhone size={20} color="#757575" />
-                  <Typography variant="body1" color="text.secondary">
-                    {user?.phone || "Not provided"}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={6}>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <IoLocation size={20} color="#757575" />
-                  <Typography variant="body1" color="text.secondary">
-                    {user?.location || "Not specified"}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={12}>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <IoCalendar size={20} color="#757575" />
-                  <Typography variant="body1" color="text.secondary">
-                    Joined on {user?.createdAt.split("T")[0] || "Not available"}
-                  </Typography>
-                </Box>
-              </Grid>
-            </Grid>
-            <Box display="flex" justifyContent="center" my={2}>
-              {socialLinks.map(
-                ({ Icon, color, link }, index) =>
-                  link && (
-                    <SocialButton
-                      key={index}
-                      href={link}
-                      target="_blank"
-                      color={color}
-                    >
-                      <Icon fontSize="small" />
-                    </SocialButton>
-                  )
-              )}
-            </Box>
-            <Box display="flex" justifyContent="flex-end">
-              <Button
-                variant="outlined"
-                sx={{ mr: 1 }}
+
+            <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}>
+              <EditButton
                 startIcon={<Edit />}
-                onClick={(e) => {
-                  e.preventDefault();
-                  nav("/profile/edit");
-                }}
+                onClick={() => navigate("/profile/edit")}
               >
                 Edit Profile
-              </Button>
-              <Button variant="contained" color="error" onClick={handleLogout}>
+              </EditButton>
+              <LogoutButton onClick={handleLogout}>
                 Logout
-              </Button>
+              </LogoutButton>
             </Box>
-          </CardContent>
-        </Card>
+          </Box>
+
+          <Divider sx={{ my: 4 }} />
+
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={6}>
+              <InfoCard>
+                <CardContent>
+                  <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+                    Personal Information
+                  </Typography>
+                  <InfoItem>
+                    <Person />
+                    <Box>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Full Name
+                      </Typography>
+                      <Typography>{user?.name || "Not provided"}</Typography>
+                    </Box>
+                  </InfoItem>
+                  <InfoItem>
+                    <Email />
+                    <Box>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Email
+                      </Typography>
+                      <Typography>{user?.email || "Not provided"}</Typography>
+                    </Box>
+                  </InfoItem>
+                  <InfoItem>
+                    <Phone />
+                    <Box>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Phone
+                      </Typography>
+                      <Typography>{user?.phone || "Not provided"}</Typography>
+                    </Box>
+                  </InfoItem>
+                  <InfoItem>
+                    <LocationOn />
+                    <Box>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Location
+                      </Typography>
+                      <Typography>{user?.location || "Not provided"}</Typography>
+                    </Box>
+                  </InfoItem>
+                  <InfoItem>
+                    <Category />
+                    <Box>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Category
+                      </Typography>
+                      <Typography>{user?.category?.name || "Not specified"}</Typography>
+                    </Box>
+                  </InfoItem>
+                </CardContent>
+              </InfoCard>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <InfoCard>
+                <CardContent>
+                  <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+                    Social Media Profiles
+                  </Typography>
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                    {socialLinks.map(({ Icon, color, link }, index) => (
+                      link && (
+                        <SocialButton
+                          key={index}
+                          href={link}
+                          target="_blank"
+                          color={color}
+                          size="large"
+                        >
+                          {typeof Icon === "function" ? <Icon /> : <Icon size={24} />}
+                        </SocialButton>
+                      )
+                    ))}
+                  </Box>
+                  {!socialLinks.some(link => link.link) && (
+                    <Typography color="text.secondary" sx={{ mt: 2 }}>
+                      No social media profiles linked yet
+                    </Typography>
+                  )}
+                </CardContent>
+              </InfoCard>
+            </Grid>
+          </Grid>
+        </ProfileCard>
       </Container>
-    </Box>
+    </PageContainer>
   );
 };
 

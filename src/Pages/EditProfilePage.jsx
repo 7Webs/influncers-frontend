@@ -20,12 +20,85 @@ import { useAuth } from "../Utils/AuthContext";
 import { useCategory } from "../Utils/CategoryContext";
 
 // Styled Components
+const PageContainer = styled(Box)(({ theme }) => ({
+  minHeight: "100vh",
+  backgroundColor: "#f8faff",
+  paddingTop: "100px",
+  paddingBottom: "50px",
+}));
+
+const ProfileCard = styled(Paper)(({ theme }) => ({
+  backgroundColor: "#ffffff",
+  borderRadius: "24px",
+  padding: "40px",
+  boxShadow: "0 10px 40px rgba(0,0,0,0.04)",
+}));
+
 const ProfileAvatar = styled(Avatar)(({ theme }) => ({
   width: 120,
   height: 120,
-  border: `4px solid ${theme.palette.background.paper}`,
+  border: "4px solid #ffffff",
+  boxShadow: "0 4px 14px rgba(0,0,0,0.1)",
   margin: "auto",
-  marginTop: -60,
+  marginTop: -80,
+}));
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  marginBottom: "16px",
+  "& .MuiOutlinedInput-root": {
+    borderRadius: "12px",
+    backgroundColor: "#f8faff",
+    "& fieldset": {
+      borderColor: "#e1e8ff",
+    },
+    "&:hover fieldset": {
+      borderColor: "#1E3FE4",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#1E3FE4",
+    },
+  },
+  "& .MuiInputLabel-root": {
+    color: "#666",
+    "&.Mui-focused": {
+      color: "#1E3FE4",
+    },
+  },
+}));
+
+const SaveButton = styled(Button)(({ theme }) => ({
+  backgroundColor: "#1E3FE4",
+  color: "white",
+  padding: "12px 32px",
+  borderRadius: "12px",
+  textTransform: "none",
+  fontSize: "16px",
+  fontWeight: 600,
+  "&:hover": {
+    backgroundColor: "#1733b7",
+  },
+}));
+
+const LogoutButton = styled(Button)(({ theme }) => ({
+  backgroundColor: "#ff4444",
+  color: "white",
+  padding: "12px 32px",
+  borderRadius: "12px",
+  textTransform: "none",
+  fontSize: "16px",
+  fontWeight: 600,
+  "&:hover": {
+    backgroundColor: "#cc0000",
+  },
+}));
+
+const CameraButton = styled(IconButton)(({ theme }) => ({
+  backgroundColor: "#1E3FE4",
+  color: "white",
+  padding: "8px",
+  "&:hover": {
+    backgroundColor: "#1733b7",
+  },
 }));
 
 const EditProfile = () => {
@@ -54,7 +127,7 @@ const EditProfile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setProfileData((prevData) => ({ ...prevData, [name]: value }));
+    setProfileData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePhotoChange = (e) => {
@@ -63,7 +136,7 @@ const EditProfile = () => {
       setPhotoFile(file);
       const reader = new FileReader();
       reader.onload = () => {
-        setProfileData((prevData) => ({ ...prevData, photo: reader.result }));
+        setProfileData((prev) => ({ ...prev, photo: reader.result }));
       };
       reader.readAsDataURL(file);
     }
@@ -82,23 +155,19 @@ const EditProfile = () => {
       setIsSubmitting(true);
       const formData = new FormData();
 
-      // Dynamically append non-empty fields to FormData
       Object.keys(profileData).forEach((key) => {
         if (user[key] !== profileData[key]) {
           formData.append(key, profileData[key]);
         }
       });
 
-      // Add the photo file separately if it's changed
       if (photoFile) {
         formData.append("photo", photoFile);
       }
 
       await updateProfileInfo(formData);
-      // toast.success("Profile updated successfully");
       navigate("/profile");
     } catch (error) {
-      // toast.error("Failed to update profile");
       console.error("Profile update error:", error);
     } finally {
       setIsSubmitting(false);
@@ -106,194 +175,147 @@ const EditProfile = () => {
   };
 
   return (
-    <Box sx={{ py: 10 }}>
+    <PageContainer>
       <Container maxWidth="md">
-        <Paper elevation={2} sx={{ p: 3, position: "relative" }}>
-          <Box position="relative" sx={{ textAlign: "center" }}>
+
+        <ProfileCard>
+          <Box position="relative">
             <ProfileAvatar src={profileData.photo} />
-            <IconButton
-              component="label"
-              sx={{
-                position: "absolute",
-                bottom: 10,
-                right: "calc(50% - 60px)",
-                bgcolor: "white",
-                border: "1px solid #ddd",
-                "&:hover": { bgcolor: "gray" },
-              }}
-            >
-              <CameraAlt fontSize="small" />
-              <input
-                hidden
-                accept="image/*"
-                type="file"
-                onChange={handlePhotoChange}
-              />
-            </IconButton>
+            <Box sx={{ position: "absolute", bottom: -60, right: "calc(50% - 80px)" }}>
+              <CameraButton component="label" sx={{ position: "absolute", top: -90, left: -60}}>
+                <CameraAlt fontSize="small" />
+                <input
+                  hidden
+                  accept="image/*"
+                  type="file"
+                  onChange={handlePhotoChange}
+                />
+              </CameraButton>
+            </Box>
           </Box>
-          <Typography variant="h5" align="center" sx={{ mt: 6, mb: 3 }}>
+
+          <Typography variant="h5" align="center" sx={{ mt: 4, mb: 4, fontWeight: 600, color: "#333" }}>
             Edit Profile
           </Typography>
-          <Box component="form" noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Full Name"
-                  name="name"
-                  value={profileData.name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Email Address"
-                  name="email"
-                  value={profileData.email}
-                  disabled
-                  onChange={handleInputChange}
-                  type="email"
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Phone Number"
-                  name="phone"
-                  value={profileData.phone}
-                  onChange={handleInputChange}
-                  type="tel"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Location"
-                  name="location"
-                  value={profileData.location}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Gender"
-                  name="gender"
-                  value={profileData.gender}
-                  onChange={handleInputChange}
-                  select
-                >
-                  <MenuItem value="Male">Male</MenuItem>
-                  <MenuItem value="Female">Female</MenuItem>
-                  <MenuItem value="Other">Other</MenuItem>
-                </TextField>
-              </Grid>
 
-              {/* Category Dropdown */}
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Your Primary Domain"
-                  name="categoryId"
-                  value={profileData.categoryId}
-                  onChange={handleInputChange}
-                  select
-                >
-                  {categories.map((category) => (
-                    <MenuItem key={category.id} value={category.id}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6}>
+              <StyledTextField
+                fullWidth
+                label="Full Name"
+                name="name"
+                value={profileData.name}
+                onChange={handleInputChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <StyledTextField
+                fullWidth
+                label="Email"
+                name="email"
+                value={profileData.email}
+                disabled
+                type="email"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <StyledTextField
+                fullWidth
+                label="Phone"
+                name="phone"
+                value={profileData.phone}
+                onChange={handleInputChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <StyledTextField
+                fullWidth
+                label="Location"
+                name="location"
+                value={profileData.location}
+                onChange={handleInputChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <StyledTextField
+                fullWidth
+                select
+                label="Gender"
+                name="gender"
+                value={profileData.gender}
+                onChange={handleInputChange}
+              >
+                <MenuItem value="Male">Male</MenuItem>
+                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </StyledTextField>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <StyledTextField
+                fullWidth
+                select
+                label="Primary Domain"
+                name="categoryId"
+                value={profileData.categoryId}
+                onChange={handleInputChange}
+              >
+                {categories.map((category) => (
+                  <MenuItem key={category.id} value={category.id}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                       <img
                         src={category.image}
                         alt={category.name}
-                        width={26}
-                        height={26}
-                        style={{ marginRight: 8 }}
+                        width={24}
+                        height={24}
                       />
                       {category.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-
-              {/* Social Media Links */}
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Facebook Profile Link"
-                  name="facebookProfileLink"
-                  value={profileData.facebookProfileLink}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Instagram Profile Link"
-                  name="instagramProfileLink"
-                  value={profileData.instagramProfileLink}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Twitter Profile Link"
-                  name="twitterProfileLink"
-                  value={profileData.twitterProfileLink}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="LinkedIn Profile Link"
-                  name="linkedinProfileLink"
-                  value={profileData.linkedinProfileLink}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Tiktok Profile Link"
-                  name="tiktokProfileLink"
-                  value={profileData.tiktokProfileLink}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Youtube Profile Link"
-                  name="youtubeProfileLink"
-                  value={profileData.youtubeProfileLink}
-                  onChange={handleInputChange}
-                />
-              </Grid>
+                    </Box>
+                  </MenuItem>
+                ))}
+              </StyledTextField>
             </Grid>
-            <Box display="flex" justifyContent="center" mt={3}>
-              <Button
-                variant="contained"
-                startIcon={!isSubmitting && <Save />}
-                onClick={handleSubmit}
-                size="large"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? <CircularProgress size={24} /> : "Save Changes"}
-              </Button>
-            </Box>
-            <Box display="flex" justifyContent="center" mt={3}>
-              <Button variant="contained" color="error" onClick={handleLogout}>
-                Logout
-              </Button>
 
-            </Box>
+            <Grid item xs={12}>
+              <Typography variant="h6" sx={{ mb: 2, color: "#333", fontWeight: 600 }}>
+                Social Media Links
+              </Typography>
+            </Grid>
+
+            {[
+              { name: "facebookProfileLink", label: "Facebook Profile" },
+              { name: "instagramProfileLink", label: "Instagram Profile" },
+              { name: "twitterProfileLink", label: "Twitter Profile" },
+              { name: "linkedinProfileLink", label: "LinkedIn Profile" },
+              { name: "tiktokProfileLink", label: "TikTok Profile" },
+              { name: "youtubeProfileLink", label: "YouTube Profile" },
+            ].map((social) => (
+              <Grid item xs={12} sm={6} key={social.name}>
+                <StyledTextField
+                  fullWidth
+                  label={social.label}
+                  name={social.name}
+                  value={profileData[social.name]}
+                  onChange={handleInputChange}
+                />
+              </Grid>
+            ))}
+          </Grid>
+
+          <Box sx={{ mt: 4, display: "flex", justifyContent: "center", gap: 2 }}>
+            <SaveButton
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              startIcon={!isSubmitting && <Save />}
+            >
+              {isSubmitting ? <CircularProgress size={24} color="inherit" /> : "Save Changes"}
+            </SaveButton>
+            <LogoutButton onClick={handleLogout}>
+              Logout
+            </LogoutButton>
           </Box>
-        </Paper>
+        </ProfileCard>
       </Container>
-    </Box>
+    </PageContainer>
   );
 };
 

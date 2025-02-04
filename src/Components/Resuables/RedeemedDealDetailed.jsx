@@ -16,10 +16,14 @@ import {
   Link,
   ImageList,
   ImageListItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
-import { ContentCopy, CheckCircleOutline } from "@mui/icons-material";
+import { ContentCopy, CheckCircleOutline, Close as CloseIcon } from "@mui/icons-material";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { apiService } from "../../Api/apiwrapper";
 import { QRCodeCanvas } from "qrcode.react";
 import { toast } from "react-toastify";
@@ -146,11 +150,53 @@ const styles = {
     flexDirection: "column",
     gap: 2,
   },
+  cancelButton: {
+    backgroundColor: "#ff4444",
+    color: "#fff",
+    borderRadius: 0,
+    padding: "10px 24px",
+    "&:hover": {
+      backgroundColor: "#cc0000",
+    },
+  },
 };
+
+const CancelConfirmationDialog = ({ open, onClose, onConfirm, isLoading }) => (
+  <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
+    <DialogTitle sx={{ pb: 1 }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Typography variant="h6">Cancel Deal</Typography>
+        <IconButton onClick={onClose} size="small">
+          <CloseIcon />
+        </IconButton>
+      </Box>
+    </DialogTitle>
+    <DialogContent>
+      <Typography>
+        Are you sure you want to cancel this deal? This action cannot be undone.
+      </Typography>
+    </DialogContent>
+    <DialogActions sx={{ p: 2.5, pt: 1.5 }}>
+      <Button onClick={onClose} disabled={isLoading}>
+        No, Keep It
+      </Button>
+      <Button
+        onClick={onConfirm}
+        variant="contained"
+        color="error"
+        disabled={isLoading}
+      >
+        {isLoading ? <CircularProgress size={24} /> : "Yes, Cancel Deal"}
+      </Button>
+    </DialogActions>
+  </Dialog>
+);
 
 const RedeemedDealDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [openDialog, setOpenDialog] = useState(false);
+  const [openCancelDialog, setOpenCancelDialog] = useState(false);
 
   const handleCopyCode = (code) => {
     navigator.clipboard
@@ -172,6 +218,27 @@ const RedeemedDealDetail = () => {
     queryKey: ["dealDetails", id],
     queryFn: fetchDealDetails,
   });
+
+  const cancelDealMutation = useMutation({
+    mutationFn: async () => {
+      return await apiService.patch(`/deals-redeem/cancel/${id}`);
+    },
+    onSuccess: () => {
+      toast.success("Deal cancelled successfully");
+      navigate("/redeemed-coupons");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Failed to cancel deal");
+    },
+  });
+
+  const handleCancelDeal = () => {
+    setOpenCancelDialog(true);
+  };
+
+  const confirmCancelDeal = () => {
+    cancelDealMutation.mutate();
+  };
 
   if (isLoading) {
     return (
@@ -245,16 +312,27 @@ const RedeemedDealDetail = () => {
                 {statusConfig.label}
               </Box>
             </Box>
-            {data.status === "used" && (
-              <Button
-                variant="contained"
-                sx={styles.primaryButton}
-                onClick={() => setOpenDialog(true)}
-                startIcon={<CheckCircleOutline />}
-              >
-                Request for Approval
-              </Button>
-            )}
+            <Box>
+              {data.status === "used" && (
+                <Button
+                  variant="contained"
+                  sx={styles.primaryButton}
+                  onClick={() => setOpenDialog(true)}
+                  startIcon={<CheckCircleOutline />}
+                >
+                  Request for Approval
+                </Button>
+              )}
+              {data.status === "pending_usage" && (
+                <Button
+                  variant="contained"
+                  sx={styles.cancelButton}
+                  onClick={handleCancelDeal}
+                >
+                  Cancel Deal
+                </Button>
+              )}
+            </Box>
           </Box>
 
           {(data.socialMediaLink ||
@@ -270,7 +348,6 @@ const RedeemedDealDetail = () => {
                   borderRadius: 2,
                 }}
               >
-                {/* Social Media Link */}
                 {data.socialMediaLink && (
                   <Box mb={3}>
                     <Typography
@@ -295,7 +372,6 @@ const RedeemedDealDetail = () => {
                   </Box>
                 )}
 
-                {/* Additional Information */}
                 {data.additionalInfo && (
                   <Box mb={3}>
                     <Typography
@@ -315,7 +391,6 @@ const RedeemedDealDetail = () => {
                   </Box>
                 )}
 
-                {/* Uploaded Images */}
                 {data.image && (
                   <Box mb={3}>
                     <Typography
@@ -352,7 +427,6 @@ const RedeemedDealDetail = () => {
                   </Box>
                 )}
 
-                {/* Engagement Metrics */}
                 {(data.totalViews || data.totalLikes || data.totalComments) && (
                   <Box>
                     <Typography
@@ -521,6 +595,13 @@ const RedeemedDealDetail = () => {
           open={openDialog}
           onClose={() => setOpenDialog(false)}
           id={id}
+        />
+
+        <CancelConfirmationDialog
+          open={openCancelDialog}
+          onClose={() => setOpenCancelDialog(false)}
+          onConfirm={confirmCancelDeal}
+          isLoading={cancelDealMutation.isLoading}
         />
       </Container>
     </Box>

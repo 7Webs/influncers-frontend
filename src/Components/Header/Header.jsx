@@ -1,129 +1,214 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Toolbar,
-  Typography,
   Box,
   Avatar,
   Button,
-  LinearProgress,
-  Stack,
-  Tooltip,
   IconButton,
-  Chip,
   Grid,
   useMediaQuery,
   useTheme,
+  Container,
+  styled,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+  LinearProgress,
+  Stack,
+  Tooltip,
+  Chip,
 } from "@mui/material";
 import {
   AccessTime,
   ContentCopy,
-  Headset as HeadsetIcon,
   LocalOffer,
   Store,
+  Menu as MenuIcon,
+  Close as CloseIcon,
 } from "@mui/icons-material";
 import CategoryDropdown from "./CategoryDropdown";
 import { useAuth } from "../../Utils/AuthContext";
-import logo from "../../Assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useCategory } from "../../Utils/CategoryContext";
+import { toast } from "react-toastify";
+
+// Styled components
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  backgroundColor: "#ffffff",
+  boxShadow: "0 2px 4px rgba(0,0,0,0.04)",
+  position: "fixed",
+}));
+
+const StyledToolbar = styled(Toolbar)(({ theme }) => ({
+  minHeight: "80px",
+  display: "flex",
+  justifyContent: "space-between",
+  padding: "0 24px",
+  [theme.breakpoints.down("sm")]: {
+    padding: "0 16px",
+  },
+}));
+
+const NavButton = styled(Button)(({ theme }) => ({
+  color: "#333333",
+  textTransform: "none",
+  fontSize: "16px",
+  fontWeight: 500,
+  padding: "8px 16px",
+  "&:hover": {
+    backgroundColor: "transparent",
+    color: "#1E3FE4",
+  },
+  [theme.breakpoints.down("md")]: {
+    display: "none",
+  },
+}));
+
+const GetStartedButton = styled(Button)(({ theme }) => ({
+  backgroundColor: "#1E3FE4",
+  color: "white",
+  textTransform: "none",
+  padding: "8px 24px",
+  borderRadius: "24px",
+  fontSize: "16px",
+  fontWeight: 500,
+  "&:hover": {
+    backgroundColor: "#1733b7",
+  },
+}));
+
+const MobileMenuButton = styled(IconButton)(({ theme }) => ({
+  display: "none",
+  [theme.breakpoints.down("md")]: {
+    display: "flex",
+    marginLeft: "auto",
+  },
+}));
 
 const HeaderMain = () => {
   const nav = useNavigate();
   const { user } = useAuth();
   const { categories } = useCategory();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   const handleForYouClick = () => {
     nav("/home");
+    setMobileMenuOpen(false);
   };
 
-  const handleHomeClick = () => {
-    window.location.href = "https://nanoinfluencers.io/";
+  const handleMyCouponsClick = () => {
+    nav("/redeemed-coupons");
+    setMobileMenuOpen(false);
+  };
+
+  const handleProfileClick = () => {
+    nav("/profile");
+    setMobileMenuOpen(false);
   };
 
   return (
     <>
-      <AppBar
-        sx={{ bgcolor: "#fff", color: "#333" }}
-        position="fixed"
-        elevation={0}
-      >
-        {user.openRedeemedDeal && (
+      <StyledAppBar>
+        {user?.openRedeemedDeal && (
           <RedeemedDealTimer redeemedDeal={user.openRedeemedDeal} />
         )}
-        <Toolbar
-          sx={{
-            backgroundColor: "#fff",
-            borderBottom: "1px solid #eee",
-            padding: "8px 16px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-            <img
-              src={logo}
-              alt="Logo"
-              style={{ height: 40, cursor: "pointer" }}
-              onClick={() => {
-                nav("/home");
-                window.location.reload();
-              }}
-            />
-
-            <CategoryDropdown categories={categories} />
-            <Button size="small" color="inherit" onClick={handleForYouClick}>
-              For You
-            </Button>
-            <Button
-              size="small"
-              color="inherit"
-              onClick={() => nav("/redeemed-coupons")}
-            >
-              My Coupons
-            </Button>
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-            {!isMobile && (
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <HeadsetIcon />
-                <Box>
-                  <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                    +34606662830
-                  </Typography>
-                  <Typography variant="caption">24/7 Support Center</Typography>
-                </Box>
-              </Box>
-            )}
-
-            {user && (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  cursor: "pointer",
+        <Container maxWidth="xl">
+          <StyledToolbar>
+            {/* Logo */}
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <img
+                src="https://nanoinfluencers.io/wp-content/uploads/2024/11/nanoinfluencers.io_Logo_small-removebg-preview.png"
+                alt="Logo"
+                style={{ height: "40px", cursor: "pointer" }}
+                onClick={() => {
+                  nav("/home");
+                  window.location.reload();
                 }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  nav("/profile");
-                }}
+              />
+            </Box>
+
+            {/* Desktop Navigation */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <CategoryDropdown categories={categories} />
+              <NavButton onClick={handleForYouClick}>For You</NavButton>
+              <NavButton onClick={handleMyCouponsClick}>My Coupons</NavButton>
+
+              {user && !isMobile && (
+                <GetStartedButton
+                  onClick={handleProfileClick}
+                  startIcon={
+                    <Avatar
+                      src={user?.photo}
+                      alt={user?.displayName}
+                      sx={{ width: 32, height: 32 }}
+                    />
+                  }
+                >
+                  My Account
+                </GetStartedButton>
+              )}
+
+              {/* Mobile Menu Button */}
+              <MobileMenuButton
+                edge="end"
+                color="inherit"
+                onClick={() => setMobileMenuOpen(true)}
               >
-                <Avatar src={user?.photo} alt={user?.displayName} />
-                {!isMobile && (
-                  <Typography variant="subtitle1" sx={{ ml: 0.5 }}>
-                    Account
-                  </Typography>
-                )}
-              </Box>
-            )}
+                <MenuIcon sx={{color: "#000"}} />
+              </MobileMenuButton>
+            </Box>
+          </StyledToolbar>
+        </Container>
+      </StyledAppBar>
+
+      {/* Mobile Menu Drawer */}
+      <Drawer
+        anchor="right"
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        PaperProps={{
+          sx: {
+            width: "280px",
+            backgroundColor: "#ffffff",
+          },
+        }}
+      >
+        <Box sx={{ p: 2, display: "flex", justifyContent: "flex-end" }}>
+          <IconButton onClick={() => setMobileMenuOpen(false)}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        {user && (
+          <Box sx={{ p: 2, display: "flex", alignItems: "center", gap: 2 }}>
+            <Avatar src={user?.photo} alt={user?.displayName} />
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>{user?.name}</Typography>
+              <Typography variant="body2" sx={{ color: "#666" }}>{user?.email}</Typography>
+            </Box>
           </Box>
-        </Toolbar>
-      </AppBar>
-      <div style={{ height: "120px" }} />
+        )}
+        <List>
+          <ListItem button onClick={handleForYouClick}>
+            <ListItemText primary="For You" />
+          </ListItem>
+          <ListItem button onClick={handleMyCouponsClick}>
+            <ListItemText primary="My Coupons" />
+          </ListItem>
+          <ListItem button onClick={handleProfileClick}>
+            <ListItemText primary="My Profile" />
+          </ListItem>
+        </List>
+      </Drawer>
+
+      <div style={{ height: user?.openRedeemedDeal ? isMobile ? "200px" : "120px" : "100px" }} />
+
+      {/* Redeemed Deal Timer Component */}
+      {/* {user?.openRedeemedDeal && <RedeemedDealTimer redeemedDeal={user.openRedeemedDeal} />} */}
     </>
   );
 };
