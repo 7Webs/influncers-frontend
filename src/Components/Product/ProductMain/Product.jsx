@@ -12,12 +12,28 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+import { Box, Chip } from "@mui/material";
+import {
+  Instagram as InstagramIcon,
+  VideoCall as VideoIcon,
+  Slideshow as StoryIcon,
+} from "@mui/icons-material";
+import { FaTiktok as TiktokIcon } from "react-icons/fa";
+import { useTheme } from "@emotion/react";
+const influencerOptions = {
+  instagram_post: { label: "Instagram Post", icon: InstagramIcon },
+  instagram_story: { label: "Instagram Story", icon: StoryIcon },
+  instagram_video_post: { label: "Instagram Video Post", icon: VideoIcon },
+  instagram_video_story: { label: "Instagram Video Story", icon: VideoIcon },
+  tiktok_post: { label: "TikTok Post", icon: TiktokIcon },
+};
 
 const Product = ({ data, isLoading, error }) => {
   const [currentImg, setCurrentImg] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
   const nav = useNavigate();
   const { user } = useAuth();
+  const theme = useTheme();
 
   const redeemDeal = async () => {
     if (user?.openRedeemedDeal) {
@@ -79,6 +95,37 @@ const Product = ({ data, isLoading, error }) => {
     } else {
       setCurrentImg(currentImg + 1);
     }
+  };
+
+  const renderInfluencerRequirements = () => {
+    if (!data.influencerRequirements) return null;
+
+    const requirements = data.influencerRequirements.split(",");
+    return (
+      <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
+        {requirements.map((req) => {
+          const option = influencerOptions[req];
+          if (!option) return null;
+          const Icon = option.icon;
+          return (
+            <Chip
+              key={req}
+              icon={<Icon />}
+              label={option.label}
+              variant="outlined"
+              sx={{
+                borderRadius: "12px",
+                px: 2,
+                py: 2.5,
+                // borderColor: theme.palette.primary.main,
+                // color: theme.palette.primary.main,
+                // "& .MuiChip-icon": { color: theme.palette.primary.main },
+              }}
+            />
+          );
+        })}
+      </Box>
+    );
   };
 
   return (
@@ -194,7 +241,7 @@ const Product = ({ data, isLoading, error }) => {
               },
             }}
           >
-            View Details
+            Ver detalles
           </Button>
         </DialogActions>
       </Dialog>
@@ -261,6 +308,7 @@ const Product = ({ data, isLoading, error }) => {
                   <p>No Min Spend</p>
                 </div>
               )}
+              {renderInfluencerRequirements()}
               {data.maxSpend > 0 ? (
                 <div className="productColor">
                   <p>Max Spend: ${data.maxSpend}</p>
@@ -271,6 +319,7 @@ const Product = ({ data, isLoading, error }) => {
                 </div>
               )}
             </div>
+
             <div className="productCartQuantity">
               <div className="productCartBtn">
                 <button onClick={() => redeemDeal()}>Redeem Now</button>
@@ -308,7 +357,26 @@ const Product = ({ data, isLoading, error }) => {
                   {data.shop.address}
                 </p>
                 {data.shop.website && (
-                  <a href={data.shop.website?.startsWith('https') ? data.shop.website : `https://${data.shop.website}`} target="_blank" rel="noopener noreferrer" style={{ color: "#0066cc", fontSize: "14px", textDecoration: "none", display: "inline-block", transition: "color 0.2s ease", "&:hover": { color: "#004d99", textDecoration: "underline" } }}>
+                  <a
+                    href={
+                      data.shop.website?.startsWith("https")
+                        ? data.shop.website
+                        : `https://${data.shop.website}`
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: "#0066cc",
+                      fontSize: "14px",
+                      textDecoration: "none",
+                      display: "inline-block",
+                      transition: "color 0.2s ease",
+                      "&:hover": {
+                        color: "#004d99",
+                        textDecoration: "underline",
+                      },
+                    }}
+                  >
                     Visit Website
                   </a>
                 )}

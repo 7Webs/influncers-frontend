@@ -54,23 +54,19 @@ const Trendy = () => {
   return (
     <div className="trendyProducts">
       <h2>
-        <span>Deals</span> Only For You
+        <span>Planes</span> Para ti
       </h2>
       <div className="trendyMainContainer">
-        {isFetching && !data ? (
-          // Show skeleton loader while initial data is being fetched
-          Array(8).fill(0).map((_, index) => (
-            <SkeletonLoader key={index} />
-          ))
-        ) : (
-          allDeals.map((deal) => (
-            <ProductCard key={deal.id} deal={deal} />
-          ))
-        )}
+        {isFetching && !data
+          ? // Show skeleton loader while initial data is being fetched
+            Array(8)
+              .fill(0)
+              .map((_, index) => <SkeletonLoader key={index} />)
+          : allDeals.map((deal) => <ProductCard key={deal.id} deal={deal} />)}
       </div>
       <div ref={loadMoreRef} className="loading-trigger">
         {isFetchingNextPage && <CircularProgress />}
-        {!hasNextPage && <p>No more deals to load</p>}
+        {!hasNextPage && <p>No hay más planes por ahora</p>}
         {isFetching && !isFetchingNextPage && <CircularProgress />}
       </div>
     </div>

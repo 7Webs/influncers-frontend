@@ -32,9 +32,7 @@ const AdditionalInfo = ({ data }) => {
             {/* Tab1 */}
 
             {activeTab === "aiTab1" && (
-              <div className="aiTabDescription">
-                {data.description}
-              </div>
+              <div className="aiTabDescription">{data.description}</div>
             )}
 
             {/* Tab2 */}
@@ -50,11 +48,11 @@ const AdditionalInfo = ({ data }) => {
                   <p>{data.maxPurchaseLimit}</p>
                 </div>
                 <div className="additionalInfoContainer">
-                  <h6>Available Until</h6>
+                  <h6>Disponible hasta</h6>
                   <p>{data.availableUntil}</p>
                 </div>
                 <div className="additionalInfoContainer">
-                  <h6>Offered By</h6>
+                  <h6>Creado por</h6>
                   <p>{data.shop.name}</p>
                 </div>
                 <div className="additionalInfoContainer">

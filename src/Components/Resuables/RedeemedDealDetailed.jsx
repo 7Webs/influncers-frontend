@@ -319,15 +319,15 @@ const RedeemedDealDetail = () => {
             <Box>
               {(data.status === "used" ||
                 data.status === "re_submission_requested") && (
-                  <Button
-                    variant="contained"
-                    sx={styles.primaryButton}
-                    onClick={() => setOpenDialog(true)}
-                    startIcon={<CheckCircleOutline />}
-                  >
-                    Request for Approval
-                  </Button>
-                )}
+                <Button
+                  variant="contained"
+                  sx={styles.primaryButton}
+                  onClick={() => setOpenDialog(true)}
+                  startIcon={<CheckCircleOutline />}
+                >
+                  Request for Approval
+                </Button>
+              )}
               {data.status === "pending_usage" && (
                 <Button
                   variant="contained"
@@ -528,7 +528,7 @@ const RedeemedDealDetail = () => {
                   ))}
                 </Box>
                 <p>
-                  Available until:{" "}
+                  Disponible hasta:{" "}
                   {new Date(deal.availableUntil).toLocaleDateString()}
                 </p>
                 <p>Max purchases per user: {deal.maxPurchasePerUser}</p>

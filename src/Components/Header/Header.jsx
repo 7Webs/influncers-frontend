@@ -146,8 +146,8 @@ const HeaderMain = () => {
             {/* Desktop Navigation */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <CategoryDropdown categories={categories} />
-              <NavButton onClick={handleForYouClick}>For You</NavButton>
-              <NavButton onClick={handleMyCouponsClick}>My Coupons</NavButton>
+              <NavButton onClick={handleForYouClick}>Para ti</NavButton>
+              <NavButton onClick={handleMyCouponsClick}>Mis cupones</NavButton>
 
               {user && !isMobile && (
                 <GetStartedButton
@@ -160,7 +160,7 @@ const HeaderMain = () => {
                     />
                   }
                 >
-                  My Account
+                  Mi cuenta
                 </GetStartedButton>
               )}
 
@@ -209,13 +209,13 @@ const HeaderMain = () => {
         )}
         <List>
           <ListItem button onClick={handleForYouClick}>
-            <ListItemText primary="For You" />
+            <ListItemText primary="Para ti" />
           </ListItem>
           <ListItem button onClick={handleMyCouponsClick}>
-            <ListItemText primary="My Coupons" />
+            <ListItemText primary="Mis cupones" />
           </ListItem>
           <ListItem button onClick={handleProfileClick}>
-            <ListItemText primary="My Profile" />
+            <ListItemText primary="Mi cuenta" />
           </ListItem>
         </List>
       </Drawer>

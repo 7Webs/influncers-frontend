@@ -246,7 +246,6 @@ const Navbar = () => {
                   ABOUT
                 </Link>
               </ListItem>
-
             </StyledList>
           </Box>
         </LogoLinkContainer>
@@ -265,7 +264,11 @@ const Navbar = () => {
 
       <MobileNav>
         <IconButton onClick={toggleMobileMenu}>
-          {mobileMenuOpen ? <MdOutlineClose size={22} /> : <RiMenu2Line size={22} />}
+          {mobileMenuOpen ? (
+            <MdOutlineClose size={22} />
+          ) : (
+            <RiMenu2Line size={22} />
+          )}
         </IconButton>
         <LogoContainer>
           <Link to="/">
@@ -279,7 +282,11 @@ const Navbar = () => {
           <SearchContainer>
             <Box className="searchBarContainer">
               <StyledInputBase placeholder="Search products" />
-              <IconButton component={Link} to="/shop" onClick={toggleMobileMenu}>
+              <IconButton
+                component={Link}
+                to="/shop"
+                onClick={toggleMobileMenu}
+              >
                 <FiSearch size={22} />
               </IconButton>
             </Box>
@@ -300,7 +307,6 @@ const Navbar = () => {
                 ABOUT
               </Link>
             </ListItem>
-
           </MobileMenuList>
         </Box>
 
@@ -308,7 +314,7 @@ const Navbar = () => {
           <Box>
             <AccountLink to="/loginSignUp" onClick={toggleMobileMenu}>
               <FaRegUser />
-              <Typography>My Account</Typography>
+              <Typography>Mi cuenta</Typography>
             </AccountLink>
           </Box>
           <Box>

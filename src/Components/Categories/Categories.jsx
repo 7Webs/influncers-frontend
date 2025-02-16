@@ -77,7 +77,7 @@ const Categories = () => {
         {(isFetchingNextPage || (isFetching && !isFetchingNextPage)) && (
           <CircularProgress />
         )}
-        {!hasNextPage && <p>No more deals to load</p>}
+        {!hasNextPage && <p>No hay más planes por ahora</p>}
       </div>
     </div>
   );

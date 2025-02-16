@@ -100,13 +100,13 @@ const CategoryDropdown = ({ categories }) => {
   }, []);
 
   return (
-    <Box 
+    <Box
       ref={dropdownRef}
-      sx={{ 
+      sx={{
         position: "relative",
         [theme.breakpoints.down("md")]: {
           position: "static",
-        }
+        },
       }}
       onMouseEnter={() => !isMobile && setIsOpen(true)}
       onMouseLeave={() => !isMobile && setIsOpen(false)}
@@ -117,7 +117,7 @@ const CategoryDropdown = ({ categories }) => {
         isopen={isOpen.toString()}
         onClick={() => isMobile && setIsOpen(!isOpen)}
       >
-        Categories
+        Categorías
       </StyledButton>
 
       <Collapse in={isOpen}>
@@ -139,11 +139,11 @@ const CategoryDropdown = ({ categories }) => {
                 button
                 onClick={() => handleCategoryClick(category.id)}
               >
-                <img 
-                  src={category.image} 
-                  alt="" 
-                  width={26} 
-                  height={26} 
+                <img
+                  src={category.image}
+                  alt=""
+                  width={26}
+                  height={26}
                   style={{ marginRight: 8 }}
                 />
                 <ListItemText primary={category.name} />

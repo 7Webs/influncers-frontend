@@ -24,7 +24,7 @@ const ProductCard = ({ deal }) => {
             scrollToTop();
           }}
         >
-          View Details
+          Ver detalles
         </h4>
       </div>
       <div className="trendyProductInfo">
@@ -34,10 +34,11 @@ const ProductCard = ({ deal }) => {
               <strong>{deal.title}</strong>
             </h5>
           </Link>
-          <div>Available till: {deal.availableUntil}</div>
+          <div>Disponible hasta: {deal.availableUntil}</div>
           <div>{deal.shortTagLine}</div>
           <div>
-            By: <span style={{ color: "#07bc0c" }}>{deal.shop.name}</span>
+            Creado por:{" "}
+            <span style={{ color: "#07bc0c" }}>{deal.shop.name}</span>
           </div>
         </div>
       </div>

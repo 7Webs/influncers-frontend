@@ -192,7 +192,7 @@ const Footer = () => {
             >
               {[
                 { text: "Home", link: "/home" },
-                { text: "My Coupons", link: "/redeemed-coupons" },
+                { text: "Mis cupones", link: "/redeemed-coupons" },
                 { text: "Profile", link: "/profile" },
               ].map((item, index) => (
                 <Box component="li" key={index} sx={{ listStyle: "none" }}>
