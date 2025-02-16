@@ -120,11 +120,22 @@ const HeaderMain = () => {
         <Container maxWidth="xl">
           <StyledToolbar>
             {/* Logo */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "white",
+                padding: "8px",
+              }}
+            >
               <img
                 src="https://nanoinfluencers.io/wp-content/uploads/2024/11/nanoinfluencers.io_Logo_small-removebg-preview.png"
                 alt="Logo"
-                style={{ height: "40px", cursor: "pointer" }}
+                style={{
+                  height: "60px",
+                  cursor: "pointer",
+                  background: "none",
+                }}
                 onClick={() => {
                   nav("/home");
                   window.location.reload();
@@ -159,7 +170,7 @@ const HeaderMain = () => {
                 color="inherit"
                 onClick={() => setMobileMenuOpen(true)}
               >
-                <MenuIcon sx={{color: "#000"}} />
+                <MenuIcon sx={{ color: "#000" }} />
               </MobileMenuButton>
             </Box>
           </StyledToolbar>
@@ -187,8 +198,12 @@ const HeaderMain = () => {
           <Box sx={{ p: 2, display: "flex", alignItems: "center", gap: 2 }}>
             <Avatar src={user?.photo} alt={user?.displayName} />
             <Box>
-              <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>{user?.name}</Typography>
-              <Typography variant="body2" sx={{ color: "#666" }}>{user?.email}</Typography>
+              <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                {user?.name}
+              </Typography>
+              <Typography variant="body2" sx={{ color: "#666" }}>
+                {user?.email}
+              </Typography>
             </Box>
           </Box>
         )}
@@ -205,7 +220,15 @@ const HeaderMain = () => {
         </List>
       </Drawer>
 
-      <div style={{ height: user?.openRedeemedDeal ? isMobile ? "200px" : "120px" : "100px" }} />
+      <div
+        style={{
+          height: user?.openRedeemedDeal
+            ? isMobile
+              ? "200px"
+              : "120px"
+            : "100px",
+        }}
+      />
 
       {/* Redeemed Deal Timer Component */}
       {/* {user?.openRedeemedDeal && <RedeemedDealTimer redeemedDeal={user.openRedeemedDeal} />} */}

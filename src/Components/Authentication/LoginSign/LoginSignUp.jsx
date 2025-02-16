@@ -117,7 +117,15 @@ const LoginSignUp = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
-  const { user, loading, authChecked, login, register, loginWithGoogle, loginWithApple } = useAuth();
+  const {
+    user,
+    loading,
+    authChecked,
+    login,
+    register,
+    loginWithGoogle,
+    loginWithApple,
+  } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -132,7 +140,7 @@ const LoginSignUp = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value || "", // Ensure value is never null
     }));
@@ -170,23 +178,25 @@ const LoginSignUp = () => {
     <StyledSection>
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center", mb: 4 }}>
-          <img 
-            src="https://nanoinfluencers.io/wp-content/uploads/2024/11/nanoinfluencers.io_Logo_small-removebg-preview.png" 
-            alt="Logo" 
-            style={{ height: "60px", marginBottom: "24px" }} 
+          <img
+            src="https://nanoinfluencers.io/wp-content/uploads/2024/11/nanoinfluencers.io_Logo_small-removebg-preview.png"
+            alt="Logo"
+            style={{ height: "60px", marginBottom: "24px" }}
           />
         </Box>
-        
+
         <AuthCard>
-          <Box sx={{ display: "flex", justifyContent: "center", gap: 4, mb: 4 }}>
-            <TabButton 
+          <Box
+            sx={{ display: "flex", justifyContent: "center", gap: 4, mb: 4 }}
+          >
+            <TabButton
               isactive={(activeTab === "tabButton1").toString()}
               onClick={() => handleTab("tabButton1")}
               variant="h5"
             >
               Login
             </TabButton>
-            <TabButton 
+            <TabButton
               isactive={(activeTab === "tabButton2").toString()}
               onClick={() => handleTab("tabButton2")}
               variant="h5"
@@ -217,7 +227,10 @@ const LoginSignUp = () => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
@@ -225,25 +238,32 @@ const LoginSignUp = () => {
                 }}
               />
               <Box sx={{ mb: 2 }}>
-                <Link to="/resetPassword" style={{ color: "#1E3FE4", textDecoration: "none" }}>
+                <Link
+                  to="/resetPassword"
+                  style={{ color: "#1E3FE4", textDecoration: "none" }}
+                >
                   Forgot password?
                 </Link>
               </Box>
-              <PrimaryButton
-                fullWidth
-                type="submit"
-                disabled={isLoggingIn}
-              >
+              <PrimaryButton fullWidth type="submit" disabled={isLoggingIn}>
                 {isLoggingIn ? <CircularProgress size={24} /> : "Login"}
               </PrimaryButton>
 
               <Divider sx={{ my: 3 }}>or continue with</Divider>
 
               <Box sx={{ display: "flex", gap: 2 }}>
-                <SocialButton fullWidth onClick={loginWithGoogle} startIcon={<GoogleIcon />}>
+                <SocialButton
+                  fullWidth
+                  onClick={loginWithGoogle}
+                  startIcon={<GoogleIcon />}
+                >
                   Google
                 </SocialButton>
-                <SocialButton fullWidth onClick={loginWithApple} startIcon={<AppleIcon />}>
+                <SocialButton
+                  fullWidth
+                  onClick={loginWithApple}
+                  startIcon={<AppleIcon />}
+                >
                   Apple
                 </SocialButton>
               </Box>
@@ -272,7 +292,10 @@ const LoginSignUp = () => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                      <IconButton
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                     </InputAdornment>
@@ -290,20 +313,44 @@ const LoginSignUp = () => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end">
-                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                      <IconButton
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        edge="end"
+                      >
+                        {showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   ),
                 }}
               />
-              <PrimaryButton
-                fullWidth
-                type="submit"
-                disabled={isRegistering}
-              >
+              <PrimaryButton fullWidth type="submit" disabled={isRegistering}>
                 {isRegistering ? <CircularProgress size={24} /> : "Register"}
               </PrimaryButton>
+
+              <Divider sx={{ my: 3 }}>or continue with</Divider>
+
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <SocialButton
+                  fullWidth
+                  onClick={loginWithGoogle}
+                  startIcon={<GoogleIcon />}
+                >
+                  Google
+                </SocialButton>
+                <SocialButton
+                  fullWidth
+                  onClick={loginWithApple}
+                  startIcon={<AppleIcon />}
+                >
+                  Apple
+                </SocialButton>
+              </Box>
             </Box>
           )}
         </AuthCard>

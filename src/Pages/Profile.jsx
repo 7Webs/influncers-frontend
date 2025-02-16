@@ -143,8 +143,6 @@ const Profile = () => {
   return (
     <PageContainer>
       <Container maxWidth="lg">
-        
-
         <ProfileCard>
           <CoverPhoto />
           <ProfileAvatar src={user?.photo || "https://via.placeholder.com/150"}>
@@ -159,16 +157,16 @@ const Profile = () => {
               {user?.category?.name + " Influencer" || "General User"}
             </Typography>
 
-            <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}>
+            <Box
+              sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}
+            >
               <EditButton
                 startIcon={<Edit />}
                 onClick={() => navigate("/profile/edit")}
               >
                 Edit Profile
               </EditButton>
-              <LogoutButton onClick={handleLogout}>
-                Logout
-              </LogoutButton>
+              <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
             </Box>
           </Box>
 
@@ -214,7 +212,9 @@ const Profile = () => {
                       <Typography variant="subtitle2" color="text.secondary">
                         Location
                       </Typography>
-                      <Typography>{user?.location || "Not provided"}</Typography>
+                      <Typography>
+                        {user?.location || "Not provided"}
+                      </Typography>
                     </Box>
                   </InfoItem>
                   <InfoItem>
@@ -223,7 +223,9 @@ const Profile = () => {
                       <Typography variant="subtitle2" color="text.secondary">
                         Category
                       </Typography>
-                      <Typography>{user?.category?.name || "Not specified"}</Typography>
+                      <Typography>
+                        {user?.category?.name || "Not specified"}
+                      </Typography>
                     </Box>
                   </InfoItem>
                 </CardContent>
@@ -237,21 +239,26 @@ const Profile = () => {
                     Social Media Profiles
                   </Typography>
                   <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                    {socialLinks.map(({ Icon, color, link }, index) => (
-                      link && (
-                        <SocialButton
-                          key={index}
-                          href={link}
-                          target="_blank"
-                          color={color}
-                          size="large"
-                        >
-                          {typeof Icon === "function" ? <Icon /> : <Icon size={24} />}
-                        </SocialButton>
-                      )
-                    ))}
+                    {socialLinks.map(
+                      ({ Icon, color, link }, index) =>
+                        link && (
+                          <SocialButton
+                            key={index}
+                            href={link}
+                            target="_blank"
+                            color={color}
+                            size="large"
+                          >
+                            {typeof Icon === "function" ? (
+                              <Icon />
+                            ) : (
+                              <Icon size={24} />
+                            )}
+                          </SocialButton>
+                        )
+                    )}
                   </Box>
-                  {!socialLinks.some(link => link.link) && (
+                  {!socialLinks.some((link) => link.link) && (
                     <Typography color="text.secondary" sx={{ mt: 2 }}>
                       No social media profiles linked yet
                     </Typography>
@@ -262,6 +269,14 @@ const Profile = () => {
           </Grid>
         </ProfileCard>
       </Container>
+
+      <LogoutButton
+        onClick={() =>
+          (window.location.href = "https://form.typeform.com/to/yBk5HCUE")
+        }
+      >
+        Delete Your Account
+      </LogoutButton>
     </PageContainer>
   );
 };

@@ -132,7 +132,28 @@ const Footer = () => {
         <Grid item xs={12} md={3}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <LogoContainer>
-              <img src={logo} alt="Logo" />
+              {/* Logo */}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "8px",
+                }}
+              >
+                <img
+                  src="https://nanoinfluencers.io/wp-content/uploads/2024/11/nanoinfluencers.io_Logo_small-removebg-preview.png"
+                  alt="Logo"
+                  style={{
+                    height: "60px",
+                    cursor: "pointer",
+                    background: "none",
+                  }}
+                  onClick={() => {
+                    nav("/home");
+                    window.location.reload();
+                  }}
+                />
+              </Box>
             </LogoContainer>
             <Typography sx={{ fontSize: "14px" }}>
               Copyright © 2025 nanoinfluencers.io, All rights reserved.
