@@ -177,12 +177,20 @@ const EditProfile = () => {
   return (
     <PageContainer>
       <Container maxWidth="md">
-
         <ProfileCard>
           <Box position="relative">
             <ProfileAvatar src={profileData.photo} />
-            <Box sx={{ position: "absolute", bottom: -60, right: "calc(50% - 80px)" }}>
-              <CameraButton component="label" sx={{ position: "absolute", top: -90, left: -60}}>
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: -60,
+                right: "calc(50% - 80px)",
+              }}
+            >
+              <CameraButton
+                component="label"
+                sx={{ position: "absolute", top: -90, left: -60 }}
+              >
                 <CameraAlt fontSize="small" />
                 <input
                   hidden
@@ -194,7 +202,11 @@ const EditProfile = () => {
             </Box>
           </Box>
 
-          <Typography variant="h5" align="center" sx={{ mt: 4, mb: 4, fontWeight: 600, color: "#333" }}>
+          <Typography
+            variant="h5"
+            align="center"
+            sx={{ mt: 4, mb: 4, fontWeight: 600, color: "#333" }}
+          >
             Edit Profile
           </Typography>
 
@@ -276,18 +288,21 @@ const EditProfile = () => {
             </Grid>
 
             <Grid item xs={12}>
-              <Typography variant="h6" sx={{ mb: 2, color: "#333", fontWeight: 600 }}>
+              <Typography
+                variant="h6"
+                sx={{ mb: 2, color: "#333", fontWeight: 600 }}
+              >
                 Social Media Links
               </Typography>
             </Grid>
 
             {[
-              { name: "facebookProfileLink", label: "Facebook Profile" },
+              // { name: "facebookProfileLink", label: "Facebook Profile" },
               { name: "instagramProfileLink", label: "Instagram Profile" },
-              { name: "twitterProfileLink", label: "Twitter Profile" },
-              { name: "linkedinProfileLink", label: "LinkedIn Profile" },
+              // { name: "twitterProfileLink", label: "Twitter Profile" },
+              // { name: "linkedinProfileLink", label: "LinkedIn Profile" },
               { name: "tiktokProfileLink", label: "TikTok Profile" },
-              { name: "youtubeProfileLink", label: "YouTube Profile" },
+              // { name: "youtubeProfileLink", label: "YouTube Profile" },
             ].map((social) => (
               <Grid item xs={12} sm={6} key={social.name}>
                 <StyledTextField
@@ -301,17 +316,21 @@ const EditProfile = () => {
             ))}
           </Grid>
 
-          <Box sx={{ mt: 4, display: "flex", justifyContent: "center", gap: 2 }}>
+          <Box
+            sx={{ mt: 4, display: "flex", justifyContent: "center", gap: 2 }}
+          >
             <SaveButton
               onClick={handleSubmit}
               disabled={isSubmitting}
               startIcon={!isSubmitting && <Save />}
             >
-              {isSubmitting ? <CircularProgress size={24} color="inherit" /> : "Save Changes"}
+              {isSubmitting ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "Save Changes"
+              )}
             </SaveButton>
-            <LogoutButton onClick={handleLogout}>
-              Logout
-            </LogoutButton>
+            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
           </Box>
         </ProfileCard>
       </Container>

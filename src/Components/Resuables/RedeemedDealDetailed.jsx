@@ -20,11 +20,13 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Alert,
 } from "@mui/material";
 import {
   ContentCopy,
   CheckCircleOutline,
   Close as CloseIcon,
+  Comment,
 } from "@mui/icons-material";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
@@ -338,6 +340,26 @@ const RedeemedDealDetail = () => {
                 </Button>
               )}
             </Box>
+          </Box>
+
+          <Box sx={{ mb: 3 }}>
+            {data.status === "re_submission_requested" && data.adminComment && (
+              <Alert
+                severity="warning"
+                icon={<Comment />}
+                sx={{
+                  mb: 2,
+                  "& .MuiAlert-message": {
+                    width: "100%",
+                  },
+                }}
+              >
+                <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+                  Admin Comment:
+                </Typography>
+                <Typography variant="body1">{data.adminComment}</Typography>
+              </Alert>
+            )}
           </Box>
 
           {(data.socialMediaLink ||

@@ -270,13 +270,22 @@ const Profile = () => {
         </ProfileCard>
       </Container>
 
-      <LogoutButton
-        onClick={() =>
-          (window.location.href = "https://form.typeform.com/to/yBk5HCUE")
-        }
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          justifyItems: "center",
+          marginTop: "20px",
+        }}
       >
-        Delete Your Account
-      </LogoutButton>
+        <LogoutButton
+          onClick={() =>
+            (window.location.href = "https://form.typeform.com/to/yBk5HCUE")
+          }
+        >
+          Delete Your Account
+        </LogoutButton>
+      </div>
     </PageContainer>
   );
 };

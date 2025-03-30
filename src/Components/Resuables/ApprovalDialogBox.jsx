@@ -70,6 +70,8 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
     }));
   };
 
+  
+
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     const totalFiles = formData.image.length + files.length;

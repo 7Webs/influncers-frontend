@@ -17,6 +17,7 @@ import {
   Instagram as InstagramIcon,
   VideoCall as VideoIcon,
   Slideshow as StoryIcon,
+  LocalOffer,
 } from "@mui/icons-material";
 import { FaTiktok as TiktokIcon } from "react-icons/fa";
 import { useTheme } from "@emotion/react";
@@ -26,6 +27,7 @@ const influencerOptions = {
   instagram_video_post: { label: "Instagram Video Post", icon: VideoIcon },
   instagram_video_story: { label: "Instagram Video Story", icon: VideoIcon },
   tiktok_post: { label: "TikTok Post", icon: TiktokIcon },
+  google_map_review: { label: "Google Map Review", icon: LocalOffer },
 };
 
 const Product = ({ data, isLoading, error }) => {
@@ -56,8 +58,17 @@ const Product = ({ data, isLoading, error }) => {
     }
   };
 
+  const recordShareAnalytics = async () => {
+    const response = await apiService.post("/deals/analytics", {
+      dealId: data.id,
+      userId: user?.id,
+      type: "share",
+    });
+  };
+
   const handleShare = async () => {
     try {
+      await recordShareAnalytics();
       if (navigator.share) {
         await navigator.share({
           title: data.title,

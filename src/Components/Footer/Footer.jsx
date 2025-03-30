@@ -160,7 +160,7 @@ const Footer = () => {
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", mb: 1 }}>
               <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>
-                nanoinfluencers.contacto@gmail.com
+                contact@nanoinfluencers.io
               </Typography>
               <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>
                 +34606662830
@@ -179,7 +179,7 @@ const Footer = () => {
                 textTransform: "uppercase",
               }}
             >
-              Pages
+              Páginas
             </Typography>
             <Box
               component="ul"
@@ -193,7 +193,7 @@ const Footer = () => {
               {[
                 { text: "Home", link: "/home" },
                 { text: "Mis cupones", link: "/redeemed-coupons" },
-                { text: "Profile", link: "/profile" },
+                { text: "Perfil", link: "/profile" },
               ].map((item, index) => (
                 <Box component="li" key={index} sx={{ listStyle: "none" }}>
                   <StyledLink to={item.link} onClick={scrollToTop}>
@@ -215,7 +215,7 @@ const Footer = () => {
                 textTransform: "uppercase",
               }}
             >
-              Follow Us
+              Síguenos
             </Typography>
             <Typography sx={{ fontSize: "14px" }}>
               Stay connected with us on social media for updates and exclusive
@@ -225,7 +225,11 @@ const Footer = () => {
               <SocialIconLink href="#" target="_blank" aria-label="Facebook">
                 <FaFacebookF />
               </SocialIconLink>
-              <SocialIconLink href="#" target="_blank" aria-label="Instagram">
+              <SocialIconLink
+                href="https://www.instagram.com/nanoinfluencers.io"
+                target="_blank"
+                aria-label="Instagram"
+              >
                 <FaInstagram />
               </SocialIconLink>
               <SocialIconLink href="#" target="_blank" aria-label="YouTube">
