@@ -148,6 +148,7 @@ const HeaderMain = () => {
               <CategoryDropdown categories={categories} />
               <NavButton onClick={handleForYouClick}>Para ti</NavButton>
               <NavButton onClick={handleMyCouponsClick}>Mis cupones</NavButton>
+              <NavButton onClick={() => nav('/rewards')}>Recompensas</NavButton>
 
               {user && !isMobile && (
                 <GetStartedButton
@@ -214,6 +215,12 @@ const HeaderMain = () => {
           <ListItem button onClick={handleMyCouponsClick}>
             <ListItemText primary="Mis cupones" />
           </ListItem>
+          {/* <ListItem button onClick={() => {
+            nav('/rewards');
+            setMobileMenuOpen(false);
+          }}>
+            <ListItemText primary="Recompensas" />
+          </ListItem> */}
           <ListItem button onClick={handleProfileClick}>
             <ListItemText primary="Mi cuenta" />
           </ListItem>

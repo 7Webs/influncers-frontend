@@ -218,8 +218,7 @@ const Footer = () => {
               Síguenos
             </Typography>
             <Typography sx={{ fontSize: "14px" }}>
-              Stay connected with us on social media for updates and exclusive
-              offers!
+            ¡Manténgase conectado con nosotros en las redes sociales para recibir actualizaciones y ofertas exclusivas!
             </Typography>
             <Box sx={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
               <SocialIconLink href="#" target="_blank" aria-label="Facebook">

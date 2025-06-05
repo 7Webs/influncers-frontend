@@ -79,20 +79,20 @@ const ShopDetails = () => {
           <div className="shopDetailsProducts">
             <div className="shopDetailsProductsContainer">
               {isLoading ? (
-                <p>Loading...</p>
+                <p>Cargando...</p>
               ) : (
                 allDeals.map((deal) =>
                   deal ? (
                     <ProductCard key={deal.id} deal={deal} />
                   ) : (
-                    <p>Invalid product data</p>
+                    <p>Datos del producto no válidos</p>
                   )
                 )
               )}
             </div>
 
             {/* Loading More Indicator */}
-            {isFetchingNextPage && <p>Loading more...</p>}
+            {isFetchingNextPage && <p>Cargando más...</p>}
 
             {/* Infinite Scroll Trigger */}
             <div

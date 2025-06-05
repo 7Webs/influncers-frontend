@@ -22,12 +22,12 @@ import {
 import { FaTiktok as TiktokIcon } from "react-icons/fa";
 import { useTheme } from "@emotion/react";
 const influencerOptions = {
-  instagram_post: { label: "Instagram Post", icon: InstagramIcon },
-  instagram_story: { label: "Instagram Story", icon: StoryIcon },
-  instagram_video_post: { label: "Instagram Video Post", icon: VideoIcon },
-  instagram_video_story: { label: "Instagram Video Story", icon: VideoIcon },
-  tiktok_post: { label: "TikTok Post", icon: TiktokIcon },
-  google_map_review: { label: "Google Map Review", icon: LocalOffer },
+  instagram_post: { label: "Publicación de Instagram", icon: InstagramIcon },
+  instagram_story: { label: "Historia de Instagram", icon: StoryIcon },
+  instagram_video_post: { label: "Publicación de Video en Instagram", icon: VideoIcon },
+  instagram_video_story: { label: "Historia de Video en Instagram", icon: VideoIcon },
+  tiktok_post: { label: "Publicación de TikTok", icon: TiktokIcon },
+  google_map_review: { label: "Reseña en Google Maps", icon: LocalOffer },
 };
 
 const Product = ({ data, isLoading, error }) => {
@@ -87,7 +87,7 @@ const Product = ({ data, isLoading, error }) => {
   };
 
   // Handle loading and error states
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p>Cargando...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   const productImg = data.images;
@@ -187,7 +187,7 @@ const Product = ({ data, isLoading, error }) => {
             letterSpacing: "-0.02em",
           }}
         >
-          Pending Deal
+          Oferta Pendiente
         </DialogTitle>
         <DialogContent
           sx={{
@@ -197,28 +197,24 @@ const Product = ({ data, isLoading, error }) => {
             margin: "0 8px",
           }}
         >
-          <p
-            style={{
-              fontSize: "16px",
-              lineHeight: 1.7,
-              color: "#475569",
-              textAlign: "center",
-              fontWeight: 500,
-            }}
-          >
-            You have a pending deal that needs to be used.
+          <p style={{
+            fontSize: "16px",
+            lineHeight: 1.7,
+            color: "#475569",
+            textAlign: "center",
+            fontWeight: 500,
+          }}>
+            Tienes una oferta pendiente que necesita ser utilizada.
           </p>
-          <p
-            style={{
-              fontSize: "16px",
-              lineHeight: 1.7,
-              color: "#475569",
-              marginTop: "16px",
-              textAlign: "center",
-              fontWeight: 500,
-            }}
-          >
-            Please use your pending deal first before claiming a new one.
+          <p style={{
+            fontSize: "16px",
+            lineHeight: 1.7,
+            color: "#475569",
+            marginTop: "16px",
+            textAlign: "center",
+            fontWeight: 500,
+          }}>
+            Por favor, utiliza tu oferta pendiente antes de reclamar una nueva.
           </p>
         </DialogContent>
         <DialogActions
@@ -285,8 +281,8 @@ const Product = ({ data, isLoading, error }) => {
           <div className="productDetails">
             <div className="productBreadcrumb">
               <div className="breadcrumbLink">
-                <Link to="/">Home</Link>&nbsp;/&nbsp;
-                <Link to="/shop">Shop</Link>&nbsp;/&nbsp;
+                <Link to="/">Inicio</Link>&nbsp;/&nbsp;
+                <Link to="/shop">Tienda</Link>&nbsp;/&nbsp;
                 {data.title}
               </div>
             </div>
@@ -299,41 +295,41 @@ const Product = ({ data, isLoading, error }) => {
             </div>
             <div className="productSizeColor">
               <div className="productColor">
-                <p>Max {data.maxPurchasePerUser} Usage Limit Per User</p>
+                <p>Máximo {data.maxPurchasePerUser} usos por usuario</p>
               </div>
               {data.percentOff > 0 ? (
                 <div className="productColor">
-                  <p>Flat {data.percentOff}% off</p>
+                  <p>{data.percentOff}% de descuento</p>
                 </div>
               ) : (
                 <div className="productColor">
-                  <p>Up to ${data.uptoAmount} off</p>
+                  <p>Hasta ${data.uptoAmount} de descuento</p>
                 </div>
               )}
               {data.minSpend > 0 ? (
                 <div className="productColor">
-                  <p>Min Spend: ${data.minSpend}</p>
+                  <p>Gasto mínimo: ${data.minSpend}</p>
                 </div>
               ) : (
                 <div className="productColor">
-                  <p>No Min Spend</p>
+                  <p>Sin gasto mínimo</p>
                 </div>
               )}
               {renderInfluencerRequirements()}
               {data.maxSpend > 0 ? (
                 <div className="productColor">
-                  <p>Max Spend: ${data.maxSpend}</p>
+                  <p>Gasto máximo: ${data.maxSpend}</p>
                 </div>
               ) : (
                 <div className="productColor">
-                  <p>No Max Spend</p>
+                  <p>Sin gasto máximo</p>
                 </div>
               )}
             </div>
 
             <div className="productCartQuantity">
               <div className="productCartBtn">
-                <button onClick={() => redeemDeal()}>Redeem Now</button>
+                <button onClick={() => redeemDeal()}>Canjear Ahora</button>
               </div>
             </div>
             <div className="productWishShare">
@@ -343,7 +339,7 @@ const Product = ({ data, isLoading, error }) => {
                 style={{ cursor: "pointer" }}
               >
                 <PiShareNetworkLight size={22} />
-                <p>Share</p>
+                <p>Compartir</p>
               </div>
             </div>
             <div
@@ -388,7 +384,7 @@ const Product = ({ data, isLoading, error }) => {
                       },
                     }}
                   >
-                    Visit Website
+                    Visitar Sitio Web
                   </a>
                 )}
               </div>

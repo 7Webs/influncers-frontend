@@ -30,17 +30,17 @@ const Filter = ({ onFilterChange }) => {
             aria-controls="panel1-content"
             id="panel1-header"
           >
-            <h5 className="filterHeading">Product Categories</h5>
+            <h5 className="filterHeading">Categorías de Productos</h5>
           </AccordionSummary>
           <AccordionDetails>
             {loading ? (
-              <p>Loading...</p>
+              <p>Cargando...</p>
             ) : categories.length > 0 ? (
               categories.map((category, index) => (
                 <p key={index}>{category.name}</p>
               ))
             ) : (
-              <p>No categories found</p>
+              <p>No se encontraron categorías</p>
             )}
           </AccordionDetails>
         </Accordion>
@@ -53,11 +53,10 @@ const Filter = ({ onFilterChange }) => {
             aria-controls="panel1-content"
             id="panel1-header"
           >
-            <h5 className="filterHeading">Brands</h5>
+            <h5 className="filterHeading">Marcas</h5>
           </AccordionSummary>
           <AccordionDetails>
             <div className="searchBar">
-
               <div className="brandList">
                 {shops.length > 0 ? (
                   shops.map((brand) => (
@@ -72,7 +71,7 @@ const Filter = ({ onFilterChange }) => {
                     </div>
                   ))
                 ) : (
-                  <p>No brands found</p>
+                  <p>No se encontraron marcas</p>
                 )}
               </div>
             </div>

@@ -18,13 +18,13 @@ const AdditionalInfo = ({ data }) => {
                 onClick={() => handleTabClick("aiTab1")}
                 className={activeTab === "aiTab1" ? "aiActive" : ""}
               >
-                Description
+                Descripción
               </p>
               <p
                 onClick={() => handleTabClick("aiTab2")}
                 className={activeTab === "aiTab2" ? "aiActive" : ""}
               >
-                Additional Information
+                Información Adicional
               </p>
             </div>
           </div>
@@ -40,11 +40,11 @@ const AdditionalInfo = ({ data }) => {
             {activeTab === "aiTab2" && (
               <div className="aiTabAdditionalInfo">
                 <div className="additionalInfoContainer">
-                  <h6>Usage Limit Per User</h6>
+                  <h6>Límite de Uso por Usuario</h6>
                   <p>{data.maxPurchasePerUser}</p>
                 </div>
                 <div className="additionalInfoContainer">
-                  <h6>Usage Limit Per Coupon</h6>
+                  <h6>Límite de Uso por Cupón</h6>
                   <p>{data.maxPurchaseLimit}</p>
                 </div>
                 <div className="additionalInfoContainer">
@@ -56,37 +56,17 @@ const AdditionalInfo = ({ data }) => {
                   <p>{data.shop.name}</p>
                 </div>
                 <div className="additionalInfoContainer">
-                  <h6>Category</h6>
+                  <h6>Categoría</h6>
                   <p>{data.shop.category.name}</p>
                 </div>
                 <div className="additionalInfoContainer">
-                  <h6>Deal Type</h6>
+                  <h6>Tipo de Oferta</h6>
                   <p>{data.type}</p>
                 </div>
                 <div className="additionalInfoContainer">
-                  <h6>Keywords</h6>
+                  <h6>Palabras Clave</h6>
                   <p>{data.keywords}</p>
                 </div>
-                {/* <div className="additionalInfoContainer">
-                  <h6>Features</h6>
-                  <p>{data.features || "No features specified"}</p>
-                </div> */}
-                {/* <div className="additionalInfoContainer">
-                  <h6>Percent Off</h6>
-                  <p>{data.percentOff}%</p>
-                </div>
-                <div className="additionalInfoContainer">
-                  <h6>Upto Amount</h6>
-                  <p>{data.uptoAmount}</p>
-                </div>
-                <div className="additionalInfoContainer">
-                  <h6>Min Spend</h6>
-                  <p>{data.minSpend}</p>
-                </div>
-                <div className="additionalInfoContainer">
-                  <h6>Max Spend</h6>
-                  <p>{data.maxSpend}</p>
-                </div> */}
               </div>
             )}
 

@@ -207,14 +207,14 @@ const EditProfile = () => {
             align="center"
             sx={{ mt: 4, mb: 4, fontWeight: 600, color: "#333" }}
           >
-            Edit Profile
+            Editar Perfil
           </Typography>
 
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
               <StyledTextField
                 fullWidth
-                label="Full Name"
+                label="Nombre Completo"
                 name="name"
                 value={profileData.name}
                 onChange={handleInputChange}
@@ -223,7 +223,7 @@ const EditProfile = () => {
             <Grid item xs={12} sm={6}>
               <StyledTextField
                 fullWidth
-                label="Email"
+                label="Correo Electrónico"
                 name="email"
                 value={profileData.email}
                 disabled
@@ -233,7 +233,7 @@ const EditProfile = () => {
             <Grid item xs={12} sm={6}>
               <StyledTextField
                 fullWidth
-                label="Phone"
+                label="Teléfono"
                 name="phone"
                 value={profileData.phone}
                 onChange={handleInputChange}
@@ -242,7 +242,7 @@ const EditProfile = () => {
             <Grid item xs={12} sm={6}>
               <StyledTextField
                 fullWidth
-                label="Location"
+                label="Ubicación"
                 name="location"
                 value={profileData.location}
                 onChange={handleInputChange}
@@ -252,21 +252,21 @@ const EditProfile = () => {
               <StyledTextField
                 fullWidth
                 select
-                label="Gender"
+                label="Género"
                 name="gender"
                 value={profileData.gender}
                 onChange={handleInputChange}
               >
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
+                <MenuItem value="Male">Masculino</MenuItem>
+                <MenuItem value="Female">Femenino</MenuItem>
+                <MenuItem value="Other">Otro</MenuItem>
               </StyledTextField>
             </Grid>
             <Grid item xs={12} sm={6}>
               <StyledTextField
                 fullWidth
                 select
-                label="Primary Domain"
+                label="Dominio Principal"
                 name="categoryId"
                 value={profileData.categoryId}
                 onChange={handleInputChange}
@@ -292,17 +292,17 @@ const EditProfile = () => {
                 variant="h6"
                 sx={{ mb: 2, color: "#333", fontWeight: 600 }}
               >
-                Social Media Links
+                Redes Sociales
               </Typography>
             </Grid>
 
             {[
-              // { name: "facebookProfileLink", label: "Facebook Profile" },
-              { name: "instagramProfileLink", label: "Instagram Profile" },
-              // { name: "twitterProfileLink", label: "Twitter Profile" },
-              // { name: "linkedinProfileLink", label: "LinkedIn Profile" },
-              { name: "tiktokProfileLink", label: "TikTok Profile" },
-              // { name: "youtubeProfileLink", label: "YouTube Profile" },
+              // { name: "facebookProfileLink", label: "Perfil de Facebook" },
+              { name: "instagramProfileLink", label: "Perfil de Instagram" },
+              // { name: "twitterProfileLink", label: "Perfil de Twitter" },
+              // { name: "linkedinProfileLink", label: "Perfil de LinkedIn" },
+              { name: "tiktokProfileLink", label: "Perfil de TikTok" },
+              // { name: "youtubeProfileLink", label: "Perfil de YouTube" },
             ].map((social) => (
               <Grid item xs={12} sm={6} key={social.name}>
                 <StyledTextField
@@ -327,10 +327,10 @@ const EditProfile = () => {
               {isSubmitting ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
-                "Save Changes"
+                "Guardar Cambios"
               )}
             </SaveButton>
-            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+            <LogoutButton onClick={handleLogout}>Cerrar Sesión</LogoutButton>
           </Box>
         </ProfileCard>
       </Container>

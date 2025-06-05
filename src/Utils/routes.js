@@ -13,6 +13,7 @@ import EditProfile from "../Pages/EditProfilePage";
 import RedeemedDealDetail from "../Components/Resuables/RedeemedDealDetailed";
 import RedeemedCoupons from "../Components/Coupons/RedeemedCoupons";
 import Categories from "../Components/Categories/Categories";
+import Rewards from "../Pages/Rewards";
 
 export const routes = {
   protected: [
@@ -63,6 +64,10 @@ export const routes = {
     {
       path: "/coupons/:categoryId",
       element: React.createElement(Categories),
+    },
+    {
+      path: "/rewards",
+      element: React.createElement(Rewards),
     },
   ],
   public: [
