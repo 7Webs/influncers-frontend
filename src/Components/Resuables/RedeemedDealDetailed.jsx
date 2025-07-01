@@ -171,7 +171,7 @@ const CancelConfirmationDialog = ({ open, onClose, onConfirm, isLoading }) => (
   <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
     <DialogTitle sx={{ pb: 1 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="h6">Cancel Deal</Typography>
+        <Typography variant="h6">Cancelar Oferta</Typography>
         <IconButton onClick={onClose} size="small">
           <CloseIcon />
         </IconButton>
@@ -179,12 +179,12 @@ const CancelConfirmationDialog = ({ open, onClose, onConfirm, isLoading }) => (
     </DialogTitle>
     <DialogContent>
       <Typography>
-        Are you sure you want to cancel this deal? This action cannot be undone.
+        ¿Estás seguro de que quieres cancelar esta oferta? Esta acción no se puede deshacer.
       </Typography>
     </DialogContent>
     <DialogActions sx={{ p: 2.5, pt: 1.5 }}>
       <Button onClick={onClose} disabled={isLoading}>
-        No, Keep It
+        No, Mantenerla
       </Button>
       <Button
         onClick={onConfirm}
@@ -192,7 +192,7 @@ const CancelConfirmationDialog = ({ open, onClose, onConfirm, isLoading }) => (
         color="error"
         disabled={isLoading}
       >
-        {isLoading ? <CircularProgress size={24} /> : "Yes, Cancel Deal"}
+        {isLoading ? <CircularProgress size={24} /> : "Sí, Cancelar Oferta"}
       </Button>
     </DialogActions>
   </Dialog>
@@ -208,10 +208,10 @@ const RedeemedDealDetail = () => {
     navigator.clipboard
       .writeText(code)
       .then(() => {
-        toast.success("Coupon code copied to clipboard!");
+        toast.success("¡Código de cupón copiado al portapapeles!");
       })
       .catch(() => {
-        toast.error("Failed to copy code");
+        toast.error("Error al copiar el código");
       });
   };
 
@@ -230,11 +230,11 @@ const RedeemedDealDetail = () => {
       return await apiService.patch(`/deals-redeem/cancel/${id}`);
     },
     onSuccess: () => {
-      toast.success("Deal cancelled successfully");
+      toast.success("Oferta cancelada exitosamente");
       navigate("/redeemed-coupons");
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || "Failed to cancel deal");
+      toast.error(error.response?.data?.message || "Error al cancelar la oferta");
     },
   });
 
@@ -267,7 +267,7 @@ const RedeemedDealDetail = () => {
         alignItems="center"
         height="100vh"
       >
-        <p>Something went wrong: {error.message}</p>
+        <p>Algo salió mal: {error.message}</p>
       </Box>
     );
   }
@@ -299,7 +299,7 @@ const RedeemedDealDetail = () => {
             mb={3}
           >
             <Box>
-              <h3 style={styles.sectionTitle}>Redemption Status</h3>
+              <h3 style={styles.sectionTitle}>Estado de Canje</h3>
               <Box
                 sx={{
                   px: 2,
@@ -327,7 +327,7 @@ const RedeemedDealDetail = () => {
                   onClick={() => setOpenDialog(true)}
                   startIcon={<CheckCircleOutline />}
                 >
-                  Request for Approval
+                  Solicitar Aprobación
                 </Button>
               )}
               {data.status === "pending_usage" && (
@@ -336,7 +336,7 @@ const RedeemedDealDetail = () => {
                   sx={styles.cancelButton}
                   onClick={handleCancelDeal}
                 >
-                  Cancel Deal
+                  Cancelar Oferta
                 </Button>
               )}
             </Box>
@@ -355,7 +355,7 @@ const RedeemedDealDetail = () => {
                 }}
               >
                 <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-                  Admin Comment:
+                  Comentario del Administrador:
                 </Typography>
                 <Typography variant="body1">{data.adminComment}</Typography>
               </Alert>
@@ -383,7 +383,7 @@ const RedeemedDealDetail = () => {
                     gutterBottom
                     sx={{ color: "#343A40" }}
                   >
-                    Social Media Link
+                    Enlace de Redes Sociales
                   </Typography>
                   <Link
                     href={data.socialMediaLink}
@@ -407,7 +407,7 @@ const RedeemedDealDetail = () => {
                     gutterBottom
                     sx={{ color: "#343A40" }}
                   >
-                    Additional Information
+                    Información Adicional
                   </Typography>
                   <Typography
                     variant="body1"
@@ -426,7 +426,7 @@ const RedeemedDealDetail = () => {
                     gutterBottom
                     sx={{ color: "#343A40" }}
                   >
-                    Uploaded Images
+                    Imágenes Subidas
                   </Typography>
                   <ImageList
                     sx={{
@@ -462,7 +462,7 @@ const RedeemedDealDetail = () => {
                     gutterBottom
                     sx={{ color: "#343A40" }}
                   >
-                    Engagement Metrics
+                    Métricas de Interacción
                   </Typography>
                   <Box display="flex" flexDirection="row" gap={4}>
                     {data.totalViews !== undefined && (
@@ -472,7 +472,7 @@ const RedeemedDealDetail = () => {
                           fontWeight="bold"
                           sx={{ color: "#6C757D" }}
                         >
-                          Total Views
+                          Total de Visualizaciones
                         </Typography>
                         <Typography variant="body1" sx={{ color: "#495057" }}>
                           {data.totalViews}
@@ -486,7 +486,7 @@ const RedeemedDealDetail = () => {
                           fontWeight="bold"
                           sx={{ color: "#6C757D" }}
                         >
-                          Total Likes
+                          Total de Me Gusta
                         </Typography>
                         <Typography variant="body1" sx={{ color: "#495057" }}>
                           {data.totalLikes}
@@ -500,7 +500,7 @@ const RedeemedDealDetail = () => {
                           fontWeight="bold"
                           sx={{ color: "#6C757D" }}
                         >
-                          Total Comments
+                          Total de Comentarios
                         </Typography>
                         <Typography variant="body1" sx={{ color: "#495057" }}>
                           {data.totalComments}
@@ -515,7 +515,7 @@ const RedeemedDealDetail = () => {
         </Card>
 
         <Paper sx={styles.couponSection}>
-          <p style={{ color: "#666" }}>Your Coupon Code</p>
+          <p style={{ color: "#666" }}>Tu Código de Cupón</p>
           <Box
             display="flex"
             alignItems="center"
@@ -534,7 +534,7 @@ const RedeemedDealDetail = () => {
             <QRCodeCanvas value={data.couponCode} size={128} level="H" />
           </Box>
           <p style={{ color: "#666" }}>
-            Use this code or scan QR at checkout to claim this deal!
+            ¡Usa este código o escanea el QR en el checkout para reclamar esta oferta!
           </p>
         </Paper>
 
@@ -542,7 +542,7 @@ const RedeemedDealDetail = () => {
           <CardContent>
             <Grid container spacing={4} marginBottom={4}>
               <Grid item xs={12} md={6}>
-                <h3 style={styles.sectionTitle}>Deal Information</h3>
+                <h3 style={styles.sectionTitle}>Información de la Oferta</h3>
                 <p>{deal.description}</p>
                 <Box sx={styles.tagContainer}>
                   {deal.keywords.split(",").map((tag) => (
@@ -553,7 +553,7 @@ const RedeemedDealDetail = () => {
                   Disponible hasta:{" "}
                   {new Date(deal.availableUntil).toLocaleDateString()}
                 </p>
-                <p>Max purchases per user: {deal.maxPurchasePerUser}</p>
+                <p>Máximo de compras por usuario: {deal.maxPurchasePerUser}</p>
               </Grid>
               <Grid item xs={12} md={6}>
                 <CardMedia
@@ -568,7 +568,7 @@ const RedeemedDealDetail = () => {
         </Card>
 
         <Card sx={styles.contentCard}>
-          <h3 style={styles.sectionTitle}>Shop Information</h3>
+          <h3 style={styles.sectionTitle}>Información de la Tienda</h3>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <Box display="flex" alignItems="center" gap={2} marginBottom={2}>
@@ -602,7 +602,7 @@ const RedeemedDealDetail = () => {
                     },
                   }}
                 >
-                  Visit Website
+                  Visitar Sitio Web
                 </a>
               )}
             </Grid>
@@ -610,7 +610,7 @@ const RedeemedDealDetail = () => {
         </Card>
 
         <Card sx={styles.contentCard}>
-          <h3 style={styles.sectionTitle}>Redeemed By</h3>
+          <h3 style={styles.sectionTitle}>Canjeado Por</h3>
           <Box display="flex" gap={3}>
             <Avatar
               src={data.user.photo}
@@ -619,8 +619,8 @@ const RedeemedDealDetail = () => {
             />
             <Box>
               <h4>{data.user.name}</h4>
-              <p>Email: {data.user.email}</p>
-              <p>Phone: {data.user.phone}</p>
+              <p>Correo: {data.user.email}</p>
+              <p>Teléfono: {data.user.phone}</p>
             </Box>
           </Box>
         </Card>

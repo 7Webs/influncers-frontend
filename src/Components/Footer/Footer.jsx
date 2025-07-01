@@ -8,8 +8,6 @@ import {
   styled,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import logo from "../../Assets/logo.png";
-import paymentIcon from "../../Assets/paymentIcon.png";
 import {
   FaFacebookF,
   FaInstagram,
@@ -156,7 +154,7 @@ const Footer = () => {
               </Box>
             </LogoContainer>
             <Typography sx={{ fontSize: "14px" }}>
-              Copyright © 2025 nanoinfluencers.io, All rights reserved.
+              Copyright © 2025 nanoinfluencers.io, Todos los derechos reservados.
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", mb: 1 }}>
               <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>
@@ -191,7 +189,7 @@ const Footer = () => {
               }}
             >
               {[
-                { text: "Home", link: "/home" },
+                { text: "Inicio", link: "/home" },
                 { text: "Mis cupones", link: "/redeemed-coupons" },
                 { text: "Perfil", link: "/profile" },
               ].map((item, index) => (

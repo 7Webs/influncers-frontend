@@ -63,10 +63,10 @@ const RedeemedCoupons = () => {
 
     return (
       <Container>
-        <div style={{ mb: 3, boxShadow: 0.3 }}>
+        <div style={{ mb: 3, paddingTop: '40px', boxShadow: 0.3 }}>
           {/* <CardContent> */}
           <Typography variant="h6" fontWeight="bold" gutterBottom>
-            Redeemed Deals
+            Ofertas Canjeadas
           </Typography>
           <List>
             {isFetching && !data

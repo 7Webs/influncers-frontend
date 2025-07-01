@@ -71,28 +71,28 @@ const ResetPass = () => {
   return (
     <StyledSection>
       <Typography variant="h2" sx={{ fontSize: "26px", fontWeight: 600 }}>
-        Reset Your Password
+        Restablecer tu Contraseña
       </Typography>
       <StyledContainer>
         <Typography sx={{ fontSize: "14px", color: "#767676" }}>
-          We will send you an email to reset your password
+          Te enviaremos un correo electrónico para restablecer tu contraseña
         </Typography>
         <StyledForm onSubmit={handleSubmit}>
           <StyledTextField
             type="email"
-            placeholder="Email address *"
+            placeholder="Dirección de correo electrónico *"
             required
             fullWidth
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <StyledButton type="submit" variant="contained" fullWidth>
-            Submit
+            Enviar
           </StyledButton>
         </StyledForm>
       </StyledContainer>
       <Typography sx={{ fontSize: "14px", color: "#767676" }}>
-        Back to{" "}
+        Volver a{" "}
         <Link
           to="/loginSignUp"
           style={{
@@ -100,7 +100,7 @@ const ResetPass = () => {
             textDecoration: "none",
           }}
         >
-          Login
+          Iniciar Sesión
         </Link>
       </Typography>
     </StyledSection>

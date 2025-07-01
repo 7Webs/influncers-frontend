@@ -1,4 +1,4 @@
-export const dummyUserPoints = 1250;
+export const dummyUserPoints = 0;
 
 export const availableRewards = [
   {

@@ -194,14 +194,14 @@ const LoginSignUp = () => {
               onClick={() => handleTab("tabButton1")}
               variant="h5"
             >
-              Login
+              Iniciar Sesión
             </TabButton>
             <TabButton
               isactive={(activeTab === "tabButton2").toString()}
               onClick={() => handleTab("tabButton2")}
               variant="h5"
             >
-              Register
+              Registrarse
             </TabButton>
           </Box>
 
@@ -209,7 +209,7 @@ const LoginSignUp = () => {
             <Box component="form" onSubmit={handleLogin}>
               <StyledTextField
                 fullWidth
-                label="Email"
+                label="Correo Electrónico"
                 name="email"
                 type="email"
                 value={formData.email}
@@ -218,7 +218,7 @@ const LoginSignUp = () => {
               />
               <StyledTextField
                 fullWidth
-                label="Password"
+                label="Contraseña"
                 name="password"
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
@@ -242,14 +242,14 @@ const LoginSignUp = () => {
                   to="/resetPassword"
                   style={{ color: "#1E3FE4", textDecoration: "none" }}
                 >
-                  Forgot password?
+                  ¿Olvidaste tu contraseña?
                 </Link>
               </Box>
               <PrimaryButton fullWidth type="submit" disabled={isLoggingIn}>
-                {isLoggingIn ? <CircularProgress size={24} /> : "Login"}
+                {isLoggingIn ? <CircularProgress size={24} /> : "Iniciar Sesión"}
               </PrimaryButton>
 
-              <Divider sx={{ my: 3 }}>or continue with</Divider>
+              <Divider sx={{ my: 3 }}>o continúa con</Divider>
 
               <Box sx={{ display: "flex", gap: 2 }}>
                 <SocialButton
@@ -274,7 +274,7 @@ const LoginSignUp = () => {
             <Box component="form" onSubmit={handleRegister}>
               <StyledTextField
                 fullWidth
-                label="Email"
+                label="Correo Electrónico"
                 name="email"
                 type="email"
                 value={formData.email}
@@ -283,7 +283,7 @@ const LoginSignUp = () => {
               />
               <StyledTextField
                 fullWidth
-                label="Password"
+                label="Contraseña"
                 name="password"
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
@@ -304,7 +304,7 @@ const LoginSignUp = () => {
               />
               <StyledTextField
                 fullWidth
-                label="Confirm Password"
+                label="Confirmar Contraseña"
                 name="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
                 value={formData.confirmPassword}
@@ -330,10 +330,10 @@ const LoginSignUp = () => {
                 }}
               />
               <PrimaryButton fullWidth type="submit" disabled={isRegistering}>
-                {isRegistering ? <CircularProgress size={24} /> : "Register"}
+                {isRegistering ? <CircularProgress size={24} /> : "Registrarse"}
               </PrimaryButton>
 
-              <Divider sx={{ my: 3 }}>or continue with</Divider>
+              <Divider sx={{ my: 3 }}>o continúa con</Divider>
 
               <Box sx={{ display: "flex", gap: 2 }}>
                 <SocialButton

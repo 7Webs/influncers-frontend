@@ -148,7 +148,7 @@ const HeaderMain = () => {
               <CategoryDropdown categories={categories} />
               <NavButton onClick={handleForYouClick}>Para ti</NavButton>
               <NavButton onClick={handleMyCouponsClick}>Mis cupones</NavButton>
-              <NavButton onClick={() => nav('/rewards')}>Recompensas</NavButton>
+              {/* <NavButton onClick={() => nav('/rewards')}>Recompensas</NavButton> */}
 
               {user && !isMobile && (
                 <GetStartedButton

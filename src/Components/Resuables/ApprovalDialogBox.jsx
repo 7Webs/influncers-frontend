@@ -77,7 +77,7 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
     const totalFiles = formData.image.length + files.length;
 
     if (totalFiles > 10) {
-      toast.error("Maximum 10 images allowed");
+      toast.error("Máximo 10 imágenes permitidas");
       return;
     }
 
@@ -129,7 +129,7 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
     },
     onSuccess: () => {
       onClose();
-      toast.success("Request for approval submitted successfully");
+      toast.success("Solicitud de aprobación enviada exitosamente");
       setTimeout(() => {
         window.location.reload();
       }, 2000);
@@ -144,7 +144,7 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
       <DialogTitle sx={{ borderBottom: "1px solid #eee", pb: 2 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h5" sx={{ fontWeight: 600 }}>
-            Submit for Approval
+            Enviar para Aprobación
           </Typography>
           <IconButton
             onClick={onClose}
@@ -163,24 +163,24 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
         <Box sx={styles.formContainer}>
           <Box sx={{ p: 3, bgcolor: "#f8f9fa", borderRadius: 1, mb: 3 }}>
             <Typography variant="h6" sx={{ mb: 2, fontWeight: 500 }}>
-              Media Post Details
+              Detalles de la Publicación
             </Typography>
 
             <TextField
               name="socialMediaLink"
-              label="Social Media Post Link"
+              label="Enlace de la Publicación en Redes Sociales"
               value={formData.socialMediaLink}
               onChange={handleInputChange}
               fullWidth
               variant="outlined"
               sx={{ mb: 2 }}
-              placeholder="Paste your social media post link here"
+              placeholder="Pega aquí el enlace de tu publicación en redes sociales"
             />
 
             <Box display="flex" gap={2} mb={2}>
               <TextField
                 name="totalViews"
-                label="Total Views"
+                label="Total de Visualizaciones"
                 value={formData.totalViews}
                 onChange={handleInputChange}
                 type="number"
@@ -189,7 +189,7 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
               />
               <TextField
                 name="totalLikes"
-                label="Total Likes"
+                label="Total de Me Gusta"
                 value={formData.totalLikes}
                 onChange={handleInputChange}
                 type="number"
@@ -198,7 +198,7 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
               />
               <TextField
                 name="totalComments"
-                label="Total Comments"
+                label="Total de Comentarios"
                 value={formData.totalComments}
                 onChange={handleInputChange}
                 type="number"
@@ -213,12 +213,12 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
               variant="subtitle1"
               sx={{ mb: 2, fontWeight: 500, color: "#1976d2" }}
             >
-              Upload Screenshots (Max 10)
+              Subir Capturas de Pantalla (Máx 10)
             </Typography>
 
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Please attach screenshots of your social media posts to verify the
-              promotion
+              Por favor adjunta capturas de pantalla de tus publicaciones en redes sociales para verificar la
+              promoción
             </Typography>
 
             <input
@@ -248,10 +248,10 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
                 }}
               >
                 {formData.image.length > 0
-                  ? `${formData.image.length} Image${
-                      formData.image.length !== 1 ? "s" : ""
-                    } Selected`
-                  : "Choose Images"}
+                  ? `${formData.image.length} Imagen${
+                      formData.image.length !== 1 ? "es" : ""
+                    } Seleccionada${formData.image.length !== 1 ? "s" : ""}`
+                  : "Elegir Imágenes"}
               </Button>
             </label>
           </Box>
@@ -266,7 +266,7 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
               }}
             >
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                Preview:
+                Vista Previa:
               </Typography>
               <ImageList
                 sx={{ width: "100%", height: "auto" }}
@@ -303,7 +303,7 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
 
           <TextField
             name="amountSpent"
-            label="Amount Spent at Store"
+            label="Cantidad Gastada en la Tienda"
             value={formData.amountSpent}
             onChange={handleInputChange}
             fullWidth
@@ -311,12 +311,12 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
             type="number"
             InputProps={{ inputProps: { min: 0 } }}
             sx={{ mb: 3 }}
-            placeholder="Enter the amount you spent at the store"
+            placeholder="Ingresa la cantidad que gastaste en la tienda"
           />
 
           <TextField
             name="additionalInfo"
-            label="Additional Information"
+            label="Información Adicional"
             value={formData.additionalInfo}
             onChange={handleInputChange}
             multiline
@@ -324,7 +324,7 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
             fullWidth
             variant="outlined"
             sx={{ mb: 3 }}
-            placeholder="Add any additional details about your post"
+            placeholder="Agrega cualquier detalle adicional sobre tu publicación"
           />
         </Box>
       </DialogContent>
@@ -340,7 +340,7 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
             },
           }}
         >
-          Cancel
+          Cancelar
         </Button>
         <Button
           variant="contained"
@@ -354,7 +354,7 @@ const ApprovalDialogBox = ({ open, onClose, id }) => {
           {approveMutation.isLoading ? (
             <CircularProgress size={24} sx={{ color: "#fff" }} />
           ) : (
-            "Submit"
+            "Enviar"
           )}
         </Button>
       </DialogActions>
